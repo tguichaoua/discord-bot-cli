@@ -1,15 +1,11 @@
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Signature } from "./Signature";
-import { Arg } from "./Arg";
-import { CommandSet, ParseOption } from "./CommandSet";
+import Arg from "./Arg";
+import CommandSet, { ParseOption } from "./CommandSet";
 import * as CommandResult from "./CommandResult";
 
-export type ArgMap = Map<string, any>;
-export type CommandInitCb = (context: any, commandSet: CommandSet) => void | Promise<void>;
-export type CommandExecutorCb = (msg: Message, args: ArgMap, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>;
-
-export class Command {
+export default class Command {
 
     private _name: string;
     private _description: string;
@@ -18,7 +14,7 @@ export class Command {
     private _ignored = false;
     private _devOnly = false;
     private _isInitialized = false;
-    private _onInit: CommandInitCb | undefined;
+    private _onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
     private _signatures: Signature[] = [];
     private _subs: Map<string, Command> = new Map<string, Command>();
 
@@ -73,6 +69,7 @@ export class Command {
     // === Settings Methods ===================
 
     /**
+     * Make this command not loaded by CommandSet.
      * @categorie Settings
      */
     ignore() {
@@ -81,6 +78,7 @@ export class Command {
     }
 
     /**
+     * Make the message that called this command to not be delete automatically.
      * @categorie Settings
      */
     keepCommandMessage() {
@@ -89,6 +87,7 @@ export class Command {
     }
 
     /**
+     * Make command can only be called by a dev.
      * @categorie Settings
      */
     dev() {
@@ -97,23 +96,26 @@ export class Command {
     }
 
     /**
+     * Set the init callback, that is called when this command is initialized.
      * @categorie Settings
      */
-    onInit(cb: CommandInitCb) {
+    onInit(cb: (context: any, commandSet: CommandSet) => void | Promise<void>) {
         if (cb instanceof Function)
             this._onInit = cb;
         return this;
     }
 
     /**
+     * Add a new signature.
      * @categorie Settings
      */
-    signature(executor: CommandExecutorCb, ...args: Arg[]) {
+    signature(executor: (msg: Message, args: ArgMap, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, ...args: Arg[]) {
         this._signatures.push(new Signature(executor, args));
         return this;
     }
 
     /**
+     * Add a sub command.
      * @categorie Settings
      */
     sub(command: Command) {

@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-import { DiscordAPIError, Message } from "discord.js";
+import { Message } from "discord.js";
 
-import { Command } from "./Command";
+import Command from "./Command";
 import * as com from "./com";
 import * as CommandResult from "./CommandResult";
 
@@ -14,7 +14,7 @@ export interface ParseOption {
     devIDs: string[];
 }
 
-export class CommandSet {
+export default class CommandSet {
 
     private _commands = new Map<string, Command>();
 
@@ -36,6 +36,11 @@ export class CommandSet {
         }
     }
 
+    /**
+     * Load command from the given folder path.<br>
+     * Command file must have the extension `.cmd.js`
+     * @param commandDirPath - path to the folder where the commands are.
+     */
     loadCommands(commandDirPath: string) {
         try {
             const cmdFiles = fs.readdirSync(commandDirPath).filter(file => file.endsWith('.cmd.js'));
@@ -48,11 +53,21 @@ export class CommandSet {
         }
     }
 
+    /**
+     * Load build-in commands.<br>
+     * `help`, `list`<br>
+     * `all` to load all build-in commands.
+     * @param buildinCommandNames - a list of build-in command name to load.
+     */
     buildin(...buildinCommandNames: string[]) {
-        for (const name of buildinCommandNames) {
-            const filePath = path.resolve(path.format({ dir: __dirname + '/cmds', name: name, ext: '.cmd.js' }));
-            if (fs.existsSync(filePath))
-                this._loadFile(filePath);
+        if (buildinCommandNames.includes("all")) {
+            this.loadCommands(__dirname + "/commands");
+        } else {
+            for (const name of buildinCommandNames) {
+                const filePath = path.resolve(path.format({ dir: __dirname + '/commands', name: name, ext: '.cmd.js' }));
+                if (fs.existsSync(filePath))
+                    this._loadFile(filePath);
+            }
         }
     }
 
@@ -62,22 +77,22 @@ export class CommandSet {
 
     resolve(args: string[]) {
         if (!Array.isArray(args))
-            return { args: args };
+            return { args };
 
         args = [...args]; // make a copy of args
         let cmd = this._commands.get(args[0]);
 
         if (cmd) {
-            let sub : Command | undefined = cmd;
+            let sub: Command | undefined = cmd;
             do {
                 cmd = sub;
                 args.shift();
                 sub = cmd.getSubCommand(args[0]);
             } while (sub);
 
-            return { cmd: cmd, args: args };
+            return { command: cmd, args };
         } else {
-            return { args: args };
+            return { args };
         }
     }
 
@@ -85,6 +100,10 @@ export class CommandSet {
         return this._commands.values();
     }
 
+    /**
+     * Init all commands.
+     * @param context - a context object that is send to command when executed. (can store database or other data)
+     */
     async init(context: any) {
         for (const cmd of this._commands.values()) {
             if (cmd.isInitialized) continue;
@@ -96,7 +115,13 @@ export class CommandSet {
         }
     }
 
-    async parse(msg: Message, context: any, options: ParseOption) /*: Promise<CommandResult.CommandResult>*/ {
+    /**
+     * Check if there is a command in the given message and execute it.
+     * @param msg
+     * @param context - a context object that is send to command when executed. (can store database or other data)
+     * @param options - option de define the behaviour of the command parser.
+     */
+    async parse(msg: Message, context: any, options: ParseOption) {
         let o: ParseOption = {
             prefix: undefined,
             helpOnSignatureNotFound: true,
@@ -116,19 +141,19 @@ export class CommandSet {
 
         // extract the command & arguments from message
         const inArgs = msg.content.slice(o.prefix.length).split(/ +/);
-        const { cmd, args } = this.resolve(inArgs);
+        const { command, args } = this.resolve(inArgs);
 
         try {
-            if (!cmd) {
+            if (!command) {
                 if (o.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete();
                 return CommandResult.commandNotFound();
             }
 
-            if (cmd.deleteCommand && msg.channel.type === 'text') await msg.delete();
+            if (command.deleteCommand && msg.channel.type === 'text') await msg.delete();
 
-            if (cmd.isDevOnly && !(msg.author.id in o.devIDs)) return CommandResult.devOnly();
+            if (command.isDevOnly && !(msg.author.id in o.devIDs)) return CommandResult.devOnly();
 
-            return await cmd.execute(msg, args, context, JSON.parse(JSON.stringify(o)), this);
+            return await command.execute(msg, args, context, JSON.parse(JSON.stringify(o)), this);
         } catch (e) {
             return CommandResult.error(e);
         }

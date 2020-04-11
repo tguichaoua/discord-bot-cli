@@ -1,6 +1,8 @@
 import { CommandExecutorCb, ArgMap } from "./Command";
 import { Arg } from "./Arg";
 import { CommandResultStatus } from "./CommandResultStatus";
+import { ParseOption, CommandSet } from "./CommandSet";
+import { Message } from "discord.js";
 
 export class Signature {
 
@@ -8,7 +10,7 @@ export class Signature {
     private _args: Arg[];
     private _minArgNeeded = 0;
 
-    constructor(executor: CommandExecutorCb, args: Arg[]) {
+    constructor(executor: (msg: Message, args: ArgMap, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, args: Arg[]) {
         if (!(executor instanceof Function))
             throw Error("Command signture must have a executor function.");
 

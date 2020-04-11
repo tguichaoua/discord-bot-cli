@@ -2,7 +2,7 @@ import { DefaultParser } from "./argParsers/DefaultParser";
 import { ArgParserBase } from "./argParsers/ArgParserBase";
 
 
-export class Arg {
+export default class Arg {
 
     private _name: string;
     private _description: string;
@@ -10,7 +10,7 @@ export class Arg {
     private _isMendatory: boolean;
     private _defaultValue: any;
 
-    constructor(name: string, description: string, isMendatory = true, parser = new DefaultParser(), defaultValue?: any) {
+    constructor(name: string, description: string, isMendatory = true, parser: ArgParserBase = new DefaultParser(), defaultValue?: any) {
         if (typeof name !== 'string' || name === '')
             throw Error('Argument\'s name must be a non-empty string');
 
