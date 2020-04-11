@@ -1,0 +1,35 @@
+{
+    "name": "discord-bot-cli",
+    "version": "2.0.0",
+    "description": "An easy way to build a command-based discord bot.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "docs": "typedoc ./src/ --disableOutputCheck --out ./docs/v1/ --readme none",
+        "build": "tsc",
+        "clean": "rm -rf ./dist",
+        "rebuild": "npm run clean && npm run build",
+        "prestart": "npm run build",
+        "start": "node dist/index.js",
+        "prepublish": "npm run rebuild"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/baanloh/discord-bot-cli.git"
+    },
+    "keywords": [
+        "discord",
+        "bot",
+        "cli"
+    ],
+    "author": "Tristan Guichaoua",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/baanloh/discord-bot-cli/issues"
+    },
+    "homepage": "https://github.com/baanloh/discord-bot-cli#readme",
+    "devDependencies": {
+        "typedoc": "^0.17.4",
+        "typescript": "^3.8.3"
+    }
+}
