@@ -15,6 +15,7 @@ switch (cmd) {
     case "cmd":
     case "c":
         require("./new-command")();
+        break;
 
     default:
         console.log(helpString);

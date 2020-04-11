@@ -1,16 +1,15 @@
-import { CommandExecutorCb, ArgMap } from "./Command";
-import { Arg } from "./Arg";
-import { CommandResultStatus } from "./CommandResultStatus";
-import { ParseOption, CommandSet } from "./CommandSet";
 import { Message } from "discord.js";
 
-export class Signature {
+import Arg from "./Arg";
+import CommandSet, { ParseOption } from "./CommandSet";
 
-    private _executor: CommandExecutorCb;
+export default class Signature {
+
+    private _executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>;
     private _args: Arg[];
     private _minArgNeeded = 0;
 
-    constructor(executor: (msg: Message, args: ArgMap, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, args: Arg[]) {
+    constructor(executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, args: Arg[]) {
         if (!(executor instanceof Function))
             throw Error("Command signture must have a executor function.");
 
@@ -65,7 +64,7 @@ export class Signature {
 
         args = [...args]; // make a copy
         let neededArgCount = this._minArgNeeded;
-        const parsed: ArgMap = new Map();
+        const parsed = new Map<string, any>();
 
         for (const a of this._args) {
             if (!a.isMendatory) {

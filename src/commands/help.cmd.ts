@@ -1,16 +1,13 @@
-import { Command, ArgMap } from "../Command";
 import { Message } from "discord.js";
-import { ParseOption, CommandSet } from "../CommandSet";
-import { RestParser } from "../argParsers/Rest";
-import { Arg } from "../Arg";
+import { Command, CommandSet, Arg, ParseOption, ArgParser } from "../index";
 
 
 module.exports = new Command("help", "Provide help on commands.")
     .signature(executor,
-        new Arg("command name", "The name of the command to get help.", true, new RestParser())
+        new Arg("command name", "The name of the command to get help.", true, new ArgParser.RestParser())
     );
 
-async function executor(msg: Message, args: ArgMap, context: any, options: ParseOption, CommandSet: CommandSet) {
+async function executor(msg: Message, args: Map<string, any>, context: any, options: ParseOption, CommandSet: CommandSet) {
     const cmdPath = args.get('command name');
 
     if (cmdPath.length === 0)

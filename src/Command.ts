@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js';
 
-import { Signature } from "./Signature";
+import Signature from "./Signature";
 import Arg from "./Arg";
 import CommandSet, { ParseOption } from "./CommandSet";
 import * as CommandResult from "./CommandResult";
@@ -109,7 +109,7 @@ export default class Command {
      * Add a new signature.
      * @categorie Settings
      */
-    signature(executor: (msg: Message, args: ArgMap, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, ...args: Arg[]) {
+    signature(executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, ...args: Arg[]) {
         this._signatures.push(new Signature(executor, args));
         return this;
     }

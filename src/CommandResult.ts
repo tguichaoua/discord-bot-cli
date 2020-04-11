@@ -1,6 +1,6 @@
 import { CommandResultStatus } from "./CommandResultStatus";
-import { Command } from "./Command";
-import { Signature } from "./Signature";
+import Command from "./Command";
+import Signature from "./Signature";
 
 export interface CommandResult {
     status: CommandResultStatus;
