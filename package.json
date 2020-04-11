@@ -31,5 +31,9 @@
     "devDependencies": {
         "typedoc": "^0.17.4",
         "typescript": "^3.8.3"
+    },
+    "dependencies": {
+        "@types/node": "^13.11.1",
+        "discord.js": "^12.1.1"
     }
 }
