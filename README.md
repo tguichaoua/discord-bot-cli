@@ -7,6 +7,5 @@ An easy way to build a command-based discord bot
 ## Dependency
 <img src="https://img.shields.io/npm/dependency-version/discord-bot-cli/discord.js"/>
 
-
-
-**WIP** This repo ready yet !
+## Documentation
+<a href="https://baanloh.github.io/discord-bot-cli/">Docs</a>
