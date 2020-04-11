@@ -191,7 +191,7 @@ export class Command {
                     return CommandResult.ok(this, s, result);
                 }
             } catch (e) {
-                return CommandResult.error(this, e);
+                return CommandResult.error(e);
             }
         }
 
