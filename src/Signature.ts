@@ -80,7 +80,7 @@ export default class Signature {
             const result = a.parser.parse(args);
             if (result) {
                 let { value, consumed } = result;
-                if (typeof consumed !== 'number') consumed = 0;
+                if (typeof consumed !== 'number' || consumed < 0) consumed = 0;
 
                 args.splice(0, consumed);
 

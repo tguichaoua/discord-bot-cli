@@ -7,7 +7,7 @@ module.exports = new Command("help", "Provide help on commands.")
         new Arg("command name", "The name of the command to get help.", true, new ArgParser.RestParser())
     );
 
-async function executor(msg: Message, args: Map<string, any>, context: any, options: ParseOption, CommandSet: CommandSet) {
+async function executor(msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, CommandSet: CommandSet) {
     const cmdPath = args.get('command name');
 
     if (cmdPath.length === 0)

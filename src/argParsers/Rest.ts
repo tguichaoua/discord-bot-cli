@@ -14,6 +14,6 @@ export class RestParser extends ArgParserBase {
     get minArgNeeded(): number { return 0; }
 
     parse(args: string[]): ArgParseResult | undefined {
-        return ArgParserBase.ok(args, args.length);
+        return ArgParserBase.ok([...args], args.length);
     }
 }
