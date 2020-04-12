@@ -18,7 +18,7 @@ export default class Command {
     private _signatures: Signature[] = [];
     private _subs: Map<string, Command> = new Map<string, Command>();
 
-    constructor(name: string, description: string) {
+    constructor(name: string, description?: string) {
         if (typeof name !== "string" || name === "")
             throw new TypeError("Command name must be a non-empty string");
             
