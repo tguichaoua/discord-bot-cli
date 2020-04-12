@@ -1,7 +1,6 @@
 import { DefaultParser } from "./argParsers/DefaultParser";
 import { ArgParserBase } from "./argParsers/ArgParserBase";
 
-
 export default class Arg {
 
     private _name: string;
@@ -18,7 +17,7 @@ export default class Arg {
             throw Error('Argument parser must inherit ArgParser.Base class.')
 
         this._name = name;
-        this._description = description;
+        this._description = description ?? "";
         this._parser = parser;
         this._isMendatory = isMendatory;
         this._defaultValue = defaultValue;

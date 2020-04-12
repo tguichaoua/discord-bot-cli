@@ -19,14 +19,11 @@ export default class Command {
     private _subs: Map<string, Command> = new Map<string, Command>();
 
     constructor(name: string, description: string) {
-        if (typeof name !== "string" || typeof description !== "string")
-            throw new TypeError("Name and description must be string.");
-
-        if (name === "")
-            throw new TypeError("Name must be a non empty string.");
-
+        if (typeof name !== "string" || name === "")
+            throw new TypeError("Command name must be a non-empty string");
+            
         this._name = name;
-        this._description = description;
+        this._description = description ?? "";
     }
 
     // === Getter =====================================================
