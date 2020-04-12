@@ -4,24 +4,33 @@ import Signature from "./Signature";
 import Arg from "./Arg";
 import CommandSet, { ParseOption } from "./CommandSet";
 import * as CommandResult from "./CommandResult";
+import Prop from "./Prop";
+
+import { keyOf } from "./com";
 
 export default class Command {
 
     private _name: string;
     private _description: string;
     private _parent: Command | undefined;
-    private _deleteCommand = true;
-    private _ignored = false;
-    private _devOnly = false;
-    private _isInitialized = false;
+
     private _onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
-    private _signatures: Signature[] = [];
     private _subs: Map<string, Command> = new Map<string, Command>();
+    private _signatures: Signature[] = [];
+
+    private _inherit = false;
+    private _isInitialized = false;
+
+    private _settings = {
+        deleteCommand: new Prop(true),
+        ignored: new Prop(false),
+        devOnly: new Prop(false),
+    }
 
     constructor(name: string, description?: string) {
         if (typeof name !== "string" || name === "")
             throw new TypeError("Command name must be a non-empty string");
-            
+
         this._name = name;
         this._description = description ?? "";
     }
@@ -32,11 +41,11 @@ export default class Command {
 
     get description() { return this._description; }
 
-    get deleteCommand() { return this._deleteCommand; }
+    get deleteCommand() { return this._settings.deleteCommand.value; }
 
-    get ignored() { return this._ignored; }
+    get ignored() { return this._settings.ignored.value; }
 
-    get isDevOnly() { return this._devOnly; }
+    get isDevOnly() { return this._settings.devOnly.value; }
 
     get isInitialized() { return this._isInitialized; }
 
@@ -69,8 +78,8 @@ export default class Command {
      * Make this command not loaded by CommandSet.
      * @categorie Settings
      */
-    ignore() {
-        this._ignored = true;
+    ignore(value: boolean = true) {
+        this._settings.ignored.value = value;
         return this;
     }
 
@@ -78,8 +87,8 @@ export default class Command {
      * Make the message that called this command to not be delete automatically.
      * @categorie Settings
      */
-    keepCommandMessage() {
-        this._deleteCommand = false;
+    keepCommandMessage(value: boolean = true) {
+        this._settings.deleteCommand.value = !value;
         return this;
     }
 
@@ -87,14 +96,23 @@ export default class Command {
      * Make command can only be called by a dev.
      * @categorie Settings
      */
-    dev() {
-        this._devOnly = true;
+    dev(value: boolean = true) {
+        this._settings.devOnly.value = value;
+        return this;
+    }
+
+    /**
+     * Make value of undefined settings same as parent.
+     * @categorie Settings
+     */
+    inherit(value: boolean = true) {
+        this._inherit = value;
         return this;
     }
 
     /**
      * Set the init callback, that is called when this command is initialized.
-     * @categorie Settings
+     * @categorie Definition
      */
     onInit(cb: (context: any, commandSet: CommandSet) => void | Promise<void>) {
         if (cb instanceof Function)
@@ -104,7 +122,7 @@ export default class Command {
 
     /**
      * Add a new signature.
-     * @categorie Settings
+     * @categorie Definition
      */
     signature(executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, ...args: Arg[]) {
         this._signatures.push(new Signature(executor, args));
@@ -113,7 +131,7 @@ export default class Command {
 
     /**
      * Add a sub command.
-     * @categorie Settings
+     * @categorie Definition
      */
     sub(command: Command) {
         if (command instanceof Command && command._parent == undefined) {
@@ -125,9 +143,17 @@ export default class Command {
 
     // === * ==================================================
 
+
     async init(context: any, commandSet: CommandSet) {
         if (this.isInitialized)
             return;
+
+        // inherit from parent
+        if (this._parent && this._inherit) {
+            for (const k of keyOf(this._settings)) {
+                this._settings[k].inherit(this._parent._settings[k]);
+            }
+        }
 
         // init sub commands
         for (const s of this._subs.values()) {
