@@ -9,9 +9,9 @@ import * as CommandResult from "./CommandResult";
 
 export interface ParseOption {
     prefix?: string;
-    helpOnSignatureNotFound: boolean;
-    deleteMessageIfCommandNotFound: boolean;
-    devIDs: string[];
+    helpOnSignatureNotFound?: boolean;
+    deleteMessageIfCommandNotFound?: boolean;
+    devIDs?: string[];
 }
 
 export default class CommandSet {
