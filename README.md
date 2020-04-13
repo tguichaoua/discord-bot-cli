@@ -69,3 +69,20 @@ client.on("message", async msg => {
     }
 })();
 ```
+
+## CLI
+
+package.json
+```jsonc
+"scripts": {
+    // ...
+    "cmd": "dbc cmd -l ts", // create a command file for typescript
+    "cmd": "dbc cmd -l js", // create a command file for javascript
+    // ...
+}
+```
+
+Run the following command to create a new file with skeleton for command.  
+`npm run cmd -- path/to/folder/commandName`
+
+
