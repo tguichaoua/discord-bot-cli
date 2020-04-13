@@ -7,13 +7,6 @@ import Command from "./Command";
 import * as com from "./com";
 import * as CommandResult from "./CommandResult";
 
-export interface ParseOption {
-    prefix?: string;
-    helpOnSignatureNotFound?: boolean;
-    deleteMessageIfCommandNotFound?: boolean;
-    devIDs?: string[];
-}
-
 export default class CommandSet {
 
     private _commands = new Map<string, Command>();
@@ -122,40 +115,52 @@ export default class CommandSet {
      * @param options - option de define the behaviour of the command parser.
      */
     async parse(msg: Message, context: any, options: ParseOption) {
-        let o: ParseOption = {
-            prefix: undefined,
-            helpOnSignatureNotFound: true,
-            deleteMessageIfCommandNotFound: true,
-            devIDs: [],
-        };
 
-        // Merge default options & user options
-        Object.assign(o, options);
 
-        // Sanitize options
-        if (o.prefix == undefined) o.prefix = "";
-        if (!Array.isArray(o.devIDs)) o.devIDs = [];
+        // Make a deep copy of options object
+        const opts = JSON.parse(JSON.stringify(options));
 
         // Extract command & arguments from message
-        if (!msg.content.startsWith(o.prefix)) return CommandResult.notPrefixed();
+        if (!msg.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-        const inArgs = msg.content.slice(o.prefix.length).split(/ +/);
+        const inArgs = msg.content.slice(opts.prefix.length).split(/ +/);
         const { command, args } = this.resolve(inArgs);
 
         try {
             if (!command) {
-                if (o.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete();
+                if (opts.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete();
                 return CommandResult.commandNotFound();
             }
 
             if (command.deleteCommand && msg.channel.type === 'text') await msg.delete();
 
-            if (command.isDevOnly && !(msg.author.id in o.devIDs)) return CommandResult.devOnly();
+            if (command.isDevOnly && !(msg.author.id in opts.devIDs)) return CommandResult.devOnly();
 
-            return await command.execute(msg, args, context, JSON.parse(JSON.stringify(o)), this);
+            return await command.execute(msg, args, context, opts, this);
         } catch (e) {
             return CommandResult.error(e);
         }
     }
+
+    static createParseOption(
+        prefix?: string,
+        helpOnSignatureNotFound = true,
+        deleteMessageIfCommandNotFound = true,
+        devIDs: string[] = []
+    ): ParseOption {
+        return {
+            prefix: prefix ?? "",
+            helpOnSignatureNotFound,
+            deleteMessageIfCommandNotFound,
+            devIDs: devIDs ?? []
+        }
+    }
+}
+
+export interface ParseOption {
+    prefix: string;
+    helpOnSignatureNotFound: boolean;
+    deleteMessageIfCommandNotFound: boolean;
+    devIDs: string[];
 }
