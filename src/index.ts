@@ -2,6 +2,7 @@ import Command from "./Command";
 import CommandSet, { ParseOption } from "./CommandSet";
 import Arg from "./Arg";
 import ArgParser from "./ArgParser";
+import { CommandResultStatus } from "./CommandResultStatus";
 
 export {
     Command,
@@ -9,4 +10,5 @@ export {
     Arg,
     ArgParser,
     ParseOption,
+    CommandResultStatus,
 };
