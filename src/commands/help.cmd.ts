@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import { Command, CommandSet, Arg, ParseOption, ArgParser } from "../index";
 
-
 module.exports = new Command("help", "Provide help on commands.")
     .signature(executor,
         new Arg("command name", "The name of the command to get help.", true, new ArgParser.RestParser())

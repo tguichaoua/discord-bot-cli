@@ -6,6 +6,7 @@ import { Message } from "discord.js";
 import Command from "./Command";
 import * as com from "./com";
 import * as CommandResult from "./CommandResult";
+import ParseOption from "./ParseOption";
 
 export default class CommandSet {
 
@@ -161,9 +162,3 @@ export default class CommandSet {
     }
 }
 
-export interface ParseOption {
-    prefix: string;
-    helpOnSignatureNotFound: boolean;
-    deleteMessageIfCommandNotFound: boolean;
-    devIDs: string[];
-}
