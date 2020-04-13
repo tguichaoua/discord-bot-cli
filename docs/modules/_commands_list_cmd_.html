@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;argParsers/DefaultParser&quot; | discord-bot-cli</title>
+	<title>&quot;commands/list.cmd&quot; | discord-bot-cli</title>
 	<meta name="description" content="Documentation for discord-bot-cli">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="_argparsers_defaultparser_.html">&quot;argParsers/DefaultParser&quot;</a>
+					<a href="_commands_list_cmd_.html">&quot;commands/list.cmd&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;argParsers/DefaultParser&quot;</h1>
+			<h1>Module &quot;commands/list.cmd&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,16 +70,16 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_argparsers_defaultparser_.defaultparser.html" class="tsd-kind-icon">Default<wbr>Parser</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_argparsers_defaultparser_.html#singleton" class="tsd-kind-icon">singleton</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_commands_list_cmd_.html#command_per_page" class="tsd-kind-icon">COMMAND_<wbr>PER_<wbr>PAGE</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_commands_list_cmd_.html#executor" class="tsd-kind-icon">executor</a></li>
 							</ul>
 						</section>
 					</div>
@@ -88,14 +88,52 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-					<a name="singleton" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagLet">Let</span> singleton</h3>
-					<div class="tsd-signature tsd-kind-icon">singleton<span class="tsd-signature-symbol">:</span> <a href="../classes/_argparsers_defaultparser_.defaultparser.html" class="tsd-signature-type">DefaultParser</a></div>
+					<a name="command_per_page" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> COMMAND_<wbr>PER_<wbr>PAGE</h3>
+					<div class="tsd-signature tsd-kind-icon">COMMAND_<wbr>PER_<wbr>PAGE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">7</span><span class="tsd-signature-symbol"> = 7</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/argParsers/DefaultParser.ts#L3">argParsers/DefaultParser.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/commands/list.cmd.ts#L4">commands/list.cmd.ts:4</a></li>
 						</ul>
 					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="executor" class="tsd-anchor"></a>
+					<h3>executor</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">executor<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, CommandSet<span class="tsd-signature-symbol">: </span><a href="../classes/_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/commands/list.cmd.ts#L11">commands/list.cmd.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msg: <span class="tsd-signature-type">Message</span></h5>
+								</li>
+								<li>
+									<h5>args: <span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>context: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>options: <a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a></h5>
+								</li>
+								<li>
+									<h5>CommandSet: <a href="../classes/_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -132,7 +170,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_argparsers_argparserbase_.html">&quot;arg<wbr>Parsers/<wbr>Arg<wbr>Parser<wbr>Base&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="_argparsers_defaultparser_.html">&quot;arg<wbr>Parsers/<wbr>Default<wbr>Parser&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -150,7 +188,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_commands_help_cmd_.html">&quot;commands/help.cmd&quot;</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="_commands_list_cmd_.html">&quot;commands/list.cmd&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -160,11 +198,11 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_argparsers_defaultparser_.defaultparser.html" class="tsd-kind-icon">Default<wbr>Parser</a>
-					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_argparsers_defaultparser_.html#singleton" class="tsd-kind-icon">singleton</a>
+						<a href="_commands_list_cmd_.html#command_per_page" class="tsd-kind-icon">COMMAND_<wbr>PER_<wbr>PAGE</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_commands_list_cmd_.html#executor" class="tsd-kind-icon">executor</a>
 					</li>
 				</ul>
 			</nav>

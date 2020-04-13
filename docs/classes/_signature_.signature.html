@@ -120,19 +120,49 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Signature<span class="tsd-signature-symbol">(</span>executor<span class="tsd-signature-symbol">: </span><a href="../modules/_command_.html#commandexecutorcb" class="tsd-signature-type">CommandExecutorCb</a>, args<span class="tsd-signature-symbol">: </span><a href="_arg_.arg.html" class="tsd-signature-type">Arg</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_signature_.signature.html" class="tsd-signature-type">Signature</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Signature<span class="tsd-signature-symbol">(</span>executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, args<span class="tsd-signature-symbol">: </span><a href="_arg_.arg.html" class="tsd-signature-type">Arg</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_signature_.signature.html" class="tsd-signature-type">Signature</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L9">Signature.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L10">Signature.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>executor: <a href="../modules/_command_.html#commandexecutorcb" class="tsd-signature-type">CommandExecutorCb</a></h5>
+									<h5>executor: <span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>msg: <span class="tsd-signature-type">Message</span></h5>
+														</li>
+														<li>
+															<h5>args: <span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+														</li>
+														<li>
+															<h5>context: <span class="tsd-signature-type">any</span></h5>
+														</li>
+														<li>
+															<h5>options: <a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a></h5>
+														</li>
+														<li>
+															<h5>commandSet: <a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
 								</li>
 								<li>
 									<h5>args: <a href="_arg_.arg.html" class="tsd-signature-type">Arg</a><span class="tsd-signature-symbol">[]</span></h5>
@@ -151,19 +181,52 @@
 					<div class="tsd-signature tsd-kind-icon">_args<span class="tsd-signature-symbol">:</span> <a href="_arg_.arg.html" class="tsd-signature-type">Arg</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L8">Signature.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L9">Signature.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_executor" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _executor</h3>
-					<div class="tsd-signature tsd-kind-icon">_executor<span class="tsd-signature-symbol">:</span> <a href="../modules/_command_.html#commandexecutorcb" class="tsd-signature-type">CommandExecutorCb</a></div>
+					<div class="tsd-signature tsd-kind-icon">_executor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L7">Signature.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L8">Signature.ts:8</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>msg: <span class="tsd-signature-type">Message</span></h5>
+											</li>
+											<li>
+												<h5>args: <span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+											</li>
+											<li>
+												<h5>context: <span class="tsd-signature-type">any</span></h5>
+											</li>
+											<li>
+												<h5>options: <a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a></h5>
+											</li>
+											<li>
+												<h5>commandSet: <a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_minargneeded" class="tsd-anchor"></a>
@@ -171,7 +234,7 @@
 					<div class="tsd-signature tsd-kind-icon">_min<wbr>Arg<wbr>Needed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L9">Signature.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L10">Signature.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -188,7 +251,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L43">Signature.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L44">Signature.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -205,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L51">Signature.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L52">Signature.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -216,20 +279,20 @@
 					<a name="executor" class="tsd-anchor"></a>
 					<h3>executor</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> executor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><a href="../modules/_command_.html#argmap" class="tsd-signature-type">ArgMap</a>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> executor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L45">Signature.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L46">Signature.ts:46</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><a href="../modules/_command_.html#argmap" class="tsd-signature-type">ArgMap</a>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-signature">
 									<ul class="tsd-signatures tsd-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><a href="../modules/_command_.html#argmap" class="tsd-signature-type">ArgMap</a>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_commandset_.parseoption.html" class="tsd-signature-type">ParseOption</a>, commandSet<span class="tsd-signature-symbol">: </span><a href="_commandset_.commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
@@ -239,7 +302,7 @@
 													<h5>msg: <span class="tsd-signature-type">Message</span></h5>
 												</li>
 												<li>
-													<h5>args: <a href="../modules/_command_.html#argmap" class="tsd-signature-type">ArgMap</a></h5>
+													<h5>args: <span class="tsd-signature-type">ReadonlyMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												</li>
 												<li>
 													<h5>context: <span class="tsd-signature-type">any</span></h5>
@@ -269,7 +332,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L41">Signature.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L42">Signature.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -286,7 +349,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L47">Signature.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L48">Signature.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -306,7 +369,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/28bcc90/src/Signature.ts#L58">Signature.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/6c93aae/src/Signature.ts#L59">Signature.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -346,7 +409,7 @@
 						<a href="../modules/_commandset_.html">&quot;<wbr>Command<wbr>Set&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_commandsignature_.html">&quot;<wbr>Command<wbr>Signature&quot;</a>
+						<a href="../modules/_prop_.html">&quot;<wbr>Prop&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="../modules/_signature_.html">&quot;<wbr>Signature&quot;</a>
@@ -368,6 +431,12 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/_com_.html">&quot;com&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_commands_help_cmd_.html">&quot;commands/help.cmd&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_commands_list_cmd_.html">&quot;commands/list.cmd&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/_index_.html">&quot;index&quot;</a>
@@ -425,14 +494,15 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
