@@ -6,6 +6,7 @@ import { Message } from "discord.js";
 import Command from "./Command";
 import * as com from "./com";
 import * as CommandResult from "./CommandResult";
+import ParseOption from "./ParseOption";
 
 export default class CommandSet {
 
@@ -17,8 +18,8 @@ export default class CommandSet {
     private _loadFile(path: string) {
         try {
             const cmd = require(path);
-            if (!(cmd instanceof Command)) return;
-            if (cmd.ignored) return;
+            if (!(cmd instanceof Command)) throw TypeError("Not of type Command.");
+            if (cmd.ignored) throw Error("Command is ignored.");
             if (cmd.signatures.length === 0 && cmd.subs.length === 0) {
                 com.log(`The command at ${path} have been ignored because have no signature and no sub command.`);
                 return;
@@ -32,13 +33,16 @@ export default class CommandSet {
     /**
      * Load command from the given folder path.<br>
      * Command file must have the extension `.cmd.js`
-     * @param commandDirPath - path to the folder where the commands are.
+     * @param commandDirPath - path to the folder where the commands are (relative to node entry point).
      */
     loadCommands(commandDirPath: string) {
         try {
+            if (require.main)
+                commandDirPath = path.resolve(path.dirname(require.main.filename), commandDirPath);
             const cmdFiles = fs.readdirSync(commandDirPath).filter(file => file.endsWith('.cmd.js'));
             for (const file of cmdFiles) {
                 const filePath = path.resolve(path.format({ dir: commandDirPath, base: file }));
+                console.log(filePath);
                 this._loadFile(filePath);
             }
         } catch (e) {
@@ -58,6 +62,7 @@ export default class CommandSet {
         } else {
             for (const name of buildinCommandNames) {
                 const filePath = path.resolve(path.format({ dir: __dirname + '/commands', name: name, ext: '.cmd.js' }));
+                console.log(filePath);
                 if (fs.existsSync(filePath))
                     this._loadFile(filePath);
             }
@@ -157,9 +162,3 @@ export default class CommandSet {
     }
 }
 
-export interface ParseOption {
-    prefix: string;
-    helpOnSignatureNotFound: boolean;
-    deleteMessageIfCommandNotFound: boolean;
-    devIDs: string[];
-}

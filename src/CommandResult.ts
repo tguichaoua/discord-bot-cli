@@ -1,4 +1,4 @@
-import { CommandResultStatus } from "./CommandResultStatus";
+import CommandResultStatus from "./CommandResultStatus";
 import Command from "./Command";
 import Signature from "./Signature";
 

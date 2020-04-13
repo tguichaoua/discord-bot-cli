@@ -1,5 +1,5 @@
 
-export enum CommandResultStatus {
+enum CommandResultStatus {
     OK = "ok",
     NOT_PREFIXED = "not prefixed",
     DEV_ONLY = "dev only",
@@ -7,3 +7,5 @@ export enum CommandResultStatus {
     SIGNATURE_NOT_FOUND = "signature not found",
     COMMAND_NOT_FOUND = "command not found",
 }
+
+export default CommandResultStatus;
