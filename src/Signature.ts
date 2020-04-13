@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 
 import Arg from "./Arg";
-import CommandSet, { ParseOption } from "./CommandSet";
+import CommandSet from "./CommandSet";
+import ParseOption from "./ParseOption";
 
 export default class Signature {
 
