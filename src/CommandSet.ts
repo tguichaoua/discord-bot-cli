@@ -42,7 +42,6 @@ export default class CommandSet {
             const cmdFiles = fs.readdirSync(commandDirPath).filter(file => file.endsWith('.cmd.js'));
             for (const file of cmdFiles) {
                 const filePath = path.resolve(path.format({ dir: commandDirPath, base: file }));
-                console.log(filePath);
                 this._loadFile(filePath);
             }
         } catch (e) {
@@ -62,7 +61,6 @@ export default class CommandSet {
         } else {
             for (const name of buildinCommandNames) {
                 const filePath = path.resolve(path.format({ dir: __dirname + '/commands', name: name, ext: '.cmd.js' }));
-                console.log(filePath);
                 if (fs.existsSync(filePath))
                     this._loadFile(filePath);
             }
