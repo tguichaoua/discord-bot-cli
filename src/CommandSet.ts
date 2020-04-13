@@ -32,10 +32,12 @@ export default class CommandSet {
     /**
      * Load command from the given folder path.<br>
      * Command file must have the extension `.cmd.js`
-     * @param commandDirPath - path to the folder where the commands are.
+     * @param commandDirPath - path to the folder where the commands are (relative to node entry point).
      */
     loadCommands(commandDirPath: string) {
         try {
+            if (require.main)
+                commandDirPath = path.resolve(path.dirname(require.main.filename), commandDirPath);
             const cmdFiles = fs.readdirSync(commandDirPath).filter(file => file.endsWith('.cmd.js'));
             for (const file of cmdFiles) {
                 const filePath = path.resolve(path.format({ dir: commandDirPath, base: file }));
@@ -54,10 +56,10 @@ export default class CommandSet {
      */
     buildin(...buildinCommandNames: string[]) {
         if (buildinCommandNames.includes("all")) {
-            this.loadCommands(__dirname + "/commands");
+            this.loadCommands(__dirname + "/dist/commands");
         } else {
             for (const name of buildinCommandNames) {
-                const filePath = path.resolve(path.format({ dir: __dirname + '/commands', name: name, ext: '.cmd.js' }));
+                const filePath = path.resolve(path.format({ dir: __dirname + '/dist/commands', name: name, ext: '.cmd.js' }));
                 if (fs.existsSync(filePath))
                     this._loadFile(filePath);
             }
