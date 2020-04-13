@@ -17,11 +17,11 @@ An easy way to build a command-based discord bot
 ```typescript
 // === include dependencies =================================================
 import Discord from "discord.js";
-import dbc from "discord-bot-cli";
+import { CommandSet, CommandResultStatus } from "discord-bot-cli";
 
 // === setup objects ========================================================
 const client = new Discord.Client();
-const commands = new dbc.CommandSet();
+const commands = new CommandSet();
 
 commands.loadCommands("./cmds/");
 commands.buildin("help", "list"); // or commands.buildin("all");
@@ -29,7 +29,7 @@ commands.buildin("help", "list"); // or commands.buildin("all");
 // === define const =========================================================
 const context = {}; // put here context data like database
 
-const commandParseOptions = dbc.CommandSet.createParseOption(".");
+const commandParseOptions = CommandSet.createParseOption(".");
 
 // === Discord events ==========================================
 
@@ -45,19 +45,19 @@ client.on("message", async msg => {
     const result = await commands.parse(msg, context, commandParseOptions);
 
     switch (result.status) {
-        case dbc.CommandResultStatus.OK:
-            console.log(result.result);
+        case CommandResultStatus.OK:
+            console.log("=", result.result);
             break;
-        case dbc.CommandResultStatus.ERROR:
-            console.error(result.error);
+        case CommandResultStatus.ERROR:
+            console.error("error", result.error);
             break;
         default:
-            console.log(result.status);
+            console.log("@", result.status);
     }
 });
 
 // === init app ==================================================
-(async function() {
+(async function () {
     try {
         console.log("INIT | init commands");
         await commands.init(context);
