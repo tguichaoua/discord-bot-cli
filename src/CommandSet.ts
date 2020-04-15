@@ -137,7 +137,7 @@ export default class CommandSet {
 
             if (command.deleteCommand && msg.channel.type === 'text') await msg.delete();
 
-            if (command.isDevOnly && !(msg.author.id in options.devIDs)) return CommandResult.devOnly();
+            if (command.isDevOnly && !(options.devIDs.includes(msg.author.id))) return CommandResult.devOnly();
 
             return await command.execute(msg, args, context, options, this);
         } catch (e) {
