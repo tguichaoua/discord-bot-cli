@@ -1,35 +1,45 @@
-import CommandResultStatus from "./CommandResultStatus";
 import Command from "./Command";
 import Signature from "./Signature";
 
-export interface CommandResult {
-    status: CommandResultStatus;
-    command?: Command,
-    signature?: Signature,
-    result?: any,
-    error?: any,
-}
+export type CommandResult = 
+{
+    status:"ok",
+    command: Command,
+    signature: Signature,
+    result: any
+} |
+{
+    status: "error",
+    error: any,
+} |
+{
+    status: "signature not found",
+    command: Command,
+} |
+{
+    status: "dev only" | "not prefixed" | "command not found"
+};
 
 export function ok(command: Command, signature: Signature, result: any): CommandResult {
-    return { status: CommandResultStatus.OK, command, signature, result };
+    return { status: "ok", command, signature, result };
 }
 
 export function error(error: any): CommandResult {
-    return { status: CommandResultStatus.ERROR, error };
+    return { status: "error", error };
 }
 
 export function devOnly(): CommandResult {
-    return { status: CommandResultStatus.DEV_ONLY };
+    return { status: "dev only" };
 }
 
 export function notPrefixed(): CommandResult {
-    return { status: CommandResultStatus.NOT_PREFIXED };
+    return { status: "not prefixed" };
 }
 
 export function signatureNotFound(command: Command): CommandResult {
-    return { status: CommandResultStatus.SIGNATURE_NOT_FOUND, command };
+    return { status: "signature not found", command };
 }
 
 export function commandNotFound(): CommandResult {
-    return { status: CommandResultStatus.COMMAND_NOT_FOUND };
+    return { status: "command not found" };
 }
