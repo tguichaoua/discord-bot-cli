@@ -131,11 +131,11 @@ export default class CommandSet {
 
         try {
             if (!command) {
-                if (options.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete();
+                if (options.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete().catch(() => { });
                 return CommandResult.commandNotFound();
             }
 
-            if (command.deleteCommand && msg.channel.type === 'text') await msg.delete();
+            if (command.deleteCommand && msg.channel.type === 'text') await msg.delete().catch(() => { });
 
             if (command.isDevOnly && !(options.devIDs.includes(msg.author.id))) return CommandResult.devOnly();
 
