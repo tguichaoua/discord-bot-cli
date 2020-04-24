@@ -1,25 +1,23 @@
-type OptionnalArg<T> =
-    {
-        optionnal?: false,
-    } |
-    {
-        optionnal: true,
-        defaultValue?: T,
-    };
+import { ParsableType as ParsableTypeName } from "../ParsableTypeName";
 
-type ArgParser<ParserName, Type, Config = {}> =
-    { type: ParserName } &
-    OptionnalArg<Type> &
-    Config;
-
-export type ArgDef =
+type ArgParser<Name extends ParsableTypeName, Type> =
     {
-        description?: string
+        type: Name;
+        description?: string;
+        validator?: (value: Type) => boolean;
     } &
     (
-        ArgParser<"string", string> |
-        ArgParser<"number", number> |
-        ArgParser<"range", number, { min: number, max: number }>
+        {
+            optionnal?: false,
+        } |
+        {
+            optionnal: true,
+            defaultValue?: Type,
+        }
+    );
 
-        //ArgParser<"custom"> // TODO
-    )
+export type ArgDef =
+    ArgParser<"string", string> |
+    ArgParser<"integer", number> |
+    ArgParser<"float", number> |
+    ArgParser<"boolean", boolean>;

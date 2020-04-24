@@ -3,12 +3,13 @@ import { ArgParserBase } from "../argParsers/ArgParserBase";
 import { ArgDef } from "./def/ArgDef";
 import { ArgParser } from "./ArgParser";
 import { NumberParser } from "../argParsers/Number";
+import { ParsableTypeName } from "./ParsableTypeName";
 
 export default class Arg {
 
     private _name: string;
     private _description: string;
-    private _parser: ArgParser;
+    private _type: ParsableTypeName;
     private _isOptionnal: boolean;
     private _defaultValue: any;
 
@@ -18,7 +19,7 @@ export default class Arg {
 
         this._name = name;
         this._description = def.description ?? "";
-        this._parser = getParser(def);
+        this._type = def.type;
         this._isOptionnal = !!def.optionnal;
         this._defaultValue = def.optionnal ? def.defaultValue : undefined;
     }
@@ -26,8 +27,6 @@ export default class Arg {
     get name() { return this._name; }
 
     get description() { return this._description; }
-
-    get parser() { return this._parser; }
 
     get isMendatory() { return this._isOptionnal; }
 
@@ -41,8 +40,14 @@ export default class Arg {
             return `[${this.name}${val}]`;
         }
     }
-}
 
-function getParser(def: ArgDef): ArgParser {
-    // TODO
+    parse(argument: string) {
+        switch(this._type) {
+            // TODO
+
+
+
+
+        }
+    }
 }
