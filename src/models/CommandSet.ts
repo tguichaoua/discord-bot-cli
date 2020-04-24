@@ -125,7 +125,11 @@ export default class CommandSet {
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-        const inArgs = message.content.slice(opts.prefix.length).split(/ +/);
+        //const inArgs = message.content.slice(opts.prefix.length).split(/ +/);
+
+        const inArgs = (message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
+            .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
+
         const { command, args } = this.resolve(inArgs);
 
         try {
@@ -138,7 +142,7 @@ export default class CommandSet {
 
             if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
 
-            return await command.execute(message, args, context, options, this); // TODO
+            return await command.execute(message, args, context, opts, this);
         } catch (e) {
             return CommandResult.error(e);
         }
@@ -160,5 +164,5 @@ export default class CommandSet {
 }
 
 function parserOptions(options?: Partial<ParseOptions>): ParseOptions {
-
+    // TODO
 }

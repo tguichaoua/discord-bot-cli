@@ -61,8 +61,6 @@ export default class Signature {
     // ==================
 
     tryParse(args: string[]) {
-        if (!Array.isArray(args)) return;
-
         // check if there is enough arguments.
         if (args.length < this._minArgNeeded) return;
 
