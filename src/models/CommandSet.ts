@@ -113,33 +113,33 @@ export default class CommandSet {
 
     /**
      * Check if there is a command in the given message and execute it.
-     * @param msg
+     * @param message
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(msg: Message, context: any, options: ParseOptions) {
+    async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
 
         // make a deep copy of options
         options = JSON.parse(JSON.stringify(options));
 
         // Extract command & arguments from message
-        if (!msg.content.startsWith(options.prefix)) return CommandResult.notPrefixed();
+        if (!message.content.startsWith(options.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-        const inArgs = msg.content.slice(options.prefix.length).split(/ +/);
+        const inArgs = message.content.slice(options.prefix.length).split(/ +/);
         const { command, args } = this.resolve(inArgs);
 
         try {
             if (!command) {
-                if (options.deleteMessageIfCommandNotFound && msg.channel.type === 'text') await msg.delete().catch(() => { });
+                if (options.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
                 return CommandResult.commandNotFound();
             }
 
-            if (command.deleteCommand && msg.channel.type === 'text') await msg.delete().catch(() => { });
+            if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
 
-            if (command.isDevOnly && !(options.devIDs.includes(msg.author.id))) return CommandResult.devOnly();
+            if (command.isDevOnly && !(options.devIDs.includes(message.author.id))) return CommandResult.devOnly();
 
-            return await command.execute(msg, args, context, options, this);
+            return await command.execute(message, args, context, options, this);
         } catch (e) {
             return CommandResult.error(e);
         }
@@ -160,3 +160,6 @@ export default class CommandSet {
     }
 }
 
+function parserOptions(options: Partial<ParseOptions>): ParseOptions {
+    
+}
