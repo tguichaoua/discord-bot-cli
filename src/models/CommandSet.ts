@@ -119,27 +119,26 @@ export default class CommandSet {
      */
     async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
 
-        // make a deep copy of options
-        options = JSON.parse(JSON.stringify(options));
+        const opts = parserOptions(options);
 
         // Extract command & arguments from message
-        if (!message.content.startsWith(options.prefix)) return CommandResult.notPrefixed();
+        if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-        const inArgs = message.content.slice(options.prefix.length).split(/ +/);
+        const inArgs = message.content.slice(opts.prefix.length).split(/ +/);
         const { command, args } = this.resolve(inArgs);
 
         try {
             if (!command) {
-                if (options.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
+                if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
                 return CommandResult.commandNotFound();
             }
 
             if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
 
-            if (command.isDevOnly && !(options.devIDs.includes(message.author.id))) return CommandResult.devOnly();
+            if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
 
-            return await command.execute(message, args, context, options, this);
+            return await command.execute(message, args, context, options, this); // TODO
         } catch (e) {
             return CommandResult.error(e);
         }
@@ -160,6 +159,6 @@ export default class CommandSet {
     }
 }
 
-function parserOptions(options: Partial<ParseOptions>): ParseOptions {
-    
+function parserOptions(options?: Partial<ParseOptions>): ParseOptions {
+
 }
