@@ -1,8 +1,4 @@
-import { Message } from "discord.js";
-
 import Arg from "./Arg";
-import CommandSet from "./CommandSet";
-import ParseOptions from "./ParseOptions";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommmandQuery } from "./CommandQuery";
 import { ParsableType } from "./ParsableType";
@@ -11,7 +7,6 @@ export default class Signature {
 
     private _executor: (query: CommmandQuery) => any | Promise<any>;
     private _args: Arg[] = [];
-    private _minArgNeeded = 0;
 
     constructor(def: SignatureDef) {
 
@@ -29,22 +24,14 @@ export default class Signature {
         // also calculate min argument count
         let cur = true;
         for (const a of this._args) {
-            if (cur && !a.isOptional)
+            if (cur && a.isOptional)
                 cur = false;
-            if (!cur && a.isOptional)
+            if (!cur && !a.isOptional)
                 throw Error("Command signature : mendatory arguments must come before optionals arguments.");
-
-            if (a.isOptional) {
-                let c = a.parser.minArgNeeded;
-                if (typeof (c) !== 'number' || c < 0) c = 1;
-                this._minArgNeeded += c;
-            }
         }
     }
 
     // === Getter ==========================================================================
-
-    get minArgNeeded() { return this._minArgNeeded; }
 
     get argCount() { return this._args.length; }
 
@@ -61,28 +48,26 @@ export default class Signature {
 
     // ==================
 
-    tryParse(args: string[]) {
-        // check if there is enough arguments.
-        if (args.length < this._minArgNeeded) return;
+    tryParse(args: readonly string[]) {
+        
+        if (args.length < this.argCount) return; // check if there is enough arguments.
 
-        args = [...args]; // make a copy
-        let neededArgCount = this._minArgNeeded;
-        const parsed = new Map<string, ParsableType>();
+        const parsedArgs = new Map<string, ParsableType>();
 
         for (let i = 0; i < this._args.length; i++) {
             const arg = this._args[i];
             if (i < args.length) {
                 const value = arg.parse(args[i]);
                 if (value === undefined) return; // fail to parse the argument
-                parsed.set(arg.name, value);
+                parsedArgs.set(arg.name, value);
             } else if (arg.isOptional) {
-                parsed.set(arg.name, arg.defaultValue);
+                parsedArgs.set(arg.name, arg.defaultValue);
             } else {
                 return; // not enough provided arguments
             }
         }
 
-        return parsed;
+        return parsedArgs;
     }
 
 }
