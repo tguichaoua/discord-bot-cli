@@ -1,35 +1,37 @@
 import { DefaultParser } from "../argParsers/DefaultParser";
 import { ArgParserBase } from "../argParsers/ArgParserBase";
+import { ArgDef } from "./def/ArgDef";
+import { ArgParser } from "./ArgParser";
+import { NumberParser } from "../argParsers/Number";
 
 export default class Arg {
 
     private _name: string;
     private _description: string;
-    private _parser: ArgParserBase;
-    private _isMendatory: boolean;
+    private _parser: ArgParser;
+    private _isOptionnal: boolean;
     private _defaultValue: any;
 
-    constructor(name: string, description?: string, isMendatory = true, parser: ArgParserBase = new DefaultParser(), defaultValue?: any) {
-        if (typeof name !== 'string' || name === '')
-            throw Error('Argument\'s name must be a non-empty string');
+    constructor(name: string, def: ArgDef) {
+        if (typeof name !== "string" || name === "")
+            throw Error("Argument's name must be a non-empty string");
 
-        if (!(parser instanceof ArgParserBase))
-            throw Error('Argument parser must inherit ArgParser.Base class.')
 
         this._name = name;
-        this._description = description ?? "";
-        this._parser = parser;
-        this._isMendatory = isMendatory;
-        this._defaultValue = defaultValue;
+        this._description = def.description ?? "";
+        this._parser = getParser(def);
+        this._isOptionnal = !!def.optionnal;
+
+    
     }
 
     get name() { return this._name; }
-    
+
     get description() { return this._description; }
 
     get parser() { return this._parser; }
 
-    get isMendatory() { return this._isMendatory; }
+    get isMendatory() { return this._isOptionnal; }
 
     get defaultValue() { return this._defaultValue; }
 
@@ -41,4 +43,8 @@ export default class Arg {
             return `[${this.name}${val}]`;
         }
     }
+}
+
+function getParser(def: ArgDef): ArgParser {
+    // TODO
 }
