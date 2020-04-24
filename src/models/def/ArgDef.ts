@@ -1,4 +1,4 @@
-import { ParsableType as ParsableTypeName } from "../ParsableTypeName";
+import { ParsableType as ParsableTypeName } from "../ParsableType";
 
 type ArgParser<Name extends ParsableTypeName, Type> =
     {

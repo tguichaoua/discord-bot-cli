@@ -1,1 +1,0 @@
-export type ParsableTypeName = "string" | "boolean" | "integer" | "float";

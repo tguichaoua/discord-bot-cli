@@ -5,6 +5,7 @@ import CommandSet from "./CommandSet";
 import ParseOptions from "./ParseOptions";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommmandQuery } from "./CommandQuery";
+import { ParsableType } from "./ParsableType";
 
 export default class Signature {
 
@@ -28,12 +29,12 @@ export default class Signature {
         // also calculate min argument count
         let cur = true;
         for (const a of this._args) {
-            if (cur && !a.isMendatory)
+            if (cur && !a.isOptionnal)
                 cur = false;
-            if (!cur && a.isMendatory)
+            if (!cur && a.isOptionnal)
                 throw Error("Command signature : mendatory arguments must come before optionals arguments.");
 
-            if (a.isMendatory) {
+            if (a.isOptionnal) {
                 let c = a.parser.minArgNeeded;
                 if (typeof (c) !== 'number' || c < 0) c = 1;
                 this._minArgNeeded += c;
@@ -66,37 +67,21 @@ export default class Signature {
 
         args = [...args]; // make a copy
         let neededArgCount = this._minArgNeeded;
-        const parsed = new Map<string, any>();
+        const parsed = new Map<string, ParsableType>();
 
-        for (const a of this._args) {
-            if (!a.isMendatory) {
-                if (args.length === 0) {
-                    parsed.set(a.name, a.defaultValue);
-                    continue;
-                }
-                if (args.length < a.parser.minArgNeeded) {
-                    return; // fail because the arg parser have not enough argument to parse
-                }
+        for (let i = 0; i < this._args.length; i++) {
+            const arg = this._args[i];
+            if (i < args.length) {
+                const value = arg.parse(args[i]);
+                if (value === undefined) return; // fail to parse the argument
+                parsed.set(arg.name, value);
+            } else if (arg.isOptionnal) {
+                parsed.set(arg.name, arg.defaultValue);
+            } else {
+                return; // not enough provided arguments
             }
-
-            const result = a.parser.parse(args);
-            if (result) {
-                let { value, consumed } = result;
-                if (typeof consumed !== 'number' || consumed < 0) consumed = 0;
-
-                args.splice(0, consumed);
-
-                if (a.isMendatory) {
-                    // if there is not enough arguments left for others argument parser return.
-                    neededArgCount -= a.parser.minArgNeeded;
-                    if (args.length < neededArgCount) return;
-                }
-
-                parsed.set(a.name, value);
-            } else
-                return; // result is undefined mean that the arg parser fail, so this signature fail too.
-
         }
+
         return parsed;
     }
 
