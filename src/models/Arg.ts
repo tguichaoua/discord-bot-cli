@@ -18,7 +18,7 @@ export default class Arg {
         this._description = def.description ?? "";
         this._type = def.type;
         this._isOptional = !!def.optional;
-        this._defaultValue = def.optional ? def.defaultValue ?? getDefaultType(def.type) : undefined;
+        this._defaultValue = def.optional ? def.defaultValue ?? getDefaultValue(def.type) : undefined;
         this._validator = def.validator;
     }
 
@@ -73,7 +73,7 @@ export default class Arg {
     }
 }
 
-function getDefaultType(name: ParsableTypeName): ParsableType {
+function getDefaultValue(name: ParsableTypeName): ParsableType {
     switch (name) {
         case "string": return "";
         case "integer": case "float": return 0;
