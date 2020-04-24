@@ -29,12 +29,12 @@ export default class Signature {
         // also calculate min argument count
         let cur = true;
         for (const a of this._args) {
-            if (cur && !a.isOptionnal)
+            if (cur && !a.isOptional)
                 cur = false;
-            if (!cur && a.isOptionnal)
+            if (!cur && a.isOptional)
                 throw Error("Command signature : mendatory arguments must come before optionals arguments.");
 
-            if (a.isOptionnal) {
+            if (a.isOptional) {
                 let c = a.parser.minArgNeeded;
                 if (typeof (c) !== 'number' || c < 0) c = 1;
                 this._minArgNeeded += c;
@@ -75,7 +75,7 @@ export default class Signature {
                 const value = arg.parse(args[i]);
                 if (value === undefined) return; // fail to parse the argument
                 parsed.set(arg.name, value);
-            } else if (arg.isOptionnal) {
+            } else if (arg.isOptional) {
                 parsed.set(arg.name, arg.defaultValue);
             } else {
                 return; // not enough provided arguments

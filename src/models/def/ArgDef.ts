@@ -8,10 +8,10 @@ type ArgParser<Name extends ParsableTypeName, Type> =
     } &
     (
         {
-            optionnal?: false,
+            optional?: false,
         } |
         {
-            optionnal: true,
+            optional: true,
             defaultValue?: Type,
         }
     );

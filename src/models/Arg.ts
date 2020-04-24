@@ -1,8 +1,4 @@
-import { DefaultParser } from "../argParsers/DefaultParser";
-import { ArgParserBase } from "../argParsers/ArgParserBase";
 import { ArgDef } from "./def/ArgDef";
-import { ArgParser } from "./ArgParser";
-import { NumberParser } from "../argParsers/Number";
 import { ParsableTypeName, ParsableType } from "./ParsableType";
 
 export default class Arg {
@@ -10,7 +6,7 @@ export default class Arg {
     private _name: string;
     private _description: string;
     private _type: ParsableTypeName;
-    private _isOptionnal: boolean;
+    private _isOptional: boolean;
     private _defaultValue?: ParsableType;
     private _validator?: (o: any) => boolean;
 
@@ -21,8 +17,8 @@ export default class Arg {
         this._name = name;
         this._description = def.description ?? "";
         this._type = def.type;
-        this._isOptionnal = !!def.optionnal;
-        this._defaultValue = def.optionnal ? def.defaultValue ?? getDefaultType(def.type) : undefined;
+        this._isOptional = !!def.optional;
+        this._defaultValue = def.optional ? def.defaultValue ?? getDefaultType(def.type) : undefined;
         this._validator = def.validator;
     }
 
@@ -30,7 +26,7 @@ export default class Arg {
 
     get description() { return this._description; }
 
-    get isOptionnal() { return this._isOptionnal; }
+    get isOptional() { return this._isOptional; }
 
     get defaultValue() {
         if (this._defaultValue === undefined)
@@ -39,7 +35,7 @@ export default class Arg {
     }
 
     get usageString() {
-        if (this.isOptionnal) {
+        if (this.isOptional) {
             return `<${this.name}>`;
         } else {
             const val = this.defaultValue ? ` = ${this.defaultValue}` : '';
