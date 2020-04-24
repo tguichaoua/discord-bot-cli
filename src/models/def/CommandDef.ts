@@ -10,6 +10,6 @@ export interface CommandDef {
 
     inherit?: boolean;
     ignore?: boolean;
-    keepCommandMessage?: boolean;
+    deleteCommandMessage?: boolean;
     dev?: boolean;
 }

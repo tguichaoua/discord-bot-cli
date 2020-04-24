@@ -18,8 +18,8 @@ export default class Command {
     private _parent: Command | null = null;
 
     private _onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
-    private _subs: Map<string, Command> = new Map<string, Command>();
     private _signatures: Signature[] = [];
+    private _subs: Map<string, Command> = new Map<string, Command>();
 
     private _inherit = false;
     private _isInitialized = false;
@@ -47,6 +47,9 @@ export default class Command {
     
         this._inherit = !!def.inherit;
 
+        this._settings.deleteCommand.rawValue = def.deleteCommandMessage;
+        this._settings.ignored.rawValue = def.ignore;
+        this._settings.devOnly.rawValue = def.dev;
     }
 
     // === Getter =====================================================
