@@ -119,13 +119,12 @@ export default class CommandSet {
      */
     async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
 
-        const opts = parserOptions(options);
+        const opts =  Object.assign({}, defaultOptions, options);
 
         // Extract command & arguments from message
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-        //const inArgs = message.content.slice(opts.prefix.length).split(/ +/);
 
         const inArgs = (message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
             .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
@@ -163,6 +162,9 @@ export default class CommandSet {
     }
 }
 
-function parserOptions(options?: Partial<ParseOptions>): ParseOptions {
-    // TODO
-}
+const defaultOptions: ParseOptions = {
+    prefix: "",
+    helpOnSignatureNotFound: true,
+    deleteMessageIfCommandNotFound: true,
+    devIDs: []
+};

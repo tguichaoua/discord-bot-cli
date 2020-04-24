@@ -44,7 +44,7 @@ export default class Arg {
     }
 
     parse(argument: string) {
-        let value;
+        let value = undefined;
         switch (this._type) {
             case "string":
                 value = argument;
