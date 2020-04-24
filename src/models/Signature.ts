@@ -3,21 +3,34 @@ import { Message } from "discord.js";
 import Arg from "./Arg";
 import CommandSet from "./CommandSet";
 import ParseOption from "./ParseOption";
+import { SignatureDef } from "./def/SignatureDef";
+import { CommmandQuery } from "./CommandQuery";
 
 export default class Signature {
 
-    private _executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>;
+    private _executor: (query: CommmandQuery) => any | Promise<any>;
     private _args: Arg[];
     private _minArgNeeded = 0;
 
-    constructor(executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, args: Arg[]) {
-        if (!(executor instanceof Function))
-            throw Error("Command signture must have a executor function.");
+    constructor(def: SignatureDef) {
+    
+        this._executor = def.executor;
 
-        this._executor = executor;
+        if (def.args)
+            for (const k of Object.keys(def.args)) {
+                const d = def.args[k];
+                
 
-        if (Array.isArray(args))
-            this._args = args.filter(a => a instanceof Arg);
+
+
+            }
+
+
+
+
+
+        if (Array.isArray(def.args))
+            this._args = def.args.filter(a => a instanceof Arg);
         else
             this._args = [];
 
