@@ -9,6 +9,7 @@ import Prop from "./Prop";
 import { keyOf } from "../com";
 import { ParseOption } from '..';
 import { CommandDef } from './def/CommandDef';
+import { threadId } from 'worker_threads';
 
 export default class Command {
 
@@ -38,8 +39,13 @@ export default class Command {
 
         this._onInit = def.onInit;
 
-
+        this._signatures = def.signatures ? def.signatures.map(d => new Signature(d)) : [];
         
+        if (def.subs)
+            for (const k of Object.keys(def.subs))
+                this._subs.set(k, new Command(k, def.subs[k]));
+    
+        this._inherit = !!def.inherit;
 
     }
 
@@ -80,77 +86,7 @@ export default class Command {
         return this._subs.get(name);
     }
 
-    // === Settings Methods ===================
-
-    /**
-     * Make this command not loaded by CommandSet.
-     * @categorie Settings
-     */
-    ignore(value: boolean = true) {
-        this._settings.ignored.value = value;
-        return this;
-    }
-
-    /**
-     * Make the message that called this command to not be delete automatically.
-     * @categorie Settings
-     */
-    keepCommandMessage(value: boolean = true) {
-        this._settings.deleteCommand.value = !value;
-        return this;
-    }
-
-    /**
-     * Make command can only be called by a dev.
-     * @categorie Settings
-     */
-    dev(value: boolean = true) {
-        this._settings.devOnly.value = value;
-        return this;
-    }
-
-    /**
-     * Make value of undefined settings same as parent.
-     * @categorie Settings
-     */
-    inherit(value: boolean = true) {
-        this._inherit = value;
-        return this;
-    }
-
-    /**
-     * Set the init callback, that is called when this command is initialized.
-     * @categorie Definition
-     */
-    onInit(cb: (context: any, commandSet: CommandSet) => void | Promise<void>) {
-        if (cb instanceof Function)
-            this._onInit = cb;
-        return this;
-    }
-
-    /**
-     * Add a new signature.
-     * @categorie Definition
-     */
-    signature(executor: (msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, commandSet: CommandSet) => any | Promise<any>, ...args: Arg[]) {
-        this._signatures.push(new Signature(executor, args));
-        return this;
-    }
-
-    /**
-     * Add a sub command.
-     * @categorie Definition
-     */
-    sub(command: Command) {
-        if (command instanceof Command && command._parent == undefined) {
-            command._parent = this;
-            this._subs.set(command._name, command);
-        }
-        return this;
-    }
-
     // === * ==================================================
-
 
     async init(context: any, commandSet: CommandSet) {
         if (this.isInitialized)
