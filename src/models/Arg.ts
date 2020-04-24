@@ -16,13 +16,11 @@ export default class Arg {
         if (typeof name !== "string" || name === "")
             throw Error("Argument's name must be a non-empty string");
 
-
         this._name = name;
         this._description = def.description ?? "";
         this._parser = getParser(def);
         this._isOptionnal = !!def.optionnal;
-
-    
+        this._defaultValue = def.optionnal ? def.defaultValue : undefined;
     }
 
     get name() { return this._name; }
