@@ -6,7 +6,7 @@ export interface CommandDef {
     signatures?: SignatureDef[];
     subs?: { [name: string]: CommandDef };
 
-    onInit: (context: any, commandSet: CommandSet) => void | Promise<void>;
+    onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
 
     inherit?: boolean;
     ignore?: boolean;

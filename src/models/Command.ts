@@ -8,12 +8,13 @@ import Prop from "./Prop";
 
 import { keyOf } from "../com";
 import { ParseOption } from '..';
+import { CommandDef } from './CommandDef';
 
 export default class Command {
 
     private _name: string;
     private _description: string;
-    private _parent: Command | undefined;
+    private _parent: Command | null = null;
 
     private _onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
     private _subs: Map<string, Command> = new Map<string, Command>();
@@ -28,12 +29,18 @@ export default class Command {
         devOnly: new Prop(false),
     }
 
-    constructor(name: string, description?: string) {
+    constructor(name: string, def: CommandDef) {
         if (typeof name !== "string" || name === "")
             throw new TypeError("Command name must be a non-empty string");
 
         this._name = name;
-        this._description = description ?? "";
+        this._description = def.description;
+
+        this._onInit = def.onInit;
+
+        
+        
+
     }
 
     // === Getter =====================================================
