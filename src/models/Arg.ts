@@ -1,5 +1,5 @@
-import { DefaultParser } from "./argParsers/DefaultParser";
-import { ArgParserBase } from "./argParsers/ArgParserBase";
+import { DefaultParser } from "../argParsers/DefaultParser";
+import { ArgParserBase } from "../argParsers/ArgParserBase";
 
 export default class Arg {
 

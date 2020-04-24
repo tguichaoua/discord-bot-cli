@@ -4,7 +4,7 @@ import path from "path";
 import { Message } from "discord.js";
 
 import Command from "./Command";
-import * as com from "./com";
+import * as com from "../com";
 import * as CommandResult from "./CommandResult";
 import ParseOption from "./ParseOption";
 

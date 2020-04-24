@@ -6,8 +6,8 @@ import CommandSet from "./CommandSet";
 import * as CommandResult from "./CommandResult";
 import Prop from "./Prop";
 
-import { keyOf } from "./com";
-import { ParseOption } from '.';
+import { keyOf } from "../com";
+import { ParseOption } from '..';
 
 export default class Command {
 
