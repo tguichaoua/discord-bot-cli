@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 
 import Arg from "./Arg";
 import CommandSet from "./CommandSet";
-import ParseOption from "./ParseOption";
+import ParseOptions from "./ParseOptions";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommmandQuery } from "./CommandQuery";
 

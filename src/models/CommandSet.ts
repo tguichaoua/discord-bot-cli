@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 import Command from "./Command";
 import * as com from "../com";
 import * as CommandResult from "./CommandResult";
-import ParseOption from "./ParseOption";
+import ParseOptions from "./ParseOptions";
 
 export default class CommandSet {
 
@@ -117,7 +117,7 @@ export default class CommandSet {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(msg: Message, context: any, options: ParseOption) {
+    async parse(msg: Message, context: any, options: ParseOptions) {
 
         // make a deep copy of options
         options = JSON.parse(JSON.stringify(options));
@@ -150,7 +150,7 @@ export default class CommandSet {
         helpOnSignatureNotFound = true,
         deleteMessageIfCommandNotFound = true,
         devIDs: string[] = []
-    ): ParseOption {
+    ): ParseOptions {
         return {
             prefix: prefix ?? "",
             helpOnSignatureNotFound,
