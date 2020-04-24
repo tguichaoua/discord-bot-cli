@@ -8,7 +8,7 @@ import Prop from "./Prop";
 
 import { keyOf } from "../com";
 import { ParseOption } from '..';
-import { CommandDef } from './CommandDef';
+import { CommandDef } from './def/CommandDef';
 
 export default class Command {
 
@@ -38,7 +38,7 @@ export default class Command {
 
         this._onInit = def.onInit;
 
-        
+
         
 
     }

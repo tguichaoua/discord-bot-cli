@@ -1,4 +1,4 @@
-import { Char } from "../utils/char"
+import { Char } from "../../utils/char"
 
 type Flag<TypeName, Type> = 
 {

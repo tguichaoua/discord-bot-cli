@@ -1,5 +1,5 @@
 import { SignatureDef } from "./SignatureDef";
-import { CommandSet } from "..";
+import { CommandSet } from "../..";
 
 export interface CommandDef {
     description: string;
