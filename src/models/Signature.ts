@@ -9,30 +9,20 @@ import { CommmandQuery } from "./CommandQuery";
 export default class Signature {
 
     private _executor: (query: CommmandQuery) => any | Promise<any>;
-    private _args: Arg[];
+    private _args: Arg[] = [];
     private _minArgNeeded = 0;
 
     constructor(def: SignatureDef) {
-    
+
         this._executor = def.executor;
 
         if (def.args)
-            for (const k of Object.keys(def.args)) {
-                const d = def.args[k];
-                
+            for (const k of Object.keys(def.args))
+                this._args.push(new Arg(k, def.args[k]));
 
 
+        // TODO build Flags
 
-            }
-
-
-
-
-
-        if (Array.isArray(def.args))
-            this._args = def.args.filter(a => a instanceof Arg);
-        else
-            this._args = [];
 
         // make sure that mendatory arguments come before all optionals arguments.
         // also calculate min argument count
