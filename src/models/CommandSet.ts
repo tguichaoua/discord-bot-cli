@@ -137,8 +137,6 @@ export default class CommandSet {
 
         if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
 
-        
-
         try {
             return await command.execute(message, args, context, opts, this);
         } catch (e) {

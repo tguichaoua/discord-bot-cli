@@ -8,6 +8,7 @@ import Prop from "./Prop";
 import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
+import { FlagInfos, FlagInfo } from './FlagInfo';
 
 export default class Command {
 
@@ -151,9 +152,41 @@ export default class Command {
         if (!this._isInitialized)
             throw Error("You cannot use a non initialized command.");
 
+        const flagInfos: FlagInfo[] = [];
+
+        for (let i = 0; i < args.length; i++) {
+            let inFlag = args[i];
+
+            if (inFlag.match(/^--[^-].+$/)) {
+                const part = inFlag.substring(2).split(/=(.+)/);
+                let value = part.length > 1 ? part[1] : undefined;
+                flagInfos.push({ type: "full", name: part[0], value });
+            } else if (inFlag.match(/^-[a-zA-Z]$/)) {
+                flagInfos.push({
+                    type: "shortcut",
+                    name: inFlag.substring(1),
+                    valueIndex: i + 1 === args.length ? undefined : i
+                });
+            } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
+                const flagNames = inFlag.substring(1).split("");
+
+                for (const flagName of flagNames) {
+                    flagInfos.push({
+                        type: "shortcut",
+                        name: flagName,
+                    });
+                }
+            } else
+                continue;
+
+            args.splice(i, 1); // remove the flag from args
+            i--; // make sure to not skip an argument.
+        }
+
+
         for (const s of this._signatures) {
             try {
-                const parsedData = s.tryParse(args);
+                const parsedData = s.tryParse(args, flagInfos);
                 if (parsedData) {
                     const result = await s.executor(
                         {

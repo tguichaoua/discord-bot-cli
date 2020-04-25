@@ -3,6 +3,7 @@ import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./CommandQuery";
 import { ParsableType } from "./ParsableType";
 import { Parsable } from "./Parsable";
+import { FlagInfo } from "./FlagInfo";
 
 export default class Signature {
 
@@ -58,70 +59,49 @@ export default class Signature {
 
     // ==================
 
-    tryParse(args: readonly string[]) {
-
-        const _args = [...args];
+    tryParse(args: readonly string[], flagInfos: readonly FlagInfo[]) {
 
         const parsedFlags = new Map<string, ParsableType>(Array.from(this._flags.values()).map(f => [f.name, f.defaultValue]));
+        const consumedArgIndex: number[] = []
 
-        for (let i = 0; i < args.length; i++) {
-            let inFlag = args[i];
+        for (const fi of flagInfos) {
+            let flag: Parsable | undefined;
+            switch (fi.type) {
+                case "full":
+                    flag = this._flags.get(fi.name);
+                    if (!flag) continue;
 
-            if (inFlag.match(/^--[^-].+$/)) {
-                const part = inFlag.substring(2).split(/=(.+)/);
-                const flag = this._flags.get(part[0]);
-                if (!flag) continue;
-
-                if (part.length === 1) {
-                    if (flag.type === "boolean")
+                    if (fi.value) {
+                        const parsedValue = flag.parse(fi.value);
+                        if (parsedValue)
+                            parsedFlags.set(flag.name, parsedValue);
+                        else
+                            return; // invalid value for this flag
+                    } else if (flag.type === "boolean")
                         parsedFlags.set(flag.name, true);
                     else
-                        return; // this flag need a value, but there is no value
-                } else {
-                    const parsedValue = flag.parse(part[1]);
-                    if (!parsedValue) return;
-                    parsedFlags.set(flag.name, parsedValue);
-                }
-                _args.splice(i, 1);
-                i--;
-            } else if (inFlag.match(/^-[a-zA-Z]$/)) {
-                const flag = this._flagAlias.get(inFlag.substring(1));
+                        return; // the flag require a value, but nothing was provided
 
-                if (!flag) continue;
-                if (flag.type === "boolean") {
-                    parsedFlags.set(flag.name, true);
-                    _args.splice(i, 1);
-                    i--;
-                }
-                else {
-                    if (i + 1 >= _args.length) return; // this flag need a value, but there is no value
-                    const parsedValue = flag.parse(_args[i + 1]);
-                    if (!parsedValue) return;
-                    parsedFlags.set(flag.name, parsedValue);
-                    _args.splice(i, 2);
-                    i--;
-                }
-            } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
-                const flagNames = inFlag.substring(1).split("");
-                for (const flagName of flagNames) {
-                    const flag = this._flagAlias.get(flagName);
+                    break;
+                case "shortcut":
+                    flag = this._flags.get(fi.name);
                     if (!flag) continue;
-                    if (flag.type === "boolean") {
+
+                    if (flag.type === "boolean")
                         parsedFlags.set(flag.name, true);
-                        _args.splice(i, 1);
-                        i--;
-                    }
                     else {
-                        if (i + 1 >= _args.length) return; // this flag need a value, but there is no value
-                        const parsedValue = flag.parse(_args[i + 1]);
-                        if (!parsedValue) return;
+                        if (!fi.valueIndex) return; // the flag require a value, but nothing was provided
+                        const parsedValue = flag.parse(args[fi.valueIndex]);
+                        if (!parsedValue) return; // invalid value for this flag
+                        consumedArgIndex.push(fi.valueIndex);
                         parsedFlags.set(flag.name, parsedValue);
-                        _args.splice(i, 2);
-                        i--;
                     }
-                }
+                    break;
             }
         }
+
+        // remove arguments consumed by flags
+        const _args = args.filter((_,i) => !consumedArgIndex.includes(i));
 
         if (_args.length < this.argCount) return; // check if there is enough arguments.
 
@@ -139,8 +119,9 @@ export default class Signature {
             }
         }
 
+        // remove parsed arguments;
         const rest = _args.splice(0, this._args.length)
-        
+
         return { parsedArgs, parsedFlags, rest };
     }
 
