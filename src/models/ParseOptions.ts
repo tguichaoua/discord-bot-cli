@@ -1,4 +1,4 @@
-export default interface ParseOptions {
+export interface ParseOptions {
     prefix: string;
     helpOnSignatureNotFound: boolean;
     deleteMessageIfCommandNotFound: boolean;

@@ -1,10 +1,12 @@
 import { Message } from "discord.js";
-import { ParseOption, CommandSet } from "..";
+import { ParsableType } from "./ParsableType";
+import { ParseOptions } from "./ParseOptions";
+import CommandSet from "./CommandSet";
 
 export interface CommmandQuery {
     message: Message,
-    args: ReadonlyMap<string, any>,
+    args: ReadonlyMap<string, ParsableType>,
     context: any,
-    options: ParseOption,
+    options: ParseOptions,
     commandSet: CommandSet
 }
