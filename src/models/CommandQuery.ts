@@ -6,6 +6,7 @@ import CommandSet from "./CommandSet";
 export interface CommmandQuery {
     message: Message,
     args: ReadonlyMap<string, ParsableType>,
+    flags: ReadonlyMap<string, ParsableType>,
     context: any,
     options: ParseOptions,
     commandSet: CommandSet
