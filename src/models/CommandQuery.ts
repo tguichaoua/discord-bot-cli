@@ -4,10 +4,11 @@ import { ParseOptions } from "./ParseOptions";
 import CommandSet from "./CommandSet";
 
 export interface CommmandQuery {
-    message: Message,
-    args: ReadonlyMap<string, ParsableType>,
-    flags: ReadonlyMap<string, ParsableType>,
-    context: any,
-    options: ParseOptions,
-    commandSet: CommandSet
+    readonly message: Message;
+    readonly args: ReadonlyMap<string, ParsableType>;
+    readonly flags: ReadonlyMap<string, ParsableType>;
+    readonly rest: readonly string[];
+    readonly context: any;
+    readonly options: ParseOptions;
+    readonly commandSet: CommandSet;
 }

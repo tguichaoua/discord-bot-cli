@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Command, CommandSet, Arg, ParseOptions, ArgParser } from "../index";
+import { Command } from "../index";
 import { CommmandQuery } from "../models/CommandQuery";
 
 /*
@@ -31,15 +30,13 @@ module.exports = new Command("help", {
     signatures: [
         {
             executor: executor,
-            args: {
-                "command name": { type: "rest" },
-            }
+            rest: {name:"command name", description: "The name of the command to get help."}
         }
     ]
 });
 
 async function executor(query: CommmandQuery) {
-    const cmdPath = query.args.get('command name') as string[];
+    const cmdPath = query.rest;
 
     if (cmdPath.length === 0)
         await query.message.author.send(`Type \`${query.options.prefix}list\` to get a list of all commands or \`${query.options.prefix}help <command name>\` to get help on a command.`);

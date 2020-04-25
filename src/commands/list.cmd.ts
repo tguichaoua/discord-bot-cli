@@ -1,26 +1,44 @@
-import { Message, MessageEmbed } from "discord.js";
-import { Command, CommandSet, Arg, ParseOption, ArgParser } from "../index";
+import { MessageEmbed } from "discord.js";
+import { Command, } from "../index";
+import { CommmandQuery } from "../models/CommandQuery";
 
 const COMMAND_PER_PAGE = 7;
 
+/*
 module.exports = new Command("list", "Display a list of all avaible commands.")
     .signature(executor,
         new Arg("page", "The page of the list to display.", false, new ArgParser.NumberParser(10), 1)
     );
+*/
 
-async function executor(msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, CommandSet: CommandSet) {
-    const page = args.get("page") as number;
+module.exports = new Command("list", {
+    description: "Display a list of all avaible commands.",
+    signatures: [{
+        executor: executor,
+        args: {
+            page: {
+                type: "integer",
+                optional: true,
+                defaultValue: 1,
+                description: "The page of the list to display.",
+            }
+        }
+    }]
+});
 
-    let cmds = Array.from(CommandSet.commands());
+async function executor(query: CommmandQuery) {
+    const page = query.args.get("page") as number;
+
+    let cmds = Array.from(query.commandSet.commands());
 
     // if the author is not a dev. Hide devOnly commands.
-    if (!options.devIDs.includes(msg.author.id))
+    if (!query.options.devIDs.includes(query.message.author.id))
         cmds = cmds.filter(c => !c.isDevOnly);
 
     const maxPage = Math.ceil(cmds.length / COMMAND_PER_PAGE);
 
     if (page > maxPage) {
-        await msg.author.send(`The number of the page must be between 1 and ${maxPage}.`);
+        await query.message.author.send(`The number of the page must be between 1 and ${maxPage}.`);
         return;
     }
 
@@ -47,5 +65,5 @@ async function executor(msg: Message, args: ReadonlyMap<string, any>, context: a
         embed.addField(cmd.name, description);
     }
 
-    msg.author.send({ embed });
+    query.message.author.send({ embed });
 }

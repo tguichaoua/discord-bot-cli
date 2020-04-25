@@ -7,7 +7,7 @@ import * as CommandResult from "./CommandResult";
 import Prop from "./Prop";
 
 import { keyOf } from "../com";
-import { ParseOption } from '..';
+import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
 import { threadId } from 'worker_threads';
 
@@ -35,16 +35,16 @@ export default class Command {
             throw new TypeError("Command name must be a non-empty string");
 
         this._name = name;
-        this._description = def.description;
+        this._description = def.description ?? "";
 
         this._onInit = def.onInit;
 
         this._signatures = def.signatures ? def.signatures.map(d => new Signature(d)) : [];
-        
+
         if (def.subs)
             for (const k of Object.keys(def.subs))
                 this._subs.set(k, new Command(k, def.subs[k]));
-    
+
         this._inherit = !!def.inherit;
 
         this._settings.deleteCommand.rawValue = def.deleteCommandMessage;
@@ -108,13 +108,11 @@ export default class Command {
         }
 
         // order signature to make sure the most suitable signature is called
-        // signature with greater min argument needed count come firts
+        // signature with greater count of arguments come firts
         // the adding order is preserved (signatures added first comes first)
         this._signatures = this._signatures
             .map((val, idx) => { return { val: val, idx: idx } })
             .sort((a, b) => {
-                if (a.val.minArgNeeded > b.val.minArgNeeded) return -1;
-                if (a.val.minArgNeeded < b.val.minArgNeeded) return 1;
                 if (a.val.argCount > b.val.argCount) return -1;
                 if (a.val.argCount < b.val.argCount) return 1;
                 return a.idx - b.idx;
@@ -151,15 +149,25 @@ export default class Command {
         return embed;
     }
 
-    async execute(msg: Message, args: string[], context: any, options: ParseOption, commandSet: CommandSet) {
+    async execute(message: Message, args: string[], context: any, options: ParseOptions, commandSet: CommandSet) {
         if (!this._isInitialized)
             throw Error("You cannot use a non initialized command.");
 
         for (const s of this._signatures) {
             try {
-                const parsedArgs = s.tryParse(args);
-                if (parsedArgs) {
-                    const result = await s.executor(msg, parsedArgs, context, options, commandSet);
+                const parsedData = s.tryParse(args);
+                if (parsedData) {
+                    const result = await s.executor(
+                        {
+                            message,
+                            args: parsedData.parsedArgs,
+                            flags: parsedData.parsedFlags,
+                            rest: parsedData.rest,
+                            context,
+                            options,
+                            commandSet
+                        }
+                    );
                     return CommandResult.ok(this, s, result);
                 }
             } catch (e) {
@@ -169,10 +177,9 @@ export default class Command {
 
         if (options.helpOnSignatureNotFound) {
             const embed = this.getEmbedHelp(options.prefix);
-            await msg.author.send(`You make an error typing the following command\n\`${msg.content}\``, embed);
+            await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
         }
 
         return CommandResult.signatureNotFound(this);
     }
-
 }

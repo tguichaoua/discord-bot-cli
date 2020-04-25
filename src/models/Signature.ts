@@ -143,7 +143,9 @@ export default class Signature {
             }
         }
 
-        return parsedArgs;
+        const rest = _args.splice(0, this._args.length)
+        
+        return { parsedArgs, parsedFlags, rest };
     }
 
 }

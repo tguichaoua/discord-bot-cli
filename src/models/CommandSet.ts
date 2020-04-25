@@ -71,24 +71,21 @@ export default class CommandSet {
         return this._commands.get(commandName);
     }
 
-    resolve(args: string[]) {
-        if (!Array.isArray(args))
-            return { args };
-
-        args = [...args]; // make a copy of args
+    resolve(args: readonly string[]) {
+        const _args = [...args]; // make a copy of args
         let cmd = this._commands.get(args[0]);
 
         if (cmd) {
             let sub: Command | undefined = cmd;
             do {
                 cmd = sub;
-                args.shift();
+                _args.shift();
                 sub = cmd.getSubCommand(args[0]);
             } while (sub);
 
-            return { command: cmd, args };
+            return { command: cmd, args: _args };
         } else {
-            return { args };
+            return { args: _args };
         }
     }
 
