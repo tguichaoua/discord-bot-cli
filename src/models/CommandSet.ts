@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 import Command from "./Command";
 import * as com from "../com";
 import * as CommandResult from "./CommandResult";
-import ParseOptions from "./ParseOptions";
+import { ParseOptions } from "./ParseOptions";
 
 export default class CommandSet {
 
@@ -119,7 +119,7 @@ export default class CommandSet {
      */
     async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
 
-        const opts =  Object.assign({}, defaultOptions, options);
+        const opts = Object.assign({}, defaultOptions, options);
 
         // Extract command & arguments from message
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
@@ -131,16 +131,18 @@ export default class CommandSet {
 
         const { command, args } = this.resolve(inArgs);
 
+        if (!command) {
+            if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
+            return CommandResult.commandNotFound();
+        }
+
+        if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
+
+        if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
+
+        
+
         try {
-            if (!command) {
-                if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
-                return CommandResult.commandNotFound();
-            }
-
-            if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
-
-            if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
-
             return await command.execute(message, args, context, opts, this);
         } catch (e) {
             return CommandResult.error(e);

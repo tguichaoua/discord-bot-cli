@@ -1,11 +1,4 @@
 import { Char } from "../../utils/char"
+import {  ParsableDef } from "./ParsableDef";
 
-type Flag<TypeName, Type> = 
-{
-    type: TypeName,
-    description?: string,
-    defaultValue?: Type,
-    shortcut: Char,
-}
-
-export type FlagDef = Flag<"string", string> | Flag<"boolean", boolean>;
+export type FlagDef = ParsableDef & { shortcut?: Char };
