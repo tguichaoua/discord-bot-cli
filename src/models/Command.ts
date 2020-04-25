@@ -8,7 +8,7 @@ import Prop from "./Prop";
 import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
-import { FlagInfos, FlagInfo } from './FlagInfo';
+import { FlagInfo } from './FlagInfo';
 
 export default class Command {
 
@@ -186,7 +186,7 @@ export default class Command {
 
         for (const s of this._signatures) {
             try {
-                const parsedData = s.tryParse(args, flagInfos);
+                const parsedData = s.tryParse(message, args, flagInfos);
                 if (parsedData) {
                     const result = await s.executor(
                         {

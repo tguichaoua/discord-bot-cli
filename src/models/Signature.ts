@@ -4,6 +4,7 @@ import { CommandQuery } from "./CommandQuery";
 import { ParsableType } from "./ParsableType";
 import { Parsable } from "./Parsable";
 import { FlagInfo } from "./FlagInfo";
+import { Message } from "discord.js";
 
 export default class Signature {
 
@@ -59,7 +60,7 @@ export default class Signature {
 
     // ==================
 
-    tryParse(args: readonly string[], flagInfos: readonly FlagInfo[]) {
+    tryParse(message: Message, args: readonly string[], flagInfos: readonly FlagInfo[]) {
 
         const parsedFlags = new Map<string, ParsableType>(Array.from(this._flags.values()).map(f => [f.name, f.defaultValue]));
         const consumedArgIndex: number[] = []
@@ -72,7 +73,7 @@ export default class Signature {
                     if (!flag) continue;
 
                     if (fi.value) {
-                        const parsedValue = flag.parse(fi.value);
+                        const parsedValue = flag.parse(message, fi.value);
                         if (parsedValue)
                             parsedFlags.set(flag.name, parsedValue);
                         else
@@ -91,7 +92,7 @@ export default class Signature {
                         parsedFlags.set(flag.name, true);
                     else {
                         if (!fi.valueIndex) return; // the flag require a value, but nothing was provided
-                        const parsedValue = flag.parse(args[fi.valueIndex]);
+                        const parsedValue = flag.parse(message, args[fi.valueIndex]);
                         if (!parsedValue) return; // invalid value for this flag
                         consumedArgIndex.push(fi.valueIndex);
                         parsedFlags.set(flag.name, parsedValue);
@@ -109,7 +110,7 @@ export default class Signature {
         for (let i = 0; i < this._args.length; i++) {
             const arg = this._args[i];
             if (i < args.length) {
-                const value = arg.parse(args[i]);
+                const value = arg.parse(message, args[i]);
                 if (value === undefined) return; // fail to parse the argument
                 parsedArgs.set(arg.name, value);
             } else if (arg.isOptional) {

@@ -1,5 +1,6 @@
 import { ParsableDef } from "./def/ParsableDef";
 import { ParsableType, ParsableTypeName, getDefaultValue } from "./ParsableType";
+import { Message, MessageMentions } from "discord.js";
 
 export class Parsable {
 
@@ -17,7 +18,7 @@ export class Parsable {
         this.defaultValue = def.defaultValue ?? getDefaultValue(def.type);
     }
 
-    parse(argument: string): ParsableType | undefined {
+    parse(message: Message, argument: string): ParsableType | undefined {
         let value = undefined;
         switch (this.type) {
             case "string":
@@ -40,6 +41,13 @@ export class Parsable {
                         value = false;
                         break;
                 }
+                break;
+            case "user":
+                // TODO
+                break;
+
+            case "channel":
+                // TODO
                 break;
         }
         if (value !== undefined && (!this._validator || this._validator(value)))
