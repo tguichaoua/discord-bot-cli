@@ -146,20 +146,6 @@ export default class CommandSet {
             return CommandResult.error(e);
         }
     }
-
-    static createParseOption(
-        prefix?: string,
-        helpOnSignatureNotFound = true,
-        deleteMessageIfCommandNotFound = true,
-        devIDs: string[] = []
-    ): ParseOptions {
-        return {
-            prefix: prefix ?? "",
-            helpOnSignatureNotFound,
-            deleteMessageIfCommandNotFound,
-            devIDs: devIDs ?? []
-        }
-    }
 }
 
 const defaultOptions: ParseOptions = {
