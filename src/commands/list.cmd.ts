@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { Command, } from "../index";
-import { CommmandQuery } from "../models/CommandQuery";
+import { CommandQuery } from "../models/CommandQuery";
 
 const COMMAND_PER_PAGE = 7;
 
@@ -26,7 +26,7 @@ module.exports = new Command("list", {
     }]
 });
 
-async function executor(query: CommmandQuery) {
+async function executor(query: CommandQuery) {
     const page = query.args.get("page") as number;
 
     let cmds = Array.from(query.commandSet.commands());

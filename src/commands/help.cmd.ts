@@ -1,5 +1,5 @@
 import { Command } from "../index";
-import { CommmandQuery } from "../models/CommandQuery";
+import { CommandQuery } from "../models/CommandQuery";
 
 /*
 module.exports = new Command("help", "Provide help on commands.")
@@ -35,7 +35,7 @@ module.exports = new Command("help", {
     ]
 });
 
-async function executor(query: CommmandQuery) {
+async function executor(query: CommandQuery) {
     const cmdPath = query.rest;
 
     if (cmdPath.length === 0)

@@ -1,6 +1,6 @@
 import Arg from "./Arg";
 import { SignatureDef } from "./def/SignatureDef";
-import { CommmandQuery } from "./CommandQuery";
+import { CommandQuery } from "./CommandQuery";
 import { ParsableType } from "./ParsableType";
 import { FlagDef } from "./def/FlagDef";
 import { Parsable } from "./Parsable";
@@ -10,7 +10,7 @@ import { Z_DEFAULT_STRATEGY } from "zlib";
 
 export default class Signature {
 
-    private _executor: (query: CommmandQuery) => any | Promise<any>;
+    private _executor: (query: CommandQuery) => any | Promise<any>;
     private _args: Arg[] = [];
     private _flags = new Map<string, Parsable>();
     private _flagAlias = new Map<string, Parsable>();

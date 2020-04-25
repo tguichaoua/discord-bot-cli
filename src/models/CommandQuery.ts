@@ -3,7 +3,7 @@ import { ParsableType } from "./ParsableType";
 import { ParseOptions } from "./ParseOptions";
 import CommandSet from "./CommandSet";
 
-export interface CommmandQuery {
+export interface CommandQuery {
     readonly message: Message;
     readonly args: ReadonlyMap<string, ParsableType>;
     readonly flags: ReadonlyMap<string, ParsableType>;
