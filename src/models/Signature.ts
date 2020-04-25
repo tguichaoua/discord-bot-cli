@@ -2,11 +2,7 @@ import Arg from "./Arg";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./CommandQuery";
 import { ParsableType } from "./ParsableType";
-import { FlagDef } from "./def/FlagDef";
 import { Parsable } from "./Parsable";
-import { notPrefixed } from "./CommandResult";
-import { Char } from "../utils/char";
-import { Z_DEFAULT_STRATEGY } from "zlib";
 
 export default class Signature {
 

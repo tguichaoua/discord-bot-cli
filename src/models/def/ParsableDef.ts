@@ -1,4 +1,4 @@
-import { ParsableTypeName, ParsableType, ParsableTypeOf } from "../ParsableType";
+import { ParsableTypeName, ParsableTypeOf } from "../ParsableType";
 
 export interface Parsable<TypeName extends ParsableTypeName> {
     description?: string;

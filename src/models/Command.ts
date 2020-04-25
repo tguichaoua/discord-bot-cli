@@ -1,7 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js';
 
 import Signature from "./Signature";
-import Arg from "./Arg";
 import CommandSet from "./CommandSet";
 import * as CommandResult from "./CommandResult";
 import Prop from "./Prop";
@@ -9,7 +8,6 @@ import Prop from "./Prop";
 import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
-import { threadId } from 'worker_threads';
 
 export default class Command {
 
