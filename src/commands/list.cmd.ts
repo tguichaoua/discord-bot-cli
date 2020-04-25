@@ -1,15 +1,7 @@
+import { Command, CommandQuery } from "../index";
 import { MessageEmbed } from "discord.js";
-import { Command, } from "../index";
-import { CommandQuery } from "../models/CommandQuery";
 
 const COMMAND_PER_PAGE = 7;
-
-/*
-module.exports = new Command("list", "Display a list of all avaible commands.")
-    .signature(executor,
-        new Arg("page", "The page of the list to display.", false, new ArgParser.NumberParser(10), 1)
-    );
-*/
 
 module.exports = new Command("list", {
     description: "Display a list of all avaible commands.",
