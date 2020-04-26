@@ -4,5 +4,3 @@ export { CommandSet } from "./models/CommandSet";
 export { CommandQuery } from "./models/query/CommandQuery";
 export { HelpQuery } from "./models/query/HelpQuery";
 export { ListQuery } from "./models/query/ListQuery";
-
-export { default as CommandResultStatus } from "./models/CommandResultStatus";
