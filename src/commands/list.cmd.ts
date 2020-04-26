@@ -20,13 +20,13 @@ module.exports = new Command("list", {
 async function executor({ message, args, commandSet, options, context }: CommandQuery) {
     const page = args.get("page") as number;
 
-    let commands = Array.from(commandSet.commands());
+    let allCommands = Array.from(commandSet.commands());
 
     // if the author is not a dev. Hide devOnly commands.
     if (!options.devIDs.includes(message.author.id))
-        commands = commands.filter(c => !c.isDevOnly);
+        allCommands = allCommands.filter(c => !c.isDevOnly);
 
-    const pageCount = Math.ceil(commands.length / options.listCommandPerPage);
+    const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
 
     if (page > pageCount) {
         await message.author.send(options.localization.list.invalidPage.replace(/\$page_count\$/gi, pageCount.toString()));
@@ -34,16 +34,16 @@ async function executor({ message, args, commandSet, options, context }: Command
     }
 
     // sort commands by name
-    commands.sort((a, b) => {
+    allCommands.sort((a, b) => {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
         return 0;
     });
 
-    commands = commands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
+    let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
 
     if (options.list)
-        return await options.list({ message, options, context, commands, page, pageCount });
+        return await options.list({ message, options, context, allCommands, commands, page, pageCount });
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
