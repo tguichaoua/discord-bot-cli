@@ -2,6 +2,7 @@ import { User, TextChannel } from "discord.js";
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" | "user" | "channel";
 export type ParsableType = null | string | boolean | number | User | TextChannel;
+/** @internal */
 export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "string" ? string :
     Name extends "boolean" ? boolean :
