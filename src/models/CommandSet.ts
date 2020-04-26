@@ -10,6 +10,7 @@ import { ParseOptions } from "./ParseOptions";
 
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
+import { DeepPartial } from "../utils/DeepPartial";
 
 export default class CommandSet {
 
@@ -117,7 +118,7 @@ export default class CommandSet {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
+    async parse(message: Message, context: any, options?: DeepPartial<ParseOptions>) {
 
         const opts = deepMerge({}, defaultOptions, options);
 
