@@ -75,6 +75,7 @@ export class CommandSet {
         return this._commands.get(commandName);
     }
 
+    /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
         let cmd = this._commands.get(args[0]);
@@ -120,7 +121,13 @@ export class CommandSet {
      */
     async parse(message: Message, context: any, options?: DeepPartial<ParseOptions>) {
 
+        function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
+
         const opts = deepMerge({}, defaultOptions, options);
+
+        // check options
+        if (opts.listCommandPerPage < 1)
+            throw OptionsError("listCommandPerPage");
 
         // Extract command & arguments from message
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
@@ -154,6 +161,6 @@ const defaultOptions: ParseOptions = {
     helpOnSignatureNotFound: true,
     deleteMessageIfCommandNotFound: true,
     devIDs: [],
-    listCommandPerPage: 7,
+    listCommandPerPage: 5,
     localization: defaultLocalization,
 };
