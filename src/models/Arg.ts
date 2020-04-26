@@ -14,10 +14,10 @@ export default class Arg extends Parsable {
 
     get usageString() {
         if (this.isOptional) {
-            return `<${this.name}>`;
-        } else {
             const val = this.defaultValue ? ` = ${this.defaultValue}` : '';
             return `[${this.name}${val}]`;
+        } else {
+            return `<${this.name}>`;
         }
     }
 }
