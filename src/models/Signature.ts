@@ -58,7 +58,7 @@ export default class Signature {
 
     get argDescription() {
         // make sure that the string is not empty
-        return this._args.length == 0 ? '---' : this._args.map(a => `**${a.usageString}** ${a.description}`).join('\n');
+        return this._args.length == 0 ? '---' : this._args.map(a => `**${a.usageString}** *(${a.type})* - ${a.description}`).join('\n');
     }
 
     // ==================
