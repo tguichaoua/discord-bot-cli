@@ -1,11 +1,13 @@
-const { Message } = require("discord.js");
-const { Command, CommandSet, Arg, ArgParser } = require("discord-bot-cli");
+const { Command } = require("discord-bot-cli");
 
-module.exports = new Command("$NAME$", "DESCRIPTION")
-    .signature(executor);
+module.exports = new Command("$NAME$", {
+    description: "...",
+    signatures: [{
+        executor: executor,
+    }]
+});
 
-/**@param {Message} msg @param {ReadonlyMap<string, any>} args @param {*} context 
- * @param {import("discord-bot-cli").ParseOption} options @param {CommandSet} commandSet */
-function executor(msg, args, context, options, commandSet) {
+/**@param {import("discord-bot-cli").CommandQuery;} query */
+function executor(query) {
 
 }

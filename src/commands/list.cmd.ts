@@ -1,51 +1,58 @@
-import { Message, MessageEmbed } from "discord.js";
-import { Command, CommandSet, Arg, ParseOption, ArgParser } from "../index";
+import { Command, CommandQuery } from "../index";
+import { MessageEmbed } from "discord.js";
 
-const COMMAND_PER_PAGE = 7;
+module.exports = new Command("list", {
+    description: "Display a list of all avaible commands.",
+    signatures: [{
+        executor: executor,
+        args: {
+            page: {
+                type: "integer",
+                optional: true,
+                defaultValue: 1,
+                description: "The page of the list to display.",
+                validator: p => p >= 1
+            }
+        }
+    }]
+});
 
-module.exports = new Command("list", "Display a list of all avaible commands.")
-    .signature(executor,
-        new Arg("page", "The page of the list to display.", false, new ArgParser.NumberParser(10), 1)
-    );
-
-async function executor(msg: Message, args: ReadonlyMap<string, any>, context: any, options: ParseOption, CommandSet: CommandSet) {
+async function executor({ message, args, commandSet, options, context }: CommandQuery) {
     const page = args.get("page") as number;
 
-    let cmds = Array.from(CommandSet.commands());
+    let allCommands = Array.from(commandSet.commands());
 
     // if the author is not a dev. Hide devOnly commands.
-    if (!options.devIDs.includes(msg.author.id))
-        cmds = cmds.filter(c => !c.isDevOnly);
+    if (!options.devIDs.includes(message.author.id))
+        allCommands = allCommands.filter(c => !c.isDevOnly);
 
-    const maxPage = Math.ceil(cmds.length / COMMAND_PER_PAGE);
+    const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
 
-    if (page > maxPage) {
-        await msg.author.send(`The number of the page must be between 1 and ${maxPage}.`);
+    if (page > pageCount) {
+        await message.author.send(options.localization.list.invalidPage.replace(/\$page_count\$/gi, pageCount.toString()));
         return;
     }
 
     // sort commands by name
-    cmds.sort((a, b) => {
+    allCommands.sort((a, b) => {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
         return 0;
     });
 
+    let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
+
+    if (options.list)
+        return await options.list({ message, options, context, allCommands, commands, page, pageCount });
+
     const embed = new MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(`Page ${page}/${maxPage}`);
+        .setTitle(`Page ${page}/${pageCount}`);
 
-    const startIdx = COMMAND_PER_PAGE * (page - 1);
-    for (let i = 0; i < COMMAND_PER_PAGE; i++) {
-        const j = startIdx + i;
-        if (j >= cmds.length) break;
-        const cmd = cmds[j];
-
-        if (cmd.description) var description = cmd.description;
-        else description = "---";
-
-        embed.addField(cmd.name, description);
+    for (const cmd of commands) {
+        const loc = options.localization.commands[cmd.name];
+        embed.addField(cmd.name, cmd.getDescription(loc));
     }
 
-    msg.author.send({ embed });
+    message.author.send({ embed });
 }

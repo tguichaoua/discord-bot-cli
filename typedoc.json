@@ -1,0 +1,15 @@
+{
+    "disableOutputCheck": true,
+    "excludeExternals": true,
+    "excludeNotExported": true,
+    "excludePrivate": true,
+    "stripInternal": true,
+    "out": "./docs/v3/",
+    "readme": "none",
+    "mode": "file",
+    "exclude": [
+        "src/com.ts",
+        "src/utils/*",
+        "src/commands/*.ts"
+    ]
+}

@@ -11,13 +11,13 @@ An easy way to build a command-based discord bot
 `npm i discord-bot-cli`
 
 ## Documentation
-<a href="https://baanloh.github.io/discord-bot-cli/">Docs</a>
+<a href="https://baanloh.github.io/discord-bot-cli/v3/index.html">Docs</a>
 
 ## Usage
 ```typescript
 // === include dependencies =================================================
 import Discord from "discord.js";
-import { CommandSet, CommandResultStatus } from "discord-bot-cli";
+import { CommandSet } from "discord-bot-cli";
 
 // === setup objects ========================================================
 const client = new Discord.Client();
@@ -28,8 +28,6 @@ commands.buildin("help", "list"); // or commands.buildin("all");
 
 // === define const =========================================================
 const context = {}; // put here context data like database
-
-const commandParseOptions = CommandSet.createParseOption(".");
 
 // === Discord events ==========================================
 
@@ -42,13 +40,15 @@ client.on("message", async msg => {
     if (msg.author.bot) return; // ignore message from bots
 
     console.log(">", msg.content);
-    const result = await commands.parse(msg, context, commandParseOptions);
+    const result = await commands.parse(msg, context, {
+        prefix: "!"
+    });
 
     switch (result.status) {
-        case CommandResultStatus.OK:
+        case "ok":
             console.log("=", result.result);
             break;
-        case CommandResultStatus.ERROR:
+        case "error":
             console.error("error", result.error);
             break;
         default:
@@ -78,6 +78,7 @@ package.json
     // ...
     "cmd": "dbc cmd -l ts", // create a command file for typescript
     "cmd": "dbc cmd -l js", // create a command file for javascript
+    "loc": "dbc loc" // create a localization file
     // ...
 }
 ```
@@ -85,4 +86,5 @@ package.json
 Run the following command to create a new file with skeleton for command.  
 `npm run cmd -- path/to/folder/commandName`
 
-
+Run the following command to create a new localization file.  
+`npm run loc -- path/to/folder/filename_without_extension`
