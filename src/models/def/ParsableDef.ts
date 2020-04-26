@@ -11,4 +11,6 @@ export type ParsableDef =
     Parsable<"string"> |
     Parsable<"boolean"> |
     Parsable<"integer"> |
-    Parsable<"float">;
+    Parsable<"float"> |
+    Parsable<"user"> |
+    Parsable<"channel">;
