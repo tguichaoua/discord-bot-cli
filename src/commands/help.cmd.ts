@@ -23,7 +23,7 @@ async function executor({ rest, options, commandSet, message, context }: Command
             if (options.help)
                 return await options.help({ message, options, context, command });
             else {
-                const embed = command.getEmbedHelp(options.prefix);
+                const embed = command.getEmbedHelp(options);
                 await message.author.send({ embed });
             }
         }

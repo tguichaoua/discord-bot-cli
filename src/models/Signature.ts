@@ -5,6 +5,7 @@ import { ParsableType } from "./ParsableType";
 import { Parsable } from "./Parsable";
 import { FlagInfo } from "./FlagInfo";
 import { Message } from "discord.js";
+import { Localization } from "./Localization";
 
 export default class Signature {
 
@@ -56,9 +57,9 @@ export default class Signature {
         return this._args.map(a => a.usageString).join(" ");
     }
 
-    get argDescription() {
+    getArgumentsDescription(localization: Localization) {
         // make sure that the string is not empty
-        return this._args.length == 0 ? '---' : this._args.map(a => `**${a.usageString}** *(${a.type})* - ${a.description}`).join('\n');
+        return this._args.length == 0 ? '---' : this._args.map(a => `**${a.usageString}** *(${localization.typeNames[a.type]})* - ${a.description}`).join('\n');
     }
 
     // ==================

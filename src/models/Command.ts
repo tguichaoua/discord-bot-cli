@@ -122,21 +122,19 @@ export default class Command {
         this._isInitialized = true;
     }
 
-    getEmbedHelp(prefix: string = "") {
-        if (!prefix) prefix = "";
-
+    getEmbedHelp(options: ParseOptions) {
         const name = this.fullName;
         const description = this.description.length == 0 ? '---' : this.description;
 
         const embed = new MessageEmbed()
-            .setTitle(prefix + name)
+            .setTitle(options.prefix + name)
             .setDescription(description);
 
 
         // if there is only 1 signature without any argument, don't display this signature.
         if (!(this._signatures.length === 1 && this._signatures[0].argCount === 0))
             for (const s of this._signatures)
-                embed.addField(prefix + name + ' ' + s.usageString, s.argDescription);
+                embed.addField(options.prefix + name + ' ' + s.usageString, s.getArgumentsDescription(options.localization));
 
         if (this._subs.size != 0) {
             let str = '';
@@ -207,7 +205,7 @@ export default class Command {
         }
 
         if (options.helpOnSignatureNotFound) {
-            const embed = this.getEmbedHelp(options.prefix);
+            const embed = this.getEmbedHelp(options);
             await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
         }
 
