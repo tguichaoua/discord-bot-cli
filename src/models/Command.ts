@@ -102,7 +102,7 @@ export class Command {
 
         // inherit from parent
         if (this._parent && this._inherit) {
-            for (const k of keyOf(this._settings)) {
+            for (const k of Object.keys(this._settings) as (keyof Command["_settings"])[]) {
                 this._settings[k].inherit(this._parent._settings[k]);
             }
         }
