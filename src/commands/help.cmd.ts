@@ -1,3 +1,5 @@
+/** @ignore */
+
 import { Command, CommandQuery } from "../index";
 
 module.exports = new Command("help", {
