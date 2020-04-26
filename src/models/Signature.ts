@@ -12,6 +12,7 @@ export default class Signature {
     private _args: Arg[] = [];
     private _flags = new Map<string, Parsable>();
     private _flagAlias = new Map<string, Parsable>();
+    private _minArgNeeded: number;
 
     constructor(def: SignatureDef) {
 
@@ -41,6 +42,8 @@ export default class Signature {
             if (!cur && !a.isOptional)
                 throw Error("Command signature : mendatory arguments must come before optionals arguments.");
         }
+
+        this._minArgNeeded = this._args.filter(a => !a.isOptional).length;
     }
 
     // === Getter ==========================================================================
@@ -104,7 +107,7 @@ export default class Signature {
         // remove arguments consumed by flags
         const _args = args.filter((_,i) => !consumedArgIndex.includes(i));
 
-        if (_args.length < this.argCount) return; // check if there is enough arguments.
+        if (_args.length < this._minArgNeeded) return; // check if there is enough arguments.
 
         const parsedArgs = new Map<string, ParsableType>();
         for (let i = 0; i < this._args.length; i++) {
