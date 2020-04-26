@@ -13,6 +13,7 @@ module.exports = new Command("list", {
                 optional: true,
                 defaultValue: 1,
                 description: "The page of the list to display.",
+                validator: p => p >= 1
             }
         }
     }]
