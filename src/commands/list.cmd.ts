@@ -50,10 +50,8 @@ async function executor({ message, args, commandSet, options, context }: Command
         .setTitle(`Page ${page}/${pageCount}`);
 
     for (const cmd of commands) {
-        if (cmd.description) var description = cmd.description;
-        else description = "---";
-
-        embed.addField(cmd.name, description);
+        const loc = options.localization.commands[cmd.name];
+        embed.addField(cmd.getName(loc), cmd.getDescription(loc));
     }
 
     message.author.send({ embed });

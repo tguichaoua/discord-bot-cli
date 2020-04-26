@@ -9,6 +9,8 @@ import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
 import { FlagInfo } from './FlagInfo';
+import { Localization } from './localization/Localization';
+import { CommandLocalization } from './localization/CommandLocalization';
 
 export default class Command {
 
@@ -38,7 +40,7 @@ export default class Command {
 
         this._onInit = def.onInit;
 
-        this._signatures = def.signatures ? def.signatures.map(d => new Signature(d)) : [];
+        this._signatures = def.signatures ? def.signatures.map(d => new Signature(this, d)) : [];
 
         if (def.subs)
             for (const k of Object.keys(def.subs))
@@ -71,7 +73,7 @@ export default class Command {
 
     get subs() { return Array.from(this._subs.values()); }
 
-    get fullName() {
+    getFullName(localization?: CommandLocalization) {
         const parents: Command[] = [];
         parents.unshift(this);
 
@@ -81,11 +83,19 @@ export default class Command {
             if (p.parent) parents.unshift(p.parent);
         } while (p.parent);
 
-        return parents.map(cmd => cmd.name).join(" ");
+        return parents.map(cmd => cmd.getName(localization)).join(" ");
     }
 
     getSubCommand(name: string) {
         return this._subs.get(name);
+    }
+
+    getName(localization?: CommandLocalization) {
+        return localization?.name ?? this.name;
+    }
+
+    getDescription(localization?: CommandLocalization) {
+        return localization?.description ?? this.description;
     }
 
     // === * ==================================================
@@ -123,8 +133,9 @@ export default class Command {
     }
 
     getEmbedHelp(options: ParseOptions) {
-        const name = this.fullName;
-        const description = this.description.length == 0 ? '---' : this.description;
+        const cmdLoc = options.localization.commands[this.name];
+        const name = this.getFullName(cmdLoc);
+        const description = this.getDescription(cmdLoc);
 
         const embed = new MessageEmbed()
             .setTitle(options.prefix + name)
@@ -134,12 +145,14 @@ export default class Command {
         // if there is only 1 signature without any argument, don't display this signature.
         if (!(this._signatures.length === 1 && this._signatures[0].argCount === 0))
             for (const s of this._signatures)
-                embed.addField(options.prefix + name + ' ' + s.usageString, s.getArgumentsDescription(options.localization));
+                embed.addField(options.prefix + name + ' ' + s.getUsageString(cmdLoc), s.getArgumentsDescription(options.localization));
 
         if (this._subs.size != 0) {
             let str = '';
-            for (const cmd of this._subs.values())
-                str += `**${cmd.name}** ${cmd.description}\n`;
+            for (const cmd of this._subs.values()) {
+                const loc = (cmdLoc?.subs ?? {})[cmd.name];
+                str += `**${cmd.getName(loc)}** ${cmd.getDescription(loc)}\n`;
+            }
             embed.addField('Sub Commands', str);
         }
 

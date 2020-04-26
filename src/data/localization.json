@@ -13,5 +13,25 @@
     },
     "list": {
         "invalidPage": "The number of the page must be between 1 and $page_count$."
+    },
+    "commands": {
+        "help": {
+            "name": "help",
+            "description": "Provide help on commands.",
+            "rest": {
+                "name": "command name",
+                "description": "The name of the command to get help."
+            }
+        },
+        "list": {
+            "name": "list",
+            "description": "Display a list of all avaible commands.",
+            "args": {
+                "page": {
+                    "name": "page",
+                    "description": "The page of the list to display."
+                }
+            }
+        }
     }
 }

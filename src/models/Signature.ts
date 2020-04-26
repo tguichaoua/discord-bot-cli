@@ -5,7 +5,9 @@ import { ParsableType } from "./ParsableType";
 import { Parsable } from "./Parsable";
 import { FlagInfo } from "./FlagInfo";
 import { Message } from "discord.js";
-import { Localization } from "./Localization";
+import { Localization } from "./localization/Localization";
+import { CommandLocalization } from "./localization/CommandLocalization";
+import { Command } from "..";
 
 export default class Signature {
 
@@ -15,7 +17,7 @@ export default class Signature {
     private _flagAlias = new Map<string, Parsable>();
     private _minArgNeeded: number;
 
-    constructor(def: SignatureDef) {
+    constructor(public readonly command: Command, def: SignatureDef) {
 
         this._executor = def.executor;
 
@@ -53,13 +55,15 @@ export default class Signature {
 
     get executor() { return this._executor; }
 
-    get usageString() {
-        return this._args.map(a => a.usageString).join(" ");
+    getUsageString(localization?: CommandLocalization) {
+        return this._args.map(a => a.getUsageString((localization?.args ?? {})[a.name])).join(" ");
     }
 
     getArgumentsDescription(localization: Localization) {
+        const cmdLoc = localization.commands[this.command.name];
         // make sure that the string is not empty
-        return this._args.length == 0 ? '---' : this._args.map(a => `**${a.usageString}** *(${localization.typeNames[a.type]})* - ${a.description}`).join('\n');
+        return this._args.length == 0 ? '---' :
+            this._args.map(a => a.getDescriptionString(localization.typeNames, (cmdLoc.args ?? {})[a.name])).join('\n');
     }
 
     // ==================
@@ -106,7 +110,7 @@ export default class Signature {
         }
 
         // remove arguments consumed by flags
-        const _args = args.filter((_,i) => !consumedArgIndex.includes(i));
+        const _args = args.filter((_, i) => !consumedArgIndex.includes(i));
 
         if (_args.length < this._minArgNeeded) return; // check if there is enough arguments.
 

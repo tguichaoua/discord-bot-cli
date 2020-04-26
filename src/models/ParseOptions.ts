@@ -1,4 +1,4 @@
-import { Localization } from "./Localization";
+import { Localization } from "./localization/Localization";
 import { ListQuery } from "./query/ListQuery";
 import { HelpQuery } from "./query/HelpQuery";
 
