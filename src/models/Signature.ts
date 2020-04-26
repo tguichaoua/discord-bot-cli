@@ -1,6 +1,6 @@
 import Arg from "./Arg";
 import { SignatureDef } from "./def/SignatureDef";
-import { CommandQuery } from "./CommandQuery";
+import { CommandQuery } from "./query/CommandQuery";
 import { ParsableType } from "./ParsableType";
 import { Parsable } from "./Parsable";
 import { FlagInfo } from "./FlagInfo";

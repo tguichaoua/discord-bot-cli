@@ -1,4 +1,4 @@
-import { CommandQuery } from "../CommandQuery";
+import { CommandQuery } from "../query/CommandQuery";
 import { ArgDef } from "./ArgDef";
 import { FlagDef } from "./FlagDef";
 
