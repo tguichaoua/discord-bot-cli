@@ -1,8 +1,6 @@
 import { Command, CommandQuery } from "../index";
 import { MessageEmbed } from "discord.js";
 
-const COMMAND_PER_PAGE = 7;
-
 module.exports = new Command("list", {
     description: "Display a list of all avaible commands.",
     signatures: [{
@@ -28,7 +26,7 @@ async function executor({message, args, commandSet, options, context}: CommandQu
     if (!options.devIDs.includes(message.author.id))
         commands = commands.filter(c => !c.isDevOnly);
 
-    const pageCount = Math.ceil(commands.length / COMMAND_PER_PAGE);
+    const pageCount = Math.ceil(commands.length / options.listCommandPerPage);
 
     if (page > pageCount) {
         await message.author.send(`The number of the page must be between 1 and ${pageCount}.`);
@@ -42,7 +40,7 @@ async function executor({message, args, commandSet, options, context}: CommandQu
         return 0;
     });
 
-    commands = commands.slice(COMMAND_PER_PAGE * (page - 1), COMMAND_PER_PAGE);
+    commands = commands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
 
     if (options.list)
         return await options.list({message, options, context, commands , page, pageCount});

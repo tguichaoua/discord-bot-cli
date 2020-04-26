@@ -10,4 +10,5 @@ export interface ParseOptions {
     localization: Localization;
     help?: (query: HelpQuery) => any | Promise<any>;
     list?: (query: ListQuery) => any | Promise<any>;
+    listCommandPerPage: number;
 }
