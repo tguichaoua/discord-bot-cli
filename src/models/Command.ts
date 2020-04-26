@@ -5,7 +5,6 @@ import { CommandSet } from "./CommandSet";
 import * as CommandResult from "./CommandResult";
 import { Prop } from "./Prop";
 
-import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
 import { FlagInfo } from './FlagInfo';

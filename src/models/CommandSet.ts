@@ -156,6 +156,7 @@ export class CommandSet {
     }
 }
 
+/** @internal */
 const defaultOptions: ParseOptions = {
     prefix: "",
     helpOnSignatureNotFound: true,

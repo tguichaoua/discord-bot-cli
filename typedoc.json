@@ -8,6 +8,7 @@
     "readme": "none",
     "mode": "file",
     "exclude": [
+        "src/com.ts",
         "src/utils/*",
         "src/commands/*.ts"
     ]
