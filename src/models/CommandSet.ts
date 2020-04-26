@@ -3,7 +3,7 @@ import path from "path";
 
 import { Message } from "discord.js";
 
-import Command from "./Command";
+import {Command} from "./Command";
 import * as com from "../com";
 import * as CommandResult from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
@@ -12,7 +12,7 @@ import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 
-export default class CommandSet {
+export class CommandSet {
 
     private _commands = new Map<string, Command>();
 

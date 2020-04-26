@@ -1,5 +1,5 @@
 
-export default class Prop<T> {
+export class Prop<T> {
 
     private _value: T | undefined = undefined;
 

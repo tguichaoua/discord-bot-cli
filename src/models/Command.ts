@@ -1,18 +1,17 @@
 import { Message, MessageEmbed } from 'discord.js';
 
-import Signature from "./Signature";
-import CommandSet from "./CommandSet";
+import { Signature } from "./Signature";
+import { CommandSet } from "./CommandSet";
 import * as CommandResult from "./CommandResult";
-import Prop from "./Prop";
+import { Prop } from "./Prop";
 
 import { keyOf } from "../com";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
 import { FlagInfo } from './FlagInfo';
-import { Localization } from './localization/Localization';
 import { CommandLocalization } from './localization/CommandLocalization';
 
-export default class Command {
+export class Command {
 
     private _name: string;
     private _description: string;

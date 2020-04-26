@@ -3,7 +3,7 @@ import { Parsable } from "./Parsable";
 import { ParsableLocalization } from "./localization/ParsableLocalization";
 import { TypeNameLocalization } from "./localization/TypeNameLocalization";
 
-export default class Arg extends Parsable {
+export class Arg extends Parsable {
 
     private _isOptional: boolean;
 

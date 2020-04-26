@@ -1,5 +1,5 @@
-import Command from "./Command";
-import Signature from "./Signature";
+import {Command} from "./Command";
+import {Signature} from "./Signature";
 
 export type CommandResult = 
 {

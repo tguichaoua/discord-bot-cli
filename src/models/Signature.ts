@@ -1,4 +1,4 @@
-import Arg from "./Arg";
+import {Arg} from "./Arg";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./query/CommandQuery";
 import { ParsableType } from "./ParsableType";
@@ -7,11 +7,10 @@ import { FlagInfo } from "./FlagInfo";
 import { Message } from "discord.js";
 import { Localization } from "./localization/Localization";
 import { CommandLocalization } from "./localization/CommandLocalization";
-import { Command } from "..";
-import { threadId } from "worker_threads";
+import { Command } from "./Command";
 import { Flag } from "./Flag";
 
-export default class Signature {
+export class Signature {
 
     private _executor: (query: CommandQuery) => any | Promise<any>;
     private _args: Arg[] = [];

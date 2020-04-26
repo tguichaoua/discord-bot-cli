@@ -1,4 +1,8 @@
-export { default as Command } from "./models/Command";
-export { default as CommandResultStatus } from "./models/CommandResultStatus";
-export { default as CommandSet } from "./models/CommandSet";
+export { Command } from "./models/Command";
+export { CommandSet } from "./models/CommandSet";
+
 export { CommandQuery } from "./models/query/CommandQuery";
+export { HelpQuery } from "./models/query/HelpQuery";
+export { ListQuery } from "./models/query/ListQuery";
+
+export { default as CommandResultStatus } from "./models/CommandResultStatus";
