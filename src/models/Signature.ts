@@ -124,9 +124,9 @@ export default class Signature {
         }
 
         // remove parsed arguments;
-        const rest = _args.splice(0, this._args.length)
+        _args.splice(0, this._args.length)
 
-        return { parsedArgs, parsedFlags, rest };
+        return { parsedArgs, parsedFlags, rest: _args };
     }
 
 }
