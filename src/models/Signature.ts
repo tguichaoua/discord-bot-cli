@@ -8,14 +8,17 @@ import { Message } from "discord.js";
 import { Localization } from "./localization/Localization";
 import { CommandLocalization } from "./localization/CommandLocalization";
 import { Command } from "..";
+import { threadId } from "worker_threads";
+import { Flag } from "./Flag";
 
 export default class Signature {
 
     private _executor: (query: CommandQuery) => any | Promise<any>;
     private _args: Arg[] = [];
-    private _flags = new Map<string, Parsable>();
-    private _flagAlias = new Map<string, Parsable>();
+    private _flags = new Map<string, Flag>();
+    private _flagAlias = new Map<string, Flag>();
     private _minArgNeeded: number;
+    private _rest?: { name: string; description?: string };
 
     constructor(public readonly command: Command, def: SignatureDef) {
 
@@ -25,12 +28,13 @@ export default class Signature {
             for (const k of Object.keys(def.args))
                 this._args.push(new Arg(k, def.args[k]));
 
+        this._rest = def.rest;
 
         // build Flags
         if (def.flags)
             for (const name of Object.keys(def.flags)) {
                 const d = def.flags[name];
-                const flag = new Parsable(name, d);
+                const flag = new Flag(name, d);
                 this._flags.set(name, flag);
                 if (d.shortcut)
                     this._flagAlias.set(d.shortcut, flag);
@@ -51,19 +55,29 @@ export default class Signature {
 
     // === Getter ==========================================================================
 
+    get rest() { return this._rest; }
+
     get argCount() { return this._args.length; }
 
     get executor() { return this._executor; }
 
     getUsageString(localization?: CommandLocalization) {
-        return this._args.map(a => a.getUsageString((localization?.args ?? {})[a.name])).join(" ");
+        return this._args.map(a => a.getUsageString((localization?.args ?? {})[a.name])).join(" ")
+            + (this._rest ? `[...${localization?.rest?.name ?? this._rest.name}]` : "");
     }
 
     getArgumentsDescription(localization: Localization) {
         const cmdLoc = localization.commands[this.command.name];
         // make sure that the string is not empty
-        return this._args.length == 0 ? '---' :
-            this._args.map(a => a.getDescriptionString(localization.typeNames, (cmdLoc.args ?? {})[a.name])).join('\n');
+        return this._args.map(a => a.getDescriptionString(localization.typeNames, (cmdLoc?.args ?? {})[a.name])).join('\n')
+            + (this._rest ? `\n**[...${cmdLoc?.rest?.name ?? this._rest.name}]** - ${cmdLoc?.rest?.description ?? this._rest.description}` : "");
+    }
+
+    getFlagsDescription(localization: Localization) {
+        const cmdLoc = localization.commands[this.command.name];
+        // make sure that the string is not empty
+        return Array.from(this._flags.values())
+            .map(f => f.getDescriptionString(localization.typeNames, (cmdLoc?.args ?? {})[f.name])).join('\n');
     }
 
     // ==================

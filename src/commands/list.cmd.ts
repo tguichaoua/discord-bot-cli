@@ -51,7 +51,7 @@ async function executor({ message, args, commandSet, options, context }: Command
 
     for (const cmd of commands) {
         const loc = options.localization.commands[cmd.name];
-        embed.addField(cmd.getName(loc), cmd.getDescription(loc));
+        embed.addField(cmd.name, cmd.getDescription(loc));
     }
 
     message.author.send({ embed });

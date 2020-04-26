@@ -83,15 +83,11 @@ export default class Command {
             if (p.parent) parents.unshift(p.parent);
         } while (p.parent);
 
-        return parents.map(cmd => cmd.getName(localization)).join(" ");
+        return parents.map(cmd => cmd.name).join(" ");
     }
 
     getSubCommand(name: string) {
         return this._subs.get(name);
-    }
-
-    getName(localization?: CommandLocalization) {
-        return localization?.name ?? this.name;
     }
 
     getDescription(localization?: CommandLocalization) {
@@ -142,16 +138,24 @@ export default class Command {
             .setDescription(description);
 
 
-        // if there is only 1 signature without any argument, don't display this signature.
-        if (!(this._signatures.length === 1 && this._signatures[0].argCount === 0))
-            for (const s of this._signatures)
-                embed.addField(options.prefix + name + ' ' + s.getUsageString(cmdLoc), s.getArgumentsDescription(options.localization));
+        // if there is only 1 signature without any argument (nor rest), don't display this signature.
+        if (!(this._signatures.length === 1 && this._signatures[0].argCount === 0 && !this._signatures[0].rest))
+            for (const s of this._signatures) {
+                const description =
+                    s.getArgumentsDescription(options.localization) +
+                    "\n" +
+                    s.getFlagsDescription(options.localization);
+                embed.addField(
+                    options.prefix + name + ' ' + s.getUsageString(cmdLoc),
+                    description.length === 0 ? "*" : description
+                );
+            }
 
         if (this._subs.size != 0) {
             let str = '';
             for (const cmd of this._subs.values()) {
                 const loc = (cmdLoc?.subs ?? {})[cmd.name];
-                str += `**${cmd.getName(loc)}** ${cmd.getDescription(loc)}\n`;
+                str += `**${cmd.name}** ${cmd.getDescription(loc)}\n`;
             }
             embed.addField('Sub Commands', str);
         }
