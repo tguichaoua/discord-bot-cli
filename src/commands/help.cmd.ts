@@ -14,11 +14,11 @@ async function executor({ rest, options, commandSet, message, context }: Command
     const cmdPath = rest;
 
     if (cmdPath.length === 0)
-        await message.author.send(options.localization.help.default.replace(/$prefix$/gi, options.prefix));
+        await message.author.send(options.localization.help.default.replace(/\$prefix\$/gi, options.prefix));
     else {
         const { command, args } = commandSet.resolve(cmdPath);
         if (!command || args.length != 0)
-            await message.author.send(options.localization.help.commandNotFound.replace(/$command$/gi, cmdPath.join(' ')));
+            await message.author.send(options.localization.help.commandNotFound.replace(/\$command\$/gi, cmdPath.join(' ')));
         else {
             if (options.help)
                 return await options.help({ message, options, context, command });

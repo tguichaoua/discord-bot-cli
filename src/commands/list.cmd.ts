@@ -29,7 +29,7 @@ async function executor({ message, args, commandSet, options, context }: Command
     const pageCount = Math.ceil(commands.length / options.listCommandPerPage);
 
     if (page > pageCount) {
-        await message.author.send(options.localization.list.invalidPage.replace(/$page_count$/gi, pageCount.toString()));
+        await message.author.send(options.localization.list.invalidPage.replace(/\$page_count\$/gi, pageCount.toString()));
         return;
     }
 
