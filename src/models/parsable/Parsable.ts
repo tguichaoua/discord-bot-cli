@@ -1,10 +1,9 @@
-/** @ignore *//** */
-
 import { ParsableDef } from "../def/ParsableDef";
 import { ParsableType, ParsableTypeName, getDefaultValue } from "../ParsableType";
 import { Message, MessageMentions } from "discord.js";
 import { ParsableLocalization } from "../localization/ParsableLocalization";
 
+/** @ignore */
 export class Parsable {
 
     public readonly name: string;

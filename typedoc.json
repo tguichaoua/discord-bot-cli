@@ -3,11 +3,12 @@
     "excludeExternals": true,
     "excludeNotExported": true,
     "excludePrivate": true,
+    "stripInternal": true,
     "out": "./docs/v3/",
     "readme": "none",
     "mode": "file",
     "exclude": [
-        "utils/",
-        "commands/"
+        "src/utils/*",
+        "src/commands/*.ts"
     ]
 }

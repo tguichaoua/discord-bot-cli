@@ -1,10 +1,9 @@
-/** @ignore *//** */
-
 import { Parsable } from "./Parsable";
 import { FlagDef } from "../def/FlagDef";
 import { TypeNameLocalization } from "../localization/TypeNameLocalization";
 import { ParsableLocalization } from "../localization/ParsableLocalization";
 
+/** @ignore */
 export class Flag extends Parsable {
 
     public readonly shortcut?: string;

@@ -18,7 +18,6 @@ export class CommandSet {
 
     constructor() { }
 
-    /** @ignore */
     private _loadFile(path: string) {
         try {
             const cmd = require(path);
@@ -94,6 +93,7 @@ export class CommandSet {
         }
     }
 
+    /** Return a iterable of commands */
     commands() {
         return this._commands.values();
     }

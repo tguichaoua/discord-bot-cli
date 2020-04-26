@@ -95,6 +95,7 @@ export class Command {
 
     // === * ==================================================
 
+    /** @internal */
     async init(context: any, commandSet: CommandSet) {
         if (this.isInitialized)
             return;
@@ -162,6 +163,7 @@ export class Command {
         return embed;
     }
 
+    /** @internal */
     async execute(message: Message, args: string[], context: any, options: ParseOptions, commandSet: CommandSet) {
         if (!this._isInitialized)
             throw Error("You cannot use a non initialized command.");

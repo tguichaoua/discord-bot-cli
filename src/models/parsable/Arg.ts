@@ -1,10 +1,11 @@
-/** @ignore *//** */
+
 
 import { ArgDef } from "../def/ArgDef";
 import { Parsable } from "./Parsable";
 import { ParsableLocalization } from "../localization/ParsableLocalization";
 import { TypeNameLocalization } from "../localization/TypeNameLocalization";
 
+/** @ignore */
 export class Arg extends Parsable {
 
     private _isOptional: boolean;

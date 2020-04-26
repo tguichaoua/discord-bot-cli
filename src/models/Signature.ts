@@ -1,5 +1,3 @@
-/** @ignore *//** */
-
 import { Arg } from "./parsable/Arg";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./query/CommandQuery";
@@ -12,6 +10,7 @@ import { CommandLocalization } from "./localization/CommandLocalization";
 import { Command } from "./Command";
 import { Flag } from "./parsable/Flag";
 
+/** @ignore */
 export class Signature {
 
     private _executor: (query: CommandQuery) => any | Promise<any>;

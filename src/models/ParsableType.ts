@@ -1,5 +1,3 @@
-/** @ignore *//** */
-
 import { User, TextChannel } from "discord.js";
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" | "user" | "channel";
@@ -13,6 +11,7 @@ export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "channel" ? TextChannel :
     never;
 
+/** @internal */
 export function getDefaultValue(name: ParsableTypeName): ParsableType {
     switch (name) {
         case "string": return "";
