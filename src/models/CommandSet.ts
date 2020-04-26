@@ -8,6 +8,9 @@ import * as com from "../com";
 import * as CommandResult from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
+import defaultLocalization from "../data/localization.json";
+import { deepMerge } from "../utils/deepMerge";
+
 export default class CommandSet {
 
     private _commands = new Map<string, Command>();
@@ -116,7 +119,7 @@ export default class CommandSet {
      */
     async parse(message: Message, context: any, options?: Partial<ParseOptions>) {
 
-        const opts = Object.assign({}, defaultOptions, options);
+        const opts = deepMerge({}, defaultOptions, options);
 
         // Extract command & arguments from message
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
@@ -149,5 +152,6 @@ const defaultOptions: ParseOptions = {
     prefix: "",
     helpOnSignatureNotFound: true,
     deleteMessageIfCommandNotFound: true,
-    devIDs: []
+    devIDs: [],
+    localization: defaultLocalization,
 };

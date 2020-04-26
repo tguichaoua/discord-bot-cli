@@ -1,0 +1,10 @@
+{
+    "typeNames": {
+        "string": "string",
+        "boolean": "boolean",
+        "integer": "integer",
+        "float": "float",
+        "user": "user",
+        "channel": "channel"
+    }
+}
