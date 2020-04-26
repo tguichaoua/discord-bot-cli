@@ -43,11 +43,13 @@ export class Parsable {
                 }
                 break;
             case "user":
-                // TODO
+                const user = MessageMentions.USERS_PATTERN.exec(argument);   
+                if (user) value = message.mentions.users.get(user[1]);
                 break;
 
             case "channel":
-                // TODO
+                const channel = MessageMentions.CHANNELS_PATTERN.exec(argument);   
+                if (channel) value = message.mentions.channels.get(channel[1]);
                 break;
         }
         if (value !== undefined && (!this._validator || this._validator(value)))

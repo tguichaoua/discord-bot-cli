@@ -1,14 +1,14 @@
-import { GuildChannel, User } from "discord.js";
+import { GuildChannel, User, TextChannel } from "discord.js";
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" | "user" | "channel";
-export type ParsableType = null | string | boolean | number | User | GuildChannel;
+export type ParsableType = null | string | boolean | number | User | TextChannel;
 export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "string" ? string :
     Name extends "boolean" ? boolean :
     Name extends "integer" ? number :
     Name extends "float" ? number :
     Name extends "user" ? User :
-    Name extends "channel" ? GuildChannel :
+    Name extends "channel" ? TextChannel :
     never;
 
 export function getDefaultValue(name: ParsableTypeName): ParsableType {
