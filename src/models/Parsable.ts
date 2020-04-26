@@ -46,7 +46,6 @@ export class Parsable {
                 const user = MessageMentions.USERS_PATTERN.exec(argument);   
                 if (user) value = message.mentions.users.get(user[1]);
                 break;
-
             case "channel":
                 const channel = MessageMentions.CHANNELS_PATTERN.exec(argument);   
                 if (channel) value = message.mentions.channels.get(channel[1]);
@@ -55,5 +54,4 @@ export class Parsable {
         if (value !== undefined && (!this._validator || this._validator(value)))
             return value;
     }
-
 }

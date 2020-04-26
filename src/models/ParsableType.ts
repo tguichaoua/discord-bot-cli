@@ -1,4 +1,4 @@
-import { GuildChannel, User, TextChannel } from "discord.js";
+import { User, TextChannel } from "discord.js";
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" | "user" | "channel";
 export type ParsableType = null | string | boolean | number | User | TextChannel;

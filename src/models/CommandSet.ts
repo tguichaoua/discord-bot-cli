@@ -57,10 +57,10 @@ export default class CommandSet {
      */
     buildin(...buildinCommandNames: string[]) {
         if (buildinCommandNames.includes("all")) {
-            this.loadCommands(__dirname + "/commands");
+            this.loadCommands(__dirname + "/../commands");
         } else {
             for (const name of buildinCommandNames) {
-                const filePath = path.resolve(path.format({ dir: __dirname + '/commands', name: name, ext: '.cmd.js' }));
+                const filePath = path.resolve(path.format({ dir: __dirname + "../commands", name: name, ext: ".cmd.js" }));
                 if (fs.existsSync(filePath))
                     this._loadFile(filePath);
             }
@@ -123,7 +123,7 @@ export default class CommandSet {
 
         // extract the command & arguments from message
 
-        const inArgs = (message.content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
+        const inArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
             .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
 
         const { command, args } = this.resolve(inArgs);
