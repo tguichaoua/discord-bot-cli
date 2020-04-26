@@ -1,14 +1,10 @@
-import { Message } from "discord.js";
 import { ParsableType } from "./ParsableType";
-import { ParseOptions } from "./ParseOptions";
 import CommandSet from "./CommandSet";
+import { BaseQuery } from "./query/BaseQuery";
 
-export interface CommandQuery {
-    readonly message: Message;
+export interface CommandQuery extends BaseQuery {
     readonly args: ReadonlyMap<string, ParsableType>;
     readonly flags: ReadonlyMap<string, ParsableType>;
     readonly rest: readonly string[];
-    readonly context: any;
-    readonly options: ParseOptions;
     readonly commandSet: CommandSet;
 }

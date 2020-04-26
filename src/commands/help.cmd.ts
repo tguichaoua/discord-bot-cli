@@ -5,23 +5,27 @@ module.exports = new Command("help", {
     signatures: [
         {
             executor: executor,
-            rest: {name:"command name", description: "The name of the command to get help."}
+            rest: { name: "command name", description: "The name of the command to get help." }
         }
     ]
 });
 
-async function executor(query: CommandQuery) {
-    const cmdPath = query.rest;
+async function executor({rest, options, commandSet, message, context}: CommandQuery) {
+    const cmdPath = rest;
 
     if (cmdPath.length === 0)
-        await query.message.author.send(`Type \`${query.options.prefix}list\` to get a list of all commands or \`${query.options.prefix}help <command name>\` to get help on a command.`);
+        await message.author.send(`Type \`${options.prefix}list\` to get a list of all commands or \`${options.prefix}help <command name>\` to get help on a command.`);
     else {
-        const { command, args } = query.commandSet.resolve(cmdPath);
+        const { command, args } = commandSet.resolve(cmdPath);
         if (!command || args.length != 0)
-            await query.message.author.send(`The command/sub-command "${cmdPath.join(' ')}" cannot be found.`);
+            await message.author.send(`The command/sub-command "${cmdPath.join(' ')}" cannot be found.`);
         else {
-            const embed = command.getEmbedHelp(query.options.prefix);
-            await query.message.author.send({ embed });
+            if (options.help)
+                return await options.help({message, options, context, command});
+            else {
+                const embed = command.getEmbedHelp(options.prefix);
+                await message.author.send({ embed });
+            }
         }
     }
 }
