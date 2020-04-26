@@ -17,7 +17,7 @@ module.exports = new Command("list", {
     }]
 });
 
-async function executor({message, args, commandSet, options, context}: CommandQuery) {
+async function executor({ message, args, commandSet, options, context }: CommandQuery) {
     const page = args.get("page") as number;
 
     let commands = Array.from(commandSet.commands());
@@ -29,7 +29,7 @@ async function executor({message, args, commandSet, options, context}: CommandQu
     const pageCount = Math.ceil(commands.length / options.listCommandPerPage);
 
     if (page > pageCount) {
-        await message.author.send(`The number of the page must be between 1 and ${pageCount}.`);
+        await message.author.send(options.localization.list.invalidPage.replace(/$page_count$/gi, pageCount.toString()));
         return;
     }
 
@@ -43,7 +43,7 @@ async function executor({message, args, commandSet, options, context}: CommandQu
     commands = commands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
 
     if (options.list)
-        return await options.list({message, options, context, commands , page, pageCount});
+        return await options.list({ message, options, context, commands, page, pageCount });
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")

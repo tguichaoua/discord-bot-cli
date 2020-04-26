@@ -154,5 +154,6 @@ const defaultOptions: ParseOptions = {
     helpOnSignatureNotFound: true,
     deleteMessageIfCommandNotFound: true,
     devIDs: [],
+    listCommandPerPage: 7,
     localization: defaultLocalization,
 };

@@ -10,18 +10,18 @@ module.exports = new Command("help", {
     ]
 });
 
-async function executor({rest, options, commandSet, message, context}: CommandQuery) {
+async function executor({ rest, options, commandSet, message, context }: CommandQuery) {
     const cmdPath = rest;
 
     if (cmdPath.length === 0)
-        await message.author.send(`Type \`${options.prefix}list\` to get a list of all commands or \`${options.prefix}help <command name>\` to get help on a command.`);
+        await message.author.send(options.localization.help.default.replace(/$prefix$/gi, options.prefix));
     else {
         const { command, args } = commandSet.resolve(cmdPath);
         if (!command || args.length != 0)
-            await message.author.send(`The command/sub-command "${cmdPath.join(' ')}" cannot be found.`);
+            await message.author.send(options.localization.help.commandNotFound.replace(/$command$/gi, cmdPath.join(' ')));
         else {
             if (options.help)
-                return await options.help({message, options, context, command});
+                return await options.help({ message, options, context, command });
             else {
                 const embed = command.getEmbedHelp(options.prefix);
                 await message.author.send({ embed });
