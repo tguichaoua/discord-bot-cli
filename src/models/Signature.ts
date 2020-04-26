@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 import { Arg } from "./parsable/Arg";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./query/CommandQuery";

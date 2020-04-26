@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 export function log(...args: any[]) {
     console.log('discord-bot-cli |', ...args);
 }

@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 import { ParsableDef } from "../def/ParsableDef";
 import { ParsableType, ParsableTypeName, getDefaultValue } from "../ParsableType";
 import { Message, MessageMentions } from "discord.js";

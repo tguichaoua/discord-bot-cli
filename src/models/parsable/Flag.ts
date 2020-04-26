@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 import { Parsable } from "./Parsable";
 import { FlagDef } from "../def/FlagDef";
 import { TypeNameLocalization } from "../localization/TypeNameLocalization";

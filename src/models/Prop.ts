@@ -1,4 +1,6 @@
+/** @ignore */
 
+/** */
 export class Prop<T> {
 
     private _value: T | undefined = undefined;

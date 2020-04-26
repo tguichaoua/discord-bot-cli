@@ -4,5 +4,10 @@
     "excludeNotExported": true,
     "excludePrivate": true,
     "out": "./docs/v3/",
-    "readme": "none"
+    "readme": "none",
+    "mode": "file",
+    "exclude": [
+        "utils/",
+        "commands/"
+    ]
 }

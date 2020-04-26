@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 import { User, TextChannel } from "discord.js";
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" | "user" | "channel";

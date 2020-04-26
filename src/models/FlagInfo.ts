@@ -1,3 +1,4 @@
+/** @ignore */
 export type FlagInfo =
     {
         name: string;

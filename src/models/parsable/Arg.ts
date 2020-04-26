@@ -1,3 +1,5 @@
+/** @ignore *//** */
+
 import { ArgDef } from "../def/ArgDef";
 import { Parsable } from "./Parsable";
 import { ParsableLocalization } from "../localization/ParsableLocalization";
