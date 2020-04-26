@@ -1,7 +1,7 @@
-import { ArgDef } from "./def/ArgDef";
+import { ArgDef } from "../def/ArgDef";
 import { Parsable } from "./Parsable";
-import { ParsableLocalization } from "./localization/ParsableLocalization";
-import { TypeNameLocalization } from "./localization/TypeNameLocalization";
+import { ParsableLocalization } from "../localization/ParsableLocalization";
+import { TypeNameLocalization } from "../localization/TypeNameLocalization";
 
 export class Arg extends Parsable {
 

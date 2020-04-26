@@ -1,7 +1,7 @@
 import { Parsable } from "./Parsable";
-import { FlagDef } from "./def/FlagDef";
-import { TypeNameLocalization } from "./localization/TypeNameLocalization";
-import { ParsableLocalization } from "./localization/ParsableLocalization";
+import { FlagDef } from "../def/FlagDef";
+import { TypeNameLocalization } from "../localization/TypeNameLocalization";
+import { ParsableLocalization } from "../localization/ParsableLocalization";
 
 export class Flag extends Parsable {
 

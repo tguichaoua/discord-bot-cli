@@ -1,4 +1,4 @@
-import { Command } from "../..";
+import { Command } from "../Command";
 import { BaseQuery } from "./BaseQuery";
 
 export interface ListQuery extends BaseQuery {

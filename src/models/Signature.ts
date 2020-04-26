@@ -1,14 +1,14 @@
-import {Arg} from "./Arg";
+import { Arg } from "./parsable/Arg";
 import { SignatureDef } from "./def/SignatureDef";
 import { CommandQuery } from "./query/CommandQuery";
 import { ParsableType } from "./ParsableType";
-import { Parsable } from "./Parsable";
+import { Parsable } from "./parsable/Parsable";
 import { FlagInfo } from "./FlagInfo";
 import { Message } from "discord.js";
 import { Localization } from "./localization/Localization";
 import { CommandLocalization } from "./localization/CommandLocalization";
 import { Command } from "./Command";
-import { Flag } from "./Flag";
+import { Flag } from "./parsable/Flag";
 
 export class Signature {
 

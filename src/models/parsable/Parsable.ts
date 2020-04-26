@@ -1,7 +1,7 @@
-import { ParsableDef } from "./def/ParsableDef";
-import { ParsableType, ParsableTypeName, getDefaultValue } from "./ParsableType";
+import { ParsableDef } from "../def/ParsableDef";
+import { ParsableType, ParsableTypeName, getDefaultValue } from "../ParsableType";
 import { Message, MessageMentions } from "discord.js";
-import { ParsableLocalization } from "./localization/ParsableLocalization";
+import { ParsableLocalization } from "../localization/ParsableLocalization";
 
 export class Parsable {
 

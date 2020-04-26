@@ -1,5 +1,5 @@
 import { ParsableType } from "../ParsableType";
-import CommandSet from "../CommandSet";
+import {CommandSet} from "../CommandSet";
 import { BaseQuery } from "./BaseQuery";
 
 export interface CommandQuery extends BaseQuery {
