@@ -41,8 +41,11 @@ export class Command {
         this._signatures = def.signatures ? def.signatures.map(d => new Signature(this, d)) : [];
 
         if (def.subs)
-            for (const k of Object.keys(def.subs))
-                this._subs.set(k, new Command(k, def.subs[k]));
+            for (const k of Object.keys(def.subs)) {
+                const sub = new Command(k, def.subs[k]);
+                sub._parent = this;
+                this._subs.set(k, sub);
+            }
 
         this._inherit = !!def.inherit;
 
