@@ -10,13 +10,13 @@ import { CommandDef } from './def/CommandDef';
 import { FlagInfo } from './FlagInfo';
 import { CommandLocalization } from './localization/CommandLocalization';
 
-export class Command {
+export class Command<Context = any> {
 
     private _name: string;
     private _description: string;
     private _parent: Command | null = null;
 
-    private _onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
+    private _onInit?: (context: Context, commandSet: CommandSet) => void | Promise<void>;
     private _signatures: Signature[] = [];
     private _subs: Map<string, Command> = new Map<string, Command>();
 
@@ -29,7 +29,7 @@ export class Command {
         devOnly: new Prop(false),
     }
 
-    constructor(name: string, def: CommandDef) {
+    constructor(name: string, def: CommandDef<Context>) {
         if (typeof name !== "string" || name === "")
             throw new TypeError("Command name must be a non-empty string");
 
@@ -98,7 +98,7 @@ export class Command {
     // === * ==================================================
 
     /** @internal */
-    async init(context: any, commandSet: CommandSet) {
+    async init(context: Context, commandSet: CommandSet) {
         if (this.isInitialized)
             return;
 
@@ -166,7 +166,7 @@ export class Command {
     }
 
     /** @internal */
-    async execute(message: Message, args: string[], context: any, options: ParseOptions, commandSet: CommandSet) {
+    async execute(message: Message, args: string[], context: Context, options: ParseOptions, commandSet: CommandSet) {
         if (!this._isInitialized)
             throw Error("You cannot use a non initialized command.");
 
