@@ -1,6 +1,6 @@
 import { BaseQuery } from "./BaseQuery";
 import { Command } from "../Command";
 
-export interface HelpQuery extends BaseQuery {
+export interface HelpQuery<Context = any> extends BaseQuery<Context> {
     command: Command;
 }
