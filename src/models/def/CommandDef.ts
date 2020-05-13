@@ -7,10 +7,10 @@ export interface CommandDef<Context = any> {
     /** A list of different signatures for this command. */
     signatures?: SignatureDef<Context>[];
     /** Sub-commands of this command. */
-    subs?: { [name: string]: CommandDef };
+    subs?: { [name: string]: CommandDef<Context> };
 
     /** Called once, when the command is initialised. */
-    onInit?: (context: Context, commandSet: CommandSet) => void | Promise<void>;
+    onInit?: (context: Context, commandSet: CommandSet<Context>) => void | Promise<void>;
 
     /** If set to true, undefined inheritable properties are inherited from parent command. (default is false). */
     inherit?: boolean;

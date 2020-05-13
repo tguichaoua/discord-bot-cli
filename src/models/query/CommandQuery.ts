@@ -6,5 +6,5 @@ export interface CommandQuery<Context = any> extends BaseQuery<Context> {
     readonly args: ReadonlyMap<string, ParsableType>;
     readonly flags: ReadonlyMap<string, ParsableType>;
     readonly rest: readonly string[];
-    readonly commandSet: CommandSet;
+    readonly commandSet: CommandSet<Context>;
 }
