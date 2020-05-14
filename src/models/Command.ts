@@ -47,7 +47,7 @@ export class Command<Context = any> {
                 this._subs.set(k, sub);
             }
 
-        this._inherit = !!def.inherit;
+        this._inherit = def.inherit ?? true;
 
         this._settings.deleteCommand.rawValue = def.deleteCommandMessage;
         this._settings.ignored.rawValue = def.ignore;
