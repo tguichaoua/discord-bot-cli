@@ -1,16 +1,16 @@
 import { SignatureDef } from "./SignatureDef";
 import { CommandSet } from "../..";
 
-export interface CommandDef {
+export interface CommandDef<Context = any> {
     /** The description of this command. Used by help command. */
     description?: string;
     /** A list of different signatures for this command. */
-    signatures?: SignatureDef[];
+    signatures?: SignatureDef<Context>[];
     /** Sub-commands of this command. */
-    subs?: { [name: string]: CommandDef };
+    subs?: { [name: string]: CommandDef<Context> };
 
     /** Called once, when the command is initialised. */
-    onInit?: (context: any, commandSet: CommandSet) => void | Promise<void>;
+    onInit?: (context: Context, commandSet: CommandSet<Context>) => void | Promise<void>;
 
     /** If set to true, undefined inheritable properties are inherited from parent command. (default is false). */
     inherit?: boolean;

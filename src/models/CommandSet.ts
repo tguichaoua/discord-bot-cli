@@ -12,9 +12,9 @@ import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 
-export class CommandSet {
+export class CommandSet<Context = any> {
 
-    private _commands = new Map<string, Command>();
+    private _commands = new Map<string, Command<Context>>();
 
     constructor() { }
 
@@ -102,7 +102,7 @@ export class CommandSet {
      * Init all commands.
      * @param context - a context object that is send to command when executed. (can store database or other data)
      */
-    async init(context: any) {
+    async init(context: Context) {
         for (const cmd of this._commands.values()) {
             if (cmd.isInitialized) continue;
             try {
@@ -119,7 +119,7 @@ export class CommandSet {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, context: any, options?: DeepPartial<ParseOptions>) {
+    async parse(message: Message, context: Context, options?: DeepPartial<ParseOptions>) {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
