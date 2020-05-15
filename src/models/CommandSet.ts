@@ -16,7 +16,7 @@ export class CommandSet<Context = any> {
 
     private _commands = new Map<string, Command<Context>>();
 
-    constructor() { }
+    constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
 
     private _loadFile(path: string) {
         try {
@@ -123,7 +123,7 @@ export class CommandSet<Context = any> {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
-        const opts = deepMerge({}, defaultOptions, options);
+        const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
 
         // check options
         if (opts.listCommandPerPage < 1)
