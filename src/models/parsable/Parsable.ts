@@ -1,7 +1,6 @@
 import { ParsableDef } from "../def/ParsableDef";
 import { ParsableType, ParsableTypeName, getDefaultValue } from "../ParsableType";
 import { Message, MessageMentions } from "discord.js";
-import { ParsableLocalization } from "../localization/ParsableLocalization";
 
 /** @ignore */
 export class Parsable {
@@ -18,14 +17,6 @@ export class Parsable {
         this.type = def.type;
         this._validator = def.validator;
         this.defaultValue = def.defaultValue ?? getDefaultValue(def.type);
-    }
-
-    getName(localization?: ParsableLocalization) {
-        return localization?.name ?? this.name;
-    }
-
-    getDescription(localization?: ParsableLocalization) {
-        return localization?.description ?? this.description;
     }
 
     parse(message: Message, argument: string): ParsableType | undefined {

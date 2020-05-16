@@ -23,7 +23,7 @@ export class CommandSet<Context = any> {
             const cmd = require(path);
             if (!(cmd instanceof Command)) throw TypeError("Not of type Command.");
             if (cmd.ignored) throw Error("Command is ignored.");
-            if (cmd.signatures.length === 0 && cmd.subs.length === 0) {
+            if (cmd.signatures.length === 0 && cmd.subsCount === 0) {
                 com.log(`The command at ${path} have been ignored because have no signature and no sub command.`);
                 return;
             }

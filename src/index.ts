@@ -9,3 +9,5 @@ export { HelpQuery } from "./models/query/HelpQuery";
 export { ListQuery } from "./models/query/ListQuery";
 
 export { DeepPartial } from "./utils/DeepPartial";
+
+export { HelpUtility } from "./other/HelpUtility"

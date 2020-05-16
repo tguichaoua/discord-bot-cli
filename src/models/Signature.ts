@@ -5,8 +5,6 @@ import { ParsableType } from "./ParsableType";
 import { Parsable } from "./parsable/Parsable";
 import { FlagInfo } from "./FlagInfo";
 import { Message } from "discord.js";
-import { Localization } from "./localization/Localization";
-import { CommandLocalization } from "./localization/CommandLocalization";
 import { Command } from "./Command";
 import { Flag } from "./parsable/Flag";
 
@@ -57,28 +55,11 @@ export class Signature {
 
     get rest() { return this._rest; }
 
-    get argCount() { return this._args.length; }
+    get arguments() { return this._args as readonly Arg[]; }
+
+    getFlags() { return this._flags.values(); }
 
     get executor() { return this._executor; }
-
-    getUsageString(localization?: CommandLocalization) {
-        return this._args.map(a => a.getUsageString((localization?.args ?? {})[a.name])).join(" ")
-            + (this._rest ? `[...${localization?.rest?.name ?? this._rest.name}]` : "");
-    }
-
-    getArgumentsDescription(localization: Localization) {
-        const cmdLoc = localization.commands[this.command.name];
-        // make sure that the string is not empty
-        return this._args.map(a => a.getDescriptionString(localization.typeNames, (cmdLoc?.args ?? {})[a.name])).join('\n')
-            + (this._rest ? `\n**[...${cmdLoc?.rest?.name ?? this._rest.name}]** - ${cmdLoc?.rest?.description ?? this._rest.description}` : "");
-    }
-
-    getFlagsDescription(localization: Localization) {
-        const cmdLoc = localization.commands[this.command.name];
-        // make sure that the string is not empty
-        return Array.from(this._flags.values())
-            .map(f => f.getDescriptionString(localization.typeNames, (cmdLoc?.args ?? {})[f.name])).join('\n');
-    }
 
     // ==================
 

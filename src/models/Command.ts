@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { Message } from 'discord.js';
 
 import { Signature } from "./Signature";
 import { CommandSet } from "./CommandSet";
@@ -8,7 +8,8 @@ import { Prop } from "./Prop";
 import { ParseOptions } from './ParseOptions';
 import { CommandDef } from './def/CommandDef';
 import { FlagInfo } from './FlagInfo';
-import { CommandLocalization } from './localization/CommandLocalization';
+
+import { HelpUtility } from "../other/HelpUtility";
 
 export class Command<Context = any> {
 
@@ -70,32 +71,28 @@ export class Command<Context = any> {
 
     get parent() { return this._parent; }
 
-    get signatures() { return [...this._signatures]; }
+    get signatures() { return this._signatures as readonly Signature[]; }
 
-    get subs() { return Array.from(this._subs.values()); }
+    getSubs() { return this._subs.values(); }
 
-    getFullName(localization?: CommandLocalization) {
+    get subsCount() { return this._subs.size; }
+
+    /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
+    getParents() {
         const parents: Command[] = [];
         parents.unshift(this);
 
-        let p: Command;
-        do {
-            p = parents[0];
-            if (p.parent) parents.unshift(p.parent);
-        } while (p.parent);
+        for (let parent = this.parent; parent; parent = parent.parent)
+            parents.unshift(parent);
 
-        return parents.map(cmd => cmd.name).join(" ");
+        return parents;
     }
 
     getSubCommand(name: string) {
         return this._subs.get(name);
     }
 
-    getDescription(localization?: CommandLocalization) {
-        return localization?.description ?? this.description;
-    }
-
-    // === * ==================================================
+    // =====================================================
 
     /** @internal */
     async init(context: Context, commandSet: CommandSet) {
@@ -120,49 +117,14 @@ export class Command<Context = any> {
         this._signatures = this._signatures
             .map((val, idx) => { return { val: val, idx: idx } })
             .sort((a, b) => {
-                if (a.val.argCount > b.val.argCount) return -1;
-                if (a.val.argCount < b.val.argCount) return 1;
+                if (a.val.arguments.length > b.val.arguments.length) return -1;
+                if (a.val.arguments.length < b.val.arguments.length) return 1;
                 return a.idx - b.idx;
             })
             .map(o => o.val);
         if (this._onInit)
             await this._onInit(context, commandSet);
         this._isInitialized = true;
-    }
-
-    getEmbedHelp(options: ParseOptions) {
-        const cmdLoc = options.localization.commands[this.name];
-        const name = this.getFullName(cmdLoc);
-        const description = this.getDescription(cmdLoc);
-
-        const embed = new MessageEmbed()
-            .setTitle(options.prefix + name)
-            .setDescription(description);
-
-
-        // if there is only 1 signature without any argument (nor rest), don't display this signature.
-        if (!(this._signatures.length === 1 && this._signatures[0].argCount === 0 && !this._signatures[0].rest))
-            for (const s of this._signatures) {
-                const description =
-                    s.getArgumentsDescription(options.localization) +
-                    "\n" +
-                    s.getFlagsDescription(options.localization);
-                embed.addField(
-                    options.prefix + name + ' ' + s.getUsageString(cmdLoc),
-                    description.length === 0 ? "*" : description
-                );
-            }
-
-        if (this._subs.size != 0) {
-            let str = '';
-            for (const cmd of this._subs.values()) {
-                const loc = (cmdLoc?.subs ?? {})[cmd.name];
-                str += `**${cmd.name}** ${cmd.getDescription(loc)}\n`;
-            }
-            embed.addField('Sub Commands', str);
-        }
-
-        return embed;
     }
 
     /** @internal */
@@ -225,7 +187,7 @@ export class Command<Context = any> {
         }
 
         if (options.helpOnSignatureNotFound) {
-            const embed = this.getEmbedHelp(options);
+            const embed = HelpUtility.Command.embedHelp(this, options.prefix, options.localization);
             await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
         }
 
