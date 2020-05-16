@@ -11,6 +11,7 @@ import { ParseOptions } from "./ParseOptions";
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
+import { HelpUtility } from "../other/HelpUtility";
 
 export class CommandSet<Context = any> {
 
@@ -144,9 +145,15 @@ export class CommandSet<Context = any> {
             return CommandResult.commandNotFound();
         }
 
+        
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
+        
+        if (command.guildOnly && !message.guild) {
+            await message.reply(opts.localization.misc.guildOnlyWarning.replace(new RegExp("{{command}}"), HelpUtility.Command.fullName(command)));
+            return CommandResult.guildOnly(command);
+        }
 
-        if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly();
+        if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly(command);
 
         try {
             return await command.execute(message, args, context, opts, this);

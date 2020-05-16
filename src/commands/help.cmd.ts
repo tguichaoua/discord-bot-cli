@@ -1,4 +1,5 @@
 import { Command, CommandQuery } from "../index";
+import { HelpUtility } from "../other/HelpUtility";
 
 module.exports = new Command("help", {
     description: "Provide help on commands.",
@@ -23,7 +24,7 @@ async function executor({ rest, options, commandSet, message, context }: Command
             if (options.help)
                 return await options.help({ message, options, context, command });
             else {
-                const embed = command.getEmbedHelp(options);
+                const embed = HelpUtility.Command.embedHelp(command, options.prefix, options.localization);
                 await message.author.send({ embed });
             }
         }

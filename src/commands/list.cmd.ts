@@ -49,10 +49,8 @@ async function executor({ message, args, commandSet, options, context }: Command
         .setColor("#0099ff")
         .setTitle(`Page ${page}/${pageCount}`);
 
-    for (const cmd of commands) {
-        const loc = options.localization.commands[cmd.name];
-        embed.addField(cmd.name, cmd.getDescription(loc));
-    }
+    for (const cmd of commands)
+        embed.addField(cmd.name, options.localization.commands[cmd.name].description ?? cmd.description);
 
     message.author.send({ embed });
 }

@@ -11,4 +11,7 @@ export interface Localization {
         invalidPage: string;
     };
     commands: { [name: string]: CommandLocalization };
+    misc: {
+        guildOnlyWarning: string;
+    };
 }

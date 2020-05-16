@@ -1,24 +1,24 @@
-import {Command} from "./Command";
-import {Signature} from "./Signature";
+import { Command } from "./Command";
+import { Signature } from "./Signature";
 
-export type CommandResult = 
-{
-    status:"ok",
-    command: Command,
-    signature: Signature,
-    result: any
-} |
-{
-    status: "error",
-    error: any,
-} |
-{
-    status: "signature not found",
-    command: Command,
-} |
-{
-    status: "dev only" | "not prefixed" | "command not found"
-};
+export type CommandResult =
+    {
+        status: "ok",
+        command: Command,
+        signature: Signature,
+        result: any
+    } |
+    {
+        status: "error",
+        error: any,
+    } |
+    {
+        status: "signature not found" | "guild only" | "dev only",
+        command: Command,
+    } |
+    {
+        status: "not prefixed" | "command not found"
+    };
 
 /** @ignore */
 export function ok(command: Command, signature: Signature, result: any): CommandResult {
@@ -31,8 +31,13 @@ export function error(error: any): CommandResult {
 }
 
 /** @ignore */
-export function devOnly(): CommandResult {
-    return { status: "dev only" };
+export function devOnly(command: Command): CommandResult {
+    return { status: "dev only", command };
+}
+
+/** @ignore */
+export function guildOnly(command: Command): CommandResult {
+    return { status: "guild only", command };
 }
 
 /** @ignore */

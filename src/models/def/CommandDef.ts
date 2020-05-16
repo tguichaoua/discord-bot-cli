@@ -20,4 +20,6 @@ export interface CommandDef<Context = any> {
     deleteCommandMessage?: boolean;
     /** If set to true, only user registred as dev via `ParseCommand.devIDs` can execute, get help or list this command. (default is false). [inheritable] */
     dev?: boolean;
+    /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
+    guildOnly?: boolean;
 }

@@ -28,6 +28,7 @@ export class Command<Context = any> {
         deleteCommand: new Prop(true),
         ignored: new Prop(false),
         devOnly: new Prop(false),
+        guildOnly: new Prop(false),
     }
 
     constructor(name: string, def: CommandDef<Context>) {
@@ -53,6 +54,7 @@ export class Command<Context = any> {
         this._settings.deleteCommand.rawValue = def.deleteCommandMessage;
         this._settings.ignored.rawValue = def.ignore;
         this._settings.devOnly.rawValue = def.dev;
+        this._settings.guildOnly.rawValue = def.guildOnly;
     }
 
     // === Getter =====================================================
@@ -66,6 +68,8 @@ export class Command<Context = any> {
     get ignored() { return this._settings.ignored.value; }
 
     get isDevOnly() { return this._settings.devOnly.value; }
+
+    get guildOnly() { return this._settings.guildOnly.value; }
 
     get isInitialized() { return this._isInitialized; }
 
