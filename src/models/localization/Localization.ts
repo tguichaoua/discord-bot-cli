@@ -6,6 +6,7 @@ export interface Localization {
     help: {
         default: string;
         commandNotFound: string;
+        guildOnlyTag: string;
     };
     list: {
         invalidPage: string;
