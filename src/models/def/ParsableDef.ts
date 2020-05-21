@@ -15,8 +15,9 @@ export type ParsableDef =
     Parsable<"boolean"> |
     Parsable<"integer"> |
     Parsable<"float"> |
-    
+
     Parsable<"user"> |
+    Parsable<"role"> |
 
     Parsable<"channel"> |
     Parsable<"guildChannel"> |
