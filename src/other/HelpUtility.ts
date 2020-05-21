@@ -15,7 +15,7 @@ export namespace HelpUtility {
         }
 
         export function embedHelp(command: Command, prefix: string, localization: Localization) {
-            const loc = localization.commands[command.name];
+            const loc = localization.commands[command.name] ?? {};
             const name = fullName(command);
             const description = loc.description ?? command.description;
 
@@ -39,7 +39,7 @@ export namespace HelpUtility {
 
             let str = '';
             for (const cmd of command.getSubs())
-                str += `**${cmd.name}** ${localization.commands[cmd.name].description ?? cmd.description}\n`;
+                str += `**${cmd.name}** ${localization.commands[cmd.name]?.description ?? cmd.description}\n`;
             if (str !== '')
                 embed.addField('Sub Commands', str);
 
