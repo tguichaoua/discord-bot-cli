@@ -151,7 +151,6 @@ export class CommandSet<Context = any> {
         
         if (command.guildOnly && !message.guild) {
             await message.reply(template(opts.localization.misc.guildOnlyWarning, {command: HelpUtility.Command.fullName(command)}));
-            //await message.reply(opts.localization.misc.guildOnlyWarning.replace(new RegExp("{{command}}"), );
             return CommandResult.guildOnly(command);
         }
 

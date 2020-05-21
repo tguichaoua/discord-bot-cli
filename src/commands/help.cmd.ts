@@ -1,5 +1,6 @@
 import { Command, CommandQuery } from "../index";
 import { HelpUtility } from "../other/HelpUtility";
+import { template } from "../utils/template";
 
 module.exports = new Command("help", {
     description: "Provide help on commands.",
@@ -15,11 +16,11 @@ async function executor({ rest, options, commandSet, message, context }: Command
     const cmdPath = rest;
 
     if (cmdPath.length === 0)
-        await message.author.send(options.localization.help.default.replace(/\$prefix\$/gi, options.prefix));
+        await message.author.send(template(options.localization.help.default, {prefix: options.prefix}));
     else {
         const { command, args } = commandSet.resolve(cmdPath);
         if (!command || args.length != 0)
-            await message.author.send(options.localization.help.commandNotFound.replace(/\$command\$/gi, cmdPath.join(' ')));
+            await message.author.send(template(options.localization.help.commandNotFound, {command: cmdPath.join(" ")}));
         else {
             if (options.help)
                 return await options.help({ message, options, context, command });

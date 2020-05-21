@@ -1,5 +1,6 @@
 import { Command, CommandQuery } from "../index";
 import { MessageEmbed } from "discord.js";
+import { template } from "../utils/template";
 
 module.exports = new Command("list", {
     description: "Display a list of all avaible commands.",
@@ -29,7 +30,7 @@ async function executor({ message, args, commandSet, options, context }: Command
     const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
 
     if (page > pageCount) {
-        await message.author.send(options.localization.list.invalidPage.replace(/\$page_count\$/gi, pageCount.toString()));
+        await message.author.send(template(options.localization.list.invalidPage, { page_count: pageCount.toString() }));
         return;
     }
 
