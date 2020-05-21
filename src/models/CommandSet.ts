@@ -12,6 +12,7 @@ import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
+import { template } from "../utils/template";
 
 export class CommandSet<Context = any> {
 
@@ -149,7 +150,8 @@ export class CommandSet<Context = any> {
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
         
         if (command.guildOnly && !message.guild) {
-            await message.reply(opts.localization.misc.guildOnlyWarning.replace(new RegExp("{{command}}"), HelpUtility.Command.fullName(command)));
+            await message.reply(template(opts.localization.misc.guildOnlyWarning, {command: HelpUtility.Command.fullName(command)}));
+            //await message.reply(opts.localization.misc.guildOnlyWarning.replace(new RegExp("{{command}}"), );
             return CommandResult.guildOnly(command);
         }
 
