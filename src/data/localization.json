@@ -7,13 +7,13 @@
         "user": "user",
         "role": "role",
         "channel": "channel",
-        "guildChannel": "guild channel",
-        "dmChannel": "dm channel",
-        "textChannel": "text channel",
-        "voiceChannel": "voice channel",
-        "categoryChannel": "category channel",
-        "newsChannel": "news channel",
-        "storeChannel": "store channel"
+        "guild channel": "guild channel",
+        "dm channel": "dm channel",
+        "text channel": "text channel",
+        "voice channel": "voice channel",
+        "category channel": "category channel",
+        "news channel": "news channel",
+        "store channel": "store channel"
     },
     "help": {
         "default": "Type `{{prefix}}list` to get a list of all commands or `{{prefix}}help <command name>` to get help on a command.",

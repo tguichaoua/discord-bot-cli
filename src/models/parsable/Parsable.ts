@@ -71,7 +71,7 @@ export class Parsable {
                 if (ID_PATTERN.test(argument)) value = message.client.channels.resolve(argument) ?? undefined;
                 break;
 
-            case "guildChannel":
+            case "guild channel":
                 if (ID_PATTERN.test(argument)) {
                     const ch = message.client.channels.resolve(argument);
                     if (ch && ch.type !== "dm" && ch.type !== "unknown" && ch.type !== "group")
@@ -79,27 +79,27 @@ export class Parsable {
                 }
                 break;
 
-            case "dmChannel":
+            case "dm channel":
                 if (ID_PATTERN.test(argument)) value = resolveChannel("dm");
                 break;
 
-            case "voiceChannel":
+            case "voice channel":
                 if (ID_PATTERN.test(argument)) value = resolveChannel("voice");
                 break;
 
-            case "categoryChannel":
+            case "category channel":
                 if (ID_PATTERN.test(argument)) value = resolveChannel("category");
                 break;
 
-            case "newsChannel":
+            case "news channel":
                 if (ID_PATTERN.test(argument)) value = resolveChannel("news");
                 break;
 
-            case "storeChannel":
+            case "store channel":
                 if (ID_PATTERN.test(argument)) value = resolveChannel("store");
                 break;
 
-            case "textChannel":
+            case "text channel":
                 const channel = MessageMentions.CHANNELS_PATTERN.exec(argument);
                 if (channel) value = message.mentions.channels.get(channel[1]);
                 else if (ID_PATTERN.test(argument)) value = resolveChannel("text");

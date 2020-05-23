@@ -20,10 +20,10 @@ export type ParsableDef =
     Parsable<"role"> |
 
     Parsable<"channel"> |
-    Parsable<"guildChannel"> |
-    Parsable<"dmChannel"> |
-    Parsable<"textChannel"> |
-    Parsable<"voiceChannel"> |
-    Parsable<"categoryChannel"> |
-    Parsable<"newsChannel"> |
-    Parsable<"storeChannel">;
+    Parsable<"guild channel"> |
+    Parsable<"dm channel"> |
+    Parsable<"text channel"> |
+    Parsable<"voice channel"> |
+    Parsable<"category channel"> |
+    Parsable<"news channel"> |
+    Parsable<"store channel">;
