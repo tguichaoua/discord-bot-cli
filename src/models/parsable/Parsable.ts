@@ -57,12 +57,14 @@ export class Parsable {
 
             case "user":
                 const user = MessageMentions.USERS_PATTERN.exec(argument);
+                MessageMentions.USERS_PATTERN.lastIndex = 0;
                 if (user) value = message.mentions.users.get(user[1]);
                 else if (ID_PATTERN.test(argument)) value = message.client.users.resolve(argument) ?? undefined;
                 break;
 
             case "role":
                 const role = MessageMentions.ROLES_PATTERN.exec(argument);
+                MessageMentions.ROLES_PATTERN.lastIndex = 0;
                 if (role) value = message.mentions.roles.get(role[1]);
                 else if (ID_PATTERN.test(argument)) value = message.guild?.roles?.resolve(argument) ?? undefined;
                 break;
@@ -101,6 +103,7 @@ export class Parsable {
 
             case "text channel":
                 const channel = MessageMentions.CHANNELS_PATTERN.exec(argument);
+                MessageMentions.CHANNELS_PATTERN.lastIndex = 0;
                 if (channel) value = message.mentions.channels.get(channel[1]);
                 else if (ID_PATTERN.test(argument)) value = resolveChannel("text");
                 break;
