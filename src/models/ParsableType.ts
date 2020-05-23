@@ -2,7 +2,7 @@ import { User, TextChannel, Channel, GuildChannel, DMChannel, VoiceChannel, Cate
 
 export type ParsableTypeName = "string" | "boolean" | "integer" | "float" |
     "user" | "role" |
-    "channel" | "guildChannel" | "dmChannel" | "textChannel" | "voiceChannel" | "categoryChannel" | "newsChannel" | "storeChannel";
+    "channel" | "guild channel" | "dm channel" | "text channel" | "voice channel" | "category channel" | "news channel" | "store channel";
 
 export type ParsableType = null | string | boolean | number |
     User | Role |
@@ -19,13 +19,13 @@ export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "role" ? Role :
 
     Name extends "channel" ? Channel :
-    Name extends "guildChannel" ? GuildChannel :
-    Name extends "dmChannel" ? DMChannel :
-    Name extends "textChannel" ? TextChannel :
-    Name extends "voiceChannel" ? VoiceChannel :
-    Name extends "categoryChannel" ? CategoryChannel :
-    Name extends "newsChannel" ? NewsChannel :
-    Name extends "storeChannel" ? StoreChannel :
+    Name extends "guild channel" ? GuildChannel :
+    Name extends "dm channel" ? DMChannel :
+    Name extends "text channel" ? TextChannel :
+    Name extends "voice channel" ? VoiceChannel :
+    Name extends "category channel" ? CategoryChannel :
+    Name extends "news channel" ? NewsChannel :
+    Name extends "store channel" ? StoreChannel :
     never;
 
 /** @internal */
@@ -39,13 +39,13 @@ export function getDefaultValue(name: ParsableTypeName): ParsableType {
         case "role":
 
         case "channel":
-        case "guildChannel":
-        case "dmChannel":
-        case "textChannel":
-        case "voiceChannel":
-        case "categoryChannel":
-        case "newsChannel":
-        case "storeChannel":
+        case "guild channel":
+        case "dm channel":
+        case "text channel":
+        case "voice channel":
+        case "category channel":
+        case "news channel":
+        case "store channel":
             return null;
     }
 }
