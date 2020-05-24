@@ -1,6 +1,6 @@
 import { Message, MessageMentions } from "discord.js";
-import { ParsableType } from "../models/ParsableType";
-import { ParsableDefinition } from "../models/definition/ParsableDefinition";
+import { ParsableType } from "../../models/ParsableType";
+import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
 
 export namespace Parsing {
     /** @internal */
