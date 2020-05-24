@@ -12,6 +12,6 @@ interface Parsable<TypeName extends ParsableTypeName> {
 }
 
 // I not found a better solution.
-type foo<T extends ParsableTypeName> = T extends any ? Parsable<T> : never;
+type WrapParsable<T extends ParsableTypeName> = T extends any ? Parsable<T> : never;
 
-export type ParsableDefinition = foo<ParsableTypeName>;
+export type ParsableDefinition = WrapParsable<ParsableTypeName>;
