@@ -1,13 +1,14 @@
 import { ParsableTypeName, ParsableTypeOf } from "../ParsableType";
 
 interface Parsable<TypeName extends ParsableTypeName> {
-    description?: string;
+    /** Provide a description. */
+    readonly description?: string;
     /** The type in which is parsed the value. */
-    type: TypeName
+    readonly type: TypeName;
     /** Used to check if parsed value satisfy certain conditions. */
-    validator?: (value: ParsableTypeOf<TypeName>) => boolean;
+    readonly validator?: (value: ParsableTypeOf<TypeName>) => boolean;
     /** The default value if there is no value to parse. */
-    defaultValue?: ParsableTypeOf<TypeName>
+    readonly defaultValue?: ParsableTypeOf<TypeName>;
 }
 
 // I not found a better solution.
