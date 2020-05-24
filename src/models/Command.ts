@@ -11,6 +11,9 @@ import { CommandData } from './CommandData';
 import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
+import { ParsableType } from './ParsableType';
+import { Flag } from './parsable/Flag';
+import { Char } from '../utils/char';
 
 export class Command {
 
@@ -19,8 +22,9 @@ export class Command {
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly subs: ReadonlyMap<string, Command>,
-        public readonly args: { readonly [name: string]: ArgDefinition },
-        public readonly flags: { readonly [name: string]: FlagDefinition },
+        public readonly args: ReadonlyMap<string, ArgDefinition>,
+        public readonly flags: ReadonlyMap<string, FlagDefinition>,
+        private readonly _flagsShortcuts: ReadonlyMap<Char, FlagDefinition>,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -36,8 +40,14 @@ export class Command {
             data.data.description ?? "",
             parent,
             subs,
-            data.data.args ?? {},
-            data.data.flags ?? {},
+            new Map(data.data.args ? Object.entries(data.data.args) : []),
+            new Map(data.data.flags ? Object.entries(data.data.flags) : []),
+            new Map(data.data.flags ?
+                Object.values(data.data.flags)
+                    .filter(function (f): f is FlagDefinition & { shortcut: Char } { return f.shortcut !== undefined })
+                    .map(f => [f.shortcut, f]) :
+                []
+            ),
             data.data.deleteCommandMessage ?? true,
             data.data.ignore ?? false,
             data.data.dev ?? false,
@@ -101,6 +111,60 @@ export class Command {
     /** @internal */
     async execute(message: Message, args: string[], options: ParseOptions, commandSet: CommandSet) {
 
+        // Parse flags
+
+        const flags = new Map<string, ParsableType | undefined>();
+        for (let i = 0; i < args.length; i++) {
+            let f = args[i];
+
+            if (f.match(/^--[^-].+$/)) {
+                const parts = f.substring(2).split("=");
+                const flagDef = this.flags.get(parts[0]);
+
+                if (!flagDef)
+                    return;
+
+                const valueToParse = parts.length > 1 ? parts[1] : undefined;
+
+
+
+
+
+                
+            } else if (f.match(/^-[a-zA-Z]$/)) {
+                const flagDef = this._flagsShortcuts.get(f.substring(1) as Char);
+                if (!flagDef)
+                return;
+
+
+                flag = flagDef;
+                if (flag.type === "boolean")
+
+            } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
+                const flagNames = inFlag.substring(1).split("");
+
+                for (const flagName of flagNames) {
+                    flagInfos.push({
+                        type: "shortcut",
+                        name: flagName,
+                    });
+                }
+            } else
+                continue;
+
+            args.splice(i, 1); // remove the flag from args
+            i--; // make sure to not skip an argument.
+        }
+
+
+
+
+
+
+
+
+
+        /// OLD CODE
         const flagInfos: FlagInfo[] = [];
 
         for (let i = 0; i < args.length; i++) {
