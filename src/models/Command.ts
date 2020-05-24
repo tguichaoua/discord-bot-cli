@@ -123,19 +123,30 @@ export class Command {
                 const name = parts[0];
                 const flag = this.flags.get(name);
 
-                if (!flag)
-                    return;
+                if (!flag) return;
 
-                const valueToParse = parts.length > 1 ? parts[1] : undefined;
-                let value = undefined;
-                if (valueToParse) {
-                    value = Parsing.parse(flag, message, valueToParse);
-                    if (value === undefined)
-                        return;
+                const flagValue = parts.length > 1 ? parts[1] : undefined;
+
+                if (flagValue) {
+                    const value = Parsing.parse(flag, message, flagValue);
+                    if (value === undefined) return;
+                    flags.set(name, value);
+                    args.splice(i, 1); // remove the flag from args
+                    i--; // make sure to not skip an argument.
+                } else {
+                    if (flag.type === "boolean") {
+                        flags.set(name, true);
+                        args.splice(i, 1); // remove the flag from args
+                        i--; // make sure to not skip an argument.
+                    } else {
+                        if (i + 1 >= args.length) return;
+                        const value = Parsing.parse(flag, message, args[i + 1]);
+                        if (value === undefined) return;
+                        flags.set(name, value);
+                        args.splice(i, 2); // remove the flag from args
+                        i--; // make sure to not skip an argument.
+                    }
                 }
-                flags.set(name, value ?? flag.defaultValue);
-                args.splice(i, 1); // remove the flag from args
-                i--; // make sure to not skip an argument.
 
             } else if (f.match(/^-[a-zA-Z]$/)) {
                 const flag = this._flagsShortcuts.get(f.substring(1) as Char);
