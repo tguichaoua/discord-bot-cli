@@ -11,9 +11,7 @@ import { CommandData } from './CommandData';
 import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
-import { ParsableType } from './ParsableType';
 import { Char } from '../utils/char';
-import { Parsing } from '../other/parse';
 
 
 export class Command {
@@ -111,84 +109,6 @@ export class Command {
 
     /** @internal */
     async execute(message: Message, args: string[], options: ParseOptions, commandSet: CommandSet) {
-
-        // Parse flags
-
-        const flags = new Map<string, ParsableType | undefined>();
-        for (let i = 0; i < args.length; i++) {
-            let f = args[i];
-            let flagName: string;
-            let flagValue: string | undefined;   
-
-            if (f.match(/^--[^-].*$/)) {
-                const parts = f.substring(2).split("=");
-                flagName = parts[0];
-                flagValue = parts.length > 1 ? parts[1] : undefined;
-                
-
-                // if (flagValue) {
-                //     const value = Parsing.parse(flag, message, flagValue);
-                //     if (value === undefined) return;
-                //     flags.set(name, value);
-                //     args.splice(i, 1); // remove the flag from args
-                //     i--; // make sure to not skip an argument.
-                // } else {
-                //     if (flag.type === "boolean") {
-                //         flags.set(name, true);
-                //         args.splice(i, 1); // remove the flag from args
-                //         i--; // make sure to not skip an argument.
-                //     } else {
-                //         if (i + 1 >= args.length) return;
-                //         const value = Parsing.parse(flag, message, args[i + 1]);
-                //         if (value === undefined) return;
-                //         flags.set(name, value);
-                //         args.splice(i, 2); // remove the flag from args
-                //         i--; // make sure to not skip an argument.
-                //     }
-                // }
-
-            } else if (f.match(/^-[a-zA-Z]$/)) {
-                const flag = this._flagsShortcuts.get(f.substring(1) as Char);
-                if (!flag)
-                    return;
-
-                if (flag.type === "boolean") {
-                    flags.set(flag.name, true);
-                    args.splice(i, 1); // remove the flag from args
-                    i--; // make sure to not skip an argument.
-                }
-                else {
-                    if (i + 1 >= args.length)
-                        return;
-                    const value = Parsing.parse(flag, message, args[i + 1]);
-                    if (value === undefined)
-                        return;
-                    flags.set(flag.name, value);
-                    args.splice(i, 2); // remove the flag from args
-                    i -= 2; // make sure to not skip an argument.
-                }
-
-            } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
-                const flagNames = inFlag.substring(1).split("");
-
-                for (const flagName of flagNames) {
-                    flagInfos.push({
-                        type: "shortcut",
-                        name: flagName,
-                    });
-                }
-            } else
-                continue;
-
-
-        }
-
-
-
-
-
-
-
 
 
         /// OLD CODE
