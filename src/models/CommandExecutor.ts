@@ -14,7 +14,11 @@ export type CommandExecutor<T extends CommandDefinition> =
                 undefined : never : never
             )
         ) },
-        flags: { [name in keyof T["flags"]]: ParsableTypeOf<NonNullable<T["flags"]>[name]["type"]> },
+        flags: { [name in keyof T["flags"]]: (
+            ParsableTypeOf<NonNullable<T["flags"]>[name]["type"]>
+            | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"] ? undefined : never)
+        )
+        },
         others: {
             rest: string[],
             message: Message,
