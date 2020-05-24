@@ -25,7 +25,7 @@ export class Command {
         public readonly subs: ReadonlyMap<string, Command>,
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
-        private readonly _flagsShortcuts: ReadonlyMap<Char, FlagDefinition & { name: string }>,
+        private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -46,7 +46,7 @@ export class Command {
             new Map(data.data.flags ?
                 Object.entries(data.data.flags)
                     .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] { return a[1].shortcut !== undefined })
-                    .map(([k, v]) => [v.shortcut, Object.assign(v, { name: k })]) :
+                    .map(([k, v]) => [v.shortcut, k]) :
                 []
             ),
             data.data.deleteCommandMessage ?? true,
