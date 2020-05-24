@@ -117,36 +117,35 @@ export class Command {
         const flags = new Map<string, ParsableType | undefined>();
         for (let i = 0; i < args.length; i++) {
             let f = args[i];
+            let flagName: string;
+            let flagValue: string | undefined;   
 
             if (f.match(/^--[^-].*$/)) {
                 const parts = f.substring(2).split("=");
-                const name = parts[0];
-                const flag = this.flags.get(name);
+                flagName = parts[0];
+                flagValue = parts.length > 1 ? parts[1] : undefined;
+                
 
-                if (!flag) return;
-
-                const flagValue = parts.length > 1 ? parts[1] : undefined;
-
-                if (flagValue) {
-                    const value = Parsing.parse(flag, message, flagValue);
-                    if (value === undefined) return;
-                    flags.set(name, value);
-                    args.splice(i, 1); // remove the flag from args
-                    i--; // make sure to not skip an argument.
-                } else {
-                    if (flag.type === "boolean") {
-                        flags.set(name, true);
-                        args.splice(i, 1); // remove the flag from args
-                        i--; // make sure to not skip an argument.
-                    } else {
-                        if (i + 1 >= args.length) return;
-                        const value = Parsing.parse(flag, message, args[i + 1]);
-                        if (value === undefined) return;
-                        flags.set(name, value);
-                        args.splice(i, 2); // remove the flag from args
-                        i--; // make sure to not skip an argument.
-                    }
-                }
+                // if (flagValue) {
+                //     const value = Parsing.parse(flag, message, flagValue);
+                //     if (value === undefined) return;
+                //     flags.set(name, value);
+                //     args.splice(i, 1); // remove the flag from args
+                //     i--; // make sure to not skip an argument.
+                // } else {
+                //     if (flag.type === "boolean") {
+                //         flags.set(name, true);
+                //         args.splice(i, 1); // remove the flag from args
+                //         i--; // make sure to not skip an argument.
+                //     } else {
+                //         if (i + 1 >= args.length) return;
+                //         const value = Parsing.parse(flag, message, args[i + 1]);
+                //         if (value === undefined) return;
+                //         flags.set(name, value);
+                //         args.splice(i, 2); // remove the flag from args
+                //         i--; // make sure to not skip an argument.
+                //     }
+                // }
 
             } else if (f.match(/^-[a-zA-Z]$/)) {
                 const flag = this._flagsShortcuts.get(f.substring(1) as Char);
