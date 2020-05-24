@@ -7,8 +7,8 @@ import { ParseOptions } from "./ParseOptions";
 
 export type CommandExecutor<T extends CommandDefinition> =
     (
-        args: { [name in keyof T["args"]]: ParsableTypeOf<Exclude<T["args"], undefined>[name]["type"]> },
-        flags: { [name in keyof T["flags"]]: ParsableTypeOf<Exclude<T["flags"], undefined>[name]["type"]> },
+        args: { [name in keyof T["args"]]: ParsableTypeOf<NonNullable<T["args"]>[name]["type"]> },
+        flags: { [name in keyof T["flags"]]: ParsableTypeOf<NonNullable<T["args"]>[name]["type"]> },
         others: {
             rest: string[],
             message: Message,
