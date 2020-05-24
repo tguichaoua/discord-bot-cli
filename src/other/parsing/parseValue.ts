@@ -9,7 +9,7 @@ export namespace Parsing {
     /** @internal 
      * Return undefined if parse fail.
     */
-    export function parse(parseData: ParsableDefinition, message: Message, argument: string): ParsableType | undefined {
+    export function parseValue(parseData: ParsableDefinition, message: Message, argument: string): ParsableType | undefined {
         let value = undefined;
 
         function resolveChannel(type: keyof typeof ChannelType) {
