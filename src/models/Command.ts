@@ -12,8 +12,9 @@ import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
 import { ParsableType } from './ParsableType';
-import { Flag } from './parsable/Flag';
 import { Char } from '../utils/char';
+import { Parsing } from '../other/parse';
+
 
 export class Command {
 
@@ -24,7 +25,7 @@ export class Command {
         public readonly subs: ReadonlyMap<string, Command>,
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
-        private readonly _flagsShortcuts: ReadonlyMap<Char, FlagDefinition>,
+        private readonly _flagsShortcuts: ReadonlyMap<Char, FlagDefinition & { name: string }>,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -43,9 +44,9 @@ export class Command {
             new Map(data.data.args ? Object.entries(data.data.args) : []),
             new Map(data.data.flags ? Object.entries(data.data.flags) : []),
             new Map(data.data.flags ?
-                Object.values(data.data.flags)
-                    .filter(function (f): f is FlagDefinition & { shortcut: Char } { return f.shortcut !== undefined })
-                    .map(f => [f.shortcut, f]) :
+                Object.entries(data.data.flags)
+                    .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] { return a[1].shortcut !== undefined })
+                    .map(([k, v]) => [v.shortcut, Object.assign(v, { name: k })]) :
                 []
             ),
             data.data.deleteCommandMessage ?? true,
@@ -119,26 +120,43 @@ export class Command {
 
             if (f.match(/^--[^-].+$/)) {
                 const parts = f.substring(2).split("=");
-                const flagDef = this.flags.get(parts[0]);
+                const name = parts[0];
+                const flag = this.flags.get(name);
 
-                if (!flagDef)
+                if (!flag)
                     return;
 
                 const valueToParse = parts.length > 1 ? parts[1] : undefined;
+                let value = undefined;
+                if (valueToParse) {
+                    value = Parsing.parse(flag, message, valueToParse);
+                    if (value === undefined)
+                        return;
+                }
+                flags.set(name, value ?? flag.defaultValue);
+                args.splice(i, 1); // remove the flag from args
+                i--; // make sure to not skip an argument.
 
-
-
-
-
-                
             } else if (f.match(/^-[a-zA-Z]$/)) {
-                const flagDef = this._flagsShortcuts.get(f.substring(1) as Char);
-                if (!flagDef)
-                return;
+                const flag = this._flagsShortcuts.get(f.substring(1) as Char);
+                if (!flag)
+                    return;
 
-
-                flag = flagDef;
-                if (flag.type === "boolean")
+                if (flag.type === "boolean") {
+                    flags.set(flag.name, true);
+                    args.splice(i, 1); // remove the flag from args
+                    i--; // make sure to not skip an argument.
+                }
+                else {
+                    if (i + 1 >= args.length)
+                        return;
+                    const value = Parsing.parse(flag, message, args[i + 1]);
+                    if (value === undefined)
+                        return;
+                    flags.set(flag.name, value);
+                    args.splice(i, 2); // remove the flag from args
+                    i -= 2; // make sure to not skip an argument.
+                }
 
             } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
                 const flagNames = inFlag.substring(1).split("");
@@ -152,8 +170,7 @@ export class Command {
             } else
                 continue;
 
-            args.splice(i, 1); // remove the flag from args
-            i--; // make sure to not skip an argument.
+
         }
 
 
