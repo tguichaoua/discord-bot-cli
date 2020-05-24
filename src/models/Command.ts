@@ -9,6 +9,8 @@ import { FlagInfo } from './FlagInfo';
 import { HelpUtility } from "../other/HelpUtility";
 import { CommandData } from './CommandData';
 import { CommandDefinition } from './definition/CommandDefinition';
+import { ArgDefinition } from './definition/ArgDefinition';
+import { FlagDefinition } from './definition/FlagDefinition';
 
 export class Command {
 
@@ -17,6 +19,8 @@ export class Command {
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly subs: ReadonlyMap<string, Command>,
+        public readonly args: { readonly [name: string]: ArgDefinition },
+        public readonly flags: { readonly [name: string]: FlagDefinition },
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -32,6 +36,8 @@ export class Command {
             data.data.description ?? "",
             parent,
             subs,
+            data.data.args ?? {},
+            data.data.flags ?? {},
             data.data.deleteCommandMessage ?? true,
             data.data.ignore ?? false,
             data.data.dev ?? false,
@@ -39,7 +45,7 @@ export class Command {
         );
 
         for (const subName in data.subs)
-            subs.set(subName, Command.build(data.subs[subName], cmd));
+            subs.set(subName, Command._build(data.subs[subName], cmd));
         return cmd;
     }
 
@@ -129,7 +135,7 @@ export class Command {
 
 
 
-        
+
         for (const s of this._signatures) {
             try {
                 const parsedData = s.tryParse(message, args, flagInfos);
