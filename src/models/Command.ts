@@ -118,7 +118,7 @@ export class Command {
         for (let i = 0; i < args.length; i++) {
             let f = args[i];
 
-            if (f.match(/^--[^-].+$/)) {
+            if (f.match(/^--[^-].*$/)) {
                 const parts = f.substring(2).split("=");
                 const name = parts[0];
                 const flag = this.flags.get(name);
