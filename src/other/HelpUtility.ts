@@ -28,6 +28,8 @@ export namespace HelpUtility {
                 .join(" ")
                 + (command.rest ? `[...${loc?.rest?.name ?? command.rest.name}]` : "");
 
+            embed.addField("usage", usageString);
+
             // if there is only 1 signature without any argument (nor rest), don't display this signature.
             // if (!(command.signatures.length === 1 && command.signatures[0].arguments.length === 0 && !command.signatures[0].rest)) {
             //     for (const s of command.signatures) {
