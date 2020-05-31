@@ -1,13 +1,11 @@
-const { Command } = require("discord-bot-cli");
+const { makeCommand } = require("discord-bot-cli");
 
-module.exports = new Command("$NAME$", {
-    description: "...",
-    signatures: [{
-        executor: executor,
-    }]
+const cmd = makeCommand("NAME", {
+    description: "DESCRIPTION"
 });
 
-/**@param {import("discord-bot-cli").CommandQuery;} query */
-function executor(query) {
+cmd.executor = async({}, {}, {}) => {
 
-}
+};
+
+export default cmd;
