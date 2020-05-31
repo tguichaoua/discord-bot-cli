@@ -4,7 +4,7 @@ export type ParsableTypeName = "string" | "boolean" | "integer" | "float" |
     "user" | "role" |
     "channel" | "guild channel" | "dm channel" | "text channel" | "voice channel" | "category channel" | "news channel" | "store channel";
 
-export type ParsableType = null | string | boolean | number |
+export type ParsableType = string | boolean | number |
     User | Role |
     Channel | GuildChannel | DMChannel | TextChannel | VoiceChannel | CategoryChannel | NewsChannel | StoreChannel;
 
