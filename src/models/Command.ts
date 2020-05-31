@@ -15,6 +15,7 @@ import { Char } from '../utils/char';
 import { CommandExecutor } from './CommandExecutor';
 import { parseFlags } from '../other/parsing/parseFlags';
 import { parseArgs } from '../other/parsing/parseArgs';
+import { RestDefinition } from './definition/RestDefinition';
 
 
 export class Command {
@@ -25,6 +26,7 @@ export class Command {
         public readonly parent: Command | null,
         public readonly subs: ReadonlyMap<string, Command>,
         public readonly args: ReadonlyMap<string, ArgDefinition>,
+        public readonly rest: Readonly<RestDefinition> | undefined,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
@@ -44,6 +46,7 @@ export class Command {
             parent,
             subs,
             new Map(data.data.args ? Object.entries(data.data.args) : []),
+            data.data.rest,
             new Map(data.data.flags ? Object.entries(data.data.flags) : []),
             new Map(data.data.flags ?
                 Object.entries(data.data.flags)
