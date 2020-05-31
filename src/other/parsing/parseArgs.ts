@@ -23,5 +23,5 @@ export function parseArgs(
         argValues.set(name, value);
     }
 
-    return argValues;
+    return { argValues, rest: args };
 }

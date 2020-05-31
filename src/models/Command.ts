@@ -113,21 +113,21 @@ export class Command {
     // }
 
     /** @internal */
-    async execute(message: Message, args: string[], options: ParseOptions, commandSet: CommandSet) {
+    async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
         if (!this._executor) return;
 
-        const flags = parseFlags(message, args, this.flags, this._flagsShortcuts);
+        const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         if (!flags) return;
 
-        const argValues = parseArgs(message, flags.args, this.args);
-        if (!argValues) return;
+        const args = parseArgs(message, flags.args, this.args);
+        if (!args) return;
 
         await this._executor(
-            Object.fromEntries(argValues),
+            Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
-                rest: [],
+                rest: args.rest,
                 message,
                 options,
                 commandSet
