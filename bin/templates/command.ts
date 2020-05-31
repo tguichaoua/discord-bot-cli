@@ -4,7 +4,7 @@ const cmd = makeCommand("$NAME$", {
     description: "DESCRIPTION"
 });
 
-cmd.executor = async ({ }, { }, {  }) => {
+cmd.executor = async ({ }, { }, { }) => {
 
 };
 
