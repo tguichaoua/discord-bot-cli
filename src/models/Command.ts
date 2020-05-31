@@ -12,6 +12,7 @@ import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
 import { Char } from '../utils/char';
+import { CommandExecutor } from './CommandExecutor';
 
 
 export class Command {
@@ -24,6 +25,7 @@ export class Command {
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
+        private readonly _executor: CommandExecutor<any> | undefined,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -47,6 +49,7 @@ export class Command {
                     .map(([k, v]) => [v.shortcut, k]) :
                 []
             ),
+            data.executor,
             data.data.deleteCommandMessage ?? true,
             data.data.ignore ?? false,
             data.data.dev ?? false,
@@ -109,7 +112,7 @@ export class Command {
 
     /** @internal */
     async execute(message: Message, args: string[], options: ParseOptions, commandSet: CommandSet) {
-
+        
 
         /// OLD CODE
         const flagInfos: FlagInfo[] = [];
