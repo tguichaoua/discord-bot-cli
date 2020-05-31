@@ -1,14 +1,17 @@
-import { FlagDefinition } from "../../models/definition/FlagDefinition";
 import { ParsableType } from "../../models/ParsableType";
 import { parseValue } from "./parseValue";
 import { Message } from "discord.js";
+import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
 
-export function parseFlags(inputArguments: readonly string[], flagDefinitions: ReadonlyMap<string, FlagDefinition>, message: Message) {
-
+export function parseFlags(
+    message: Message, inputArguments: readonly string[],
+    flagDefinitions: ReadonlyMap<string, ParsableDefinition>,
+    shortcuts?: ReadonlyMap<string, string>
+) {
     const args = [...inputArguments];
     const flags = new Map<string, ParsableType | undefined>();
 
-    function parse(index: number, flagName: string, flagValue?: string): boolean {
+    function parse(index: number, flagName: string, flagValue?: string, dontUseNextArg?: boolean): boolean {
         const flag = flagDefinitions.get(flagName);
         if (!flag) return false;
 
@@ -22,6 +25,7 @@ export function parseFlags(inputArguments: readonly string[], flagDefinitions: R
                 flags.set(flagName, true);
                 args.splice(index, 1);
             } else {
+                if (dontUseNextArg) return false;
                 if (index + 1 >= args.length) return false;
                 const value = parseValue(flag, message, args[index + 1]);
                 if (value === undefined) return false;
@@ -32,25 +36,26 @@ export function parseFlags(inputArguments: readonly string[], flagDefinitions: R
         return true;
     }
 
-
     for (let i = 0; i < args.length; i++) {
         let f = args[i];
-        let flagName: string | undefined;
-        let flagValue: string | undefined;
 
         if (f.match(/^--[^-].*$/)) {
             const parts = f.substring(2).split("=");
             if (!parse(i, parts[0], parts.length > 1 ? parts[1] : undefined)) return;
-            i--;
         } else if (f.match(/^-[a-zA-Z](=.+)?$/)) {
             const parts = f.substring(1).split("=");
-            flagName =  flagDefinitions.values();
-            flagValue = parts.length > 1 ? parts[1] : undefined;
+            const flagName = shortcuts?.get(parts[0]);
+            if (!flagName) return;
+            if (!parse(i, flagName, parts.length > 1 ? parts[1] : undefined)) return;
         } else if (f.match(/^-[a-zA-Z]{2,}$/)) {
-
+            const flags = f.substring(1).split("");
+            for (let j = 0; j < flags.length; j++) {
+                const flagName = shortcuts?.get(flags[j]);
+                if (!flagName) return;
+                if (!parse(i, flagName, undefined, j != flags.length - 1)) return;
+            }
         } else
             continue;
-
-
+        i--;
     }
 }
