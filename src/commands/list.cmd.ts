@@ -52,3 +52,5 @@ cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
 
     message.author.send({ embed });
 }
+
+export default cmd;
