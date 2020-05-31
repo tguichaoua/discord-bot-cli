@@ -142,7 +142,7 @@ export class CommandSet {
             if (e instanceof CommandResultError)
                 return e.commandResult;
             else
-                CommandResultUtils.error(e);
+                return CommandResultUtils.error(e);
         }
     }
 }
