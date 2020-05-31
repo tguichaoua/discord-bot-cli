@@ -137,7 +137,7 @@ export class CommandSet {
         if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResultUtils.devOnly(command);
 
         try {
-            return await command.execute(message, args, opts, this);
+            return CommandResultUtils.ok(command, await command.execute(message, args, opts, this));
         } catch (e) {
             if (e instanceof CommandResultError)
                 return e.commandResult;
