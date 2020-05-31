@@ -140,11 +140,11 @@ export class CommandSet {
             if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
             return CommandResult.commandNotFound();
         }
-        
+
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
-        
+
         if (command.guildOnly && !message.guild) {
-            await message.reply(template(opts.localization.misc.guildOnlyWarning, {command: HelpUtility.Command.fullName(command)}));
+            await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtility.Command.fullName(command) }));
             return CommandResult.guildOnly(command);
         }
 
