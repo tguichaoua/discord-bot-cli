@@ -35,7 +35,7 @@ export class Command {
     private static _build<T extends CommandDefinition>(data: CommandData<T>, parent: Command | null): Command {
         const subs = new Map<string, Command>();
         const cmd = new Command(
-            "",
+            data.name,
             data.data.description ?? "",
             parent,
             subs,
