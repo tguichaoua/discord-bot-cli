@@ -9,7 +9,7 @@ export function parseFlags(
     shortcuts?: ReadonlyMap<string, string>
 ) {
     const args = [...inputArguments];
-    const flags = new Map<string, ParsableType | undefined>();
+    const flagValues = new Map<string, ParsableType | undefined>();
 
     function parse(index: number, flagName: string, flagValue?: string, dontUseNextArg?: boolean): boolean {
         const flag = flagDefinitions.get(flagName);
@@ -18,18 +18,18 @@ export function parseFlags(
         if (flagValue) {
             const value = parseValue(flag, message, flagValue);
             if (value === undefined) return false;
-            flags.set(flagName, value);
+            flagValues.set(flagName, value);
             args.splice(index, 1);
         } else {
             if (flag.type === "boolean") {
-                flags.set(flagName, true);
+                flagValues.set(flagName, true);
                 args.splice(index, 1);
             } else {
                 if (dontUseNextArg) return false;
                 if (index + 1 >= args.length) return false;
                 const value = parseValue(flag, message, args[index + 1]);
                 if (value === undefined) return false;
-                flags.set(flagName, value);
+                flagValues.set(flagName, value);
                 args.splice(index, 2);
             }
         }
@@ -58,4 +58,6 @@ export function parseFlags(
             continue;
         i--;
     }
+
+    return flagValues;
 }
