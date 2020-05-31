@@ -14,9 +14,9 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
 
-export class CommandSet<Context = any> {
+export class CommandSet {
 
-    private _commands = new Map<string, Command<Context>>();
+    private _commands = new Map<string, Command>();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
 
@@ -25,10 +25,6 @@ export class CommandSet<Context = any> {
             const cmd = require(path);
             if (!(cmd instanceof Command)) throw TypeError("Not of type Command.");
             if (cmd.ignored) throw Error("Command is ignored.");
-            if (cmd.signatures.length === 0 && cmd.subsCount === 0) {
-                com.log(`The command at ${path} have been ignored because have no signature and no sub command.`);
-                return;
-            }
             this._commands.set(cmd.name, cmd);
         } catch (e) {
             com.error(`Fail to load command at ${path} :`, e);
@@ -86,7 +82,7 @@ export class CommandSet<Context = any> {
             do {
                 cmd = sub;
                 _args.shift();
-                sub = cmd.getSubCommand(_args[0]);
+                sub = cmd.subs.get(_args[0]);
             } while (sub);
 
             return { command: cmd, args: _args };
@@ -100,20 +96,20 @@ export class CommandSet<Context = any> {
         return this._commands.values();
     }
 
-    /**
-     * Init all commands.
-     * @param context - a context object that is send to command when executed. (can store database or other data)
-     */
-    async init(context: Context) {
-        for (const cmd of this._commands.values()) {
-            if (cmd.isInitialized) continue;
-            try {
-                await cmd.init(context, this);
-            } catch (e) {
-                com.error('fail to init the following command\n', cmd, '\ncause :', e);
-            }
-        }
-    }
+    // /**
+    //  * Init all commands.
+    //  * @param context - a context object that is send to command when executed. (can store database or other data)
+    //  */
+    // async init(context: Context) {
+    //     for (const cmd of this._commands.values()) {
+    //         if (cmd.isInitialized) continue;
+    //         try {
+    //             await cmd.init(context, this);
+    //         } catch (e) {
+    //             com.error('fail to init the following command\n', cmd, '\ncause :', e);
+    //         }
+    //     }
+    // }
 
     /**
      * Check if there is a command in the given message and execute it.
@@ -121,7 +117,7 @@ export class CommandSet<Context = any> {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, context: Context, options?: DeepPartial<ParseOptions>) {
+    async parse(message: Message, options?: DeepPartial<ParseOptions>) {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
@@ -135,17 +131,15 @@ export class CommandSet<Context = any> {
         if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
 
         // extract the command & arguments from message
-
-        const inArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
+        const rawArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
             .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
 
-        const { command, args } = this.resolve(inArgs);
+        const { command, args } = this.resolve(rawArgs);
 
         if (!command) {
             if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
             return CommandResult.commandNotFound();
         }
-
         
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
         
@@ -154,10 +148,10 @@ export class CommandSet<Context = any> {
             return CommandResult.guildOnly(command);
         }
 
-        if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly(command);
+        if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly(command);
 
         try {
-            return await command.execute(message, args, context, opts, this);
+            return await command.execute(message, args, opts, this);
         } catch (e) {
             return CommandResult.error(e);
         }
