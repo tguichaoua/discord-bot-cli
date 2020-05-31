@@ -22,7 +22,7 @@ export class CommandSet {
 
     private _loadFile(path: string) {
         try {
-            const commandData = require(path);
+            const commandData = require(path).default;
             const cmd = Command.build(commandData);
             if (cmd.ignored) Com.warn(`Command "${cmd.name}" has been ignored.`);
             else this._commands.set(cmd.name, cmd);
