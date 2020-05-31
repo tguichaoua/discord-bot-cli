@@ -22,9 +22,10 @@ export namespace HelpUtility {
                 .setTitle(prefix + name)
                 .setDescription((command.guildOnly ? `[${localization.help.guildOnlyTag}]\n` : "") + description);
 
-            const usageString = Array.from(command.args.entries())
-                .map(([name, arg]) => Arg.usageString(name, arg, loc?.args ? loc.args[name] : undefined))
-                .join(" ")
+            const usageString = prefix + name + " " +
+                Array.from(command.args.entries())
+                    .map(([name, arg]) => Arg.usageString(name, arg, loc?.args ? loc.args[name] : undefined))
+                    .join(" ")
                 + (command.rest ? `[...${loc?.rest?.name ?? command.rest.name}]` : "");
 
             embed.addField("usage", usageString);
