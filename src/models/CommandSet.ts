@@ -5,7 +5,7 @@ import { Message } from "discord.js";
 
 import { Command } from "./Command";
 import { Com } from "../com";
-import * as CommandResult from "./CommandResult";
+import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
 import defaultLocalization from "../data/localization.json";
@@ -13,6 +13,7 @@ import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
+import { CommandResultError } from "./CommandResultError";
 
 export class CommandSet {
 
@@ -102,7 +103,7 @@ export class CommandSet {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, options?: DeepPartial<ParseOptions>) {
+    async parse(message: Message, options?: DeepPartial<ParseOptions>): Promise<CommandResult> {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
@@ -113,7 +114,7 @@ export class CommandSet {
             throw OptionsError("listCommandPerPage");
 
         // Extract command & arguments from message
-        if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
+        if (!message.content.startsWith(opts.prefix)) return CommandResultUtils.notPrefixed();
 
         // extract the command & arguments from message
         const rawArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
@@ -123,22 +124,25 @@ export class CommandSet {
 
         if (!command) {
             if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
-            return CommandResult.commandNotFound();
+            return CommandResultUtils.commandNotFound();
         }
 
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
 
         if (command.guildOnly && !message.guild) {
             await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtility.Command.fullName(command) }));
-            return CommandResult.guildOnly(command);
+            return CommandResultUtils.guildOnly(command);
         }
 
-        if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly(command);
+        if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResultUtils.devOnly(command);
 
         try {
             return await command.execute(message, args, opts, this);
         } catch (e) {
-            return CommandResult.error(e);
+            if (e instanceof CommandResultError)
+                return e.commandResult;
+            else
+                CommandResultUtils.error(e);
         }
     }
 }

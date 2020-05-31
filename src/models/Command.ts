@@ -11,6 +11,7 @@ import { parseFlags } from '../other/parsing/parseFlags';
 import { parseArgs } from '../other/parsing/parseArgs';
 import { RestDefinition } from './definition/RestDefinition';
 import { CommandResultUtils } from './CommandResult';
+import { CommandResultError } from './CommandResultError';
 
 
 export class Command {
@@ -79,7 +80,7 @@ export class Command {
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
-        if (!this._executor) return CommandResultUtils.noExecutor(this);
+        if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         const args = parseArgs(message, flags.args, this.args);

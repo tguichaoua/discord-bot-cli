@@ -26,8 +26,16 @@ export type CommandResult =
                 {
                     readonly type: "arg";
                     readonly arg: Readonly<ArgDefinition>;
-                    readonly got: string;
-                }
+                } &
+                (
+                    {
+                        readonly reason: "invalid value";
+                        readonly got: string;
+                    } |
+                    {
+                        readonly reason: "missing argument";
+                    }
+                )
             ) |
             (
                 {
@@ -73,7 +81,10 @@ export namespace CommandResultUtils {
     export function commandNotFound(): CommandResult { return { status: "command not found" }; }
 
     /** @internal */
-    export function failParseArg(arg: Readonly<ArgDefinition>, got: string): CommandResult { return { status: "parsing error", type: "arg", got, arg }; }
+    export function failParseArgInvalid(arg: Readonly<ArgDefinition>, got: string): CommandResult { return { status: "parsing error", type: "arg", arg, reason: "invalid value", got }; }
+
+    /** @internal */
+    export function failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult { return { status: "parsing error", type: "arg", arg, reason: "missing argument" }; }
 
     /** @internal */
     export function failParseFlagUnknown(name: string): CommandResult { return { status: "parsing error", type: "flag", reason: "unknown flag", name }; }
