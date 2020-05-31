@@ -2,6 +2,7 @@ import { ParsableType } from "../../models/ParsableType";
 import { parseValue } from "./parseValue";
 import { Message } from "discord.js";
 import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
+import { CommandResultUtils } from "../../models/CommandResult";
 
 export function parseFlags(
     message: Message, inputArguments: readonly string[],

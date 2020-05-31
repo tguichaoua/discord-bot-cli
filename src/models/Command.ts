@@ -10,7 +10,7 @@ import { CommandExecutor } from './CommandExecutor';
 import { parseFlags } from '../other/parsing/parseFlags';
 import { parseArgs } from '../other/parsing/parseArgs';
 import { RestDefinition } from './definition/RestDefinition';
-import { CommandResult } from './CommandResult';
+import { CommandResultUtils } from './CommandResult';
 
 
 export class Command {
@@ -77,9 +77,9 @@ export class Command {
     // =====================================================
 
     /** @internal */
-    async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet): CommandResult {
+    async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
-        if (!this._executor) return;
+        if (!this._executor) return CommandResultUtils.noExecutor(this);
 
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         if (!flags) return;
