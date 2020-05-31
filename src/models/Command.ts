@@ -82,10 +82,7 @@ export class Command {
         if (!this._executor) return CommandResultUtils.noExecutor(this);
 
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
-        if (!flags) return;
-
         const args = parseArgs(message, flags.args, this.args);
-        if (!args) return;
 
         return await this._executor(
             Object.fromEntries(args.argValues),
