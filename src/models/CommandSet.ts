@@ -96,21 +96,6 @@ export class CommandSet {
         return this._commands.values();
     }
 
-    // /**
-    //  * Init all commands.
-    //  * @param context - a context object that is send to command when executed. (can store database or other data)
-    //  */
-    // async init(context: Context) {
-    //     for (const cmd of this._commands.values()) {
-    //         if (cmd.isInitialized) continue;
-    //         try {
-    //             await cmd.init(context, this);
-    //         } catch (e) {
-    //             com.error('fail to init the following command\n', cmd, '\ncause :', e);
-    //         }
-    //     }
-    // }
-
     /**
      * Check if there is a command in the given message and execute it.
      * @param message

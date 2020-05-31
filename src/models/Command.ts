@@ -1,12 +1,6 @@
 import { Message } from 'discord.js';
-
 import { CommandSet } from "./CommandSet";
-import * as CommandResult from "./CommandResult";
-
 import { ParseOptions } from './ParseOptions';
-import { FlagInfo } from './FlagInfo';
-
-import { HelpUtility } from "../other/HelpUtility";
 import { CommandData } from './CommandData';
 import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
@@ -81,40 +75,6 @@ export class Command {
 
     // =====================================================
 
-
-    // /** @internal */
-    // async init(context: Context, commandSet: CommandSet) {
-    //     if (this.isInitialized)
-    //         return;
-
-    //     // inherit from parent
-    //     if (this._parent && this._inherit) {
-    //         for (const k of Object.keys(this._settings) as (keyof Command["_settings"])[]) {
-    //             this._settings[k].inherit(this._parent._settings[k]);
-    //         }
-    //     }
-
-    //     // init sub commands
-    //     for (const s of this._subs.values()) {
-    //         await s.init(context, commandSet);
-    //     }
-
-    //     // order signature to make sure the most suitable signature is called
-    //     // signature with greater count of arguments come firts
-    //     // the adding order is preserved (signatures added first comes first)
-    //     this._signatures = this._signatures
-    //         .map((val, idx) => { return { val: val, idx: idx } })
-    //         .sort((a, b) => {
-    //             if (a.val.arguments.length > b.val.arguments.length) return -1;
-    //             if (a.val.arguments.length < b.val.arguments.length) return 1;
-    //             return a.idx - b.idx;
-    //         })
-    //         .map(o => o.val);
-    //     if (this._onInit)
-    //         await this._onInit(context, commandSet);
-    //     this._isInitialized = true;
-    // }
-
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
@@ -126,7 +86,7 @@ export class Command {
         const args = parseArgs(message, flags.args, this.args);
         if (!args) return;
 
-        await this._executor(
+        return await this._executor(
             Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
@@ -136,70 +96,5 @@ export class Command {
                 commandSet
             }
         );
-
-        // /// OLD CODE
-        // const flagInfos: FlagInfo[] = [];
-
-        // for (let i = 0; i < args.length; i++) {
-        //     let inFlag = args[i];
-
-        //     if (inFlag.match(/^--[^-].+$/)) {
-        //         const part = inFlag.substring(2).split(/=(.+)/);
-        //         let value = part.length > 1 ? part[1] : undefined;
-        //         flagInfos.push({ type: "full", name: part[0], value });
-        //     } else if (inFlag.match(/^-[a-zA-Z]$/)) {
-        //         flagInfos.push({
-        //             type: "shortcut",
-        //             name: inFlag.substring(1),
-        //             valueIndex: i + 1 === args.length ? undefined : i
-        //         });
-        //     } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
-        //         const flagNames = inFlag.substring(1).split("");
-
-        //         for (const flagName of flagNames) {
-        //             flagInfos.push({
-        //                 type: "shortcut",
-        //                 name: flagName,
-        //             });
-        //         }
-        //     } else
-        //         continue;
-
-        //     args.splice(i, 1); // remove the flag from args
-        //     i--; // make sure to not skip an argument.
-        // }
-
-
-
-
-
-        // for (const s of this._signatures) {
-        //     try {
-        //         const parsedData = s.tryParse(message, args, flagInfos);
-        //         if (parsedData) {
-        //             const result = await s.executor(
-        //                 {
-        //                     message,
-        //                     args: parsedData.parsedArgs,
-        //                     flags: parsedData.parsedFlags,
-        //                     rest: parsedData.rest,
-        //                     context,
-        //                     options,
-        //                     commandSet
-        //                 }
-        //             );
-        //             return CommandResult.ok(this, s, result);
-        //         }
-        //     } catch (e) {
-        //         return CommandResult.error(e);
-        //     }
-        // }
-
-        // if (options.helpOnSignatureNotFound) {
-        //     const embed = HelpUtility.Command.embedHelp(this, options.prefix, options.localization);
-        //     await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
-        // }
-
-        // return CommandResult.signatureNotFound(this);
     }
 }
