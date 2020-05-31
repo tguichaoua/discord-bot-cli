@@ -1,5 +1,6 @@
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
+import { RestDefinition } from "./RestDefinition";
 
 export interface CommandDefinition {
     /** The description of this command. Used by help command. */
@@ -9,8 +10,8 @@ export interface CommandDefinition {
     /** Flags that can be used with this command. */
     readonly flags?: { readonly [name: string]: FlagDefinition };
     /** Define a name and a description for a rest argument. Used for help purpose. */
-    readonly rest?: { name: string, description?: string };
-    
+    readonly rest?: RestDefinition;
+
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
 
