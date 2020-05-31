@@ -121,6 +121,7 @@ export class Command {
         if (!flags) return;
 
         const argValues = parseArgs(message, flags.args, this.args);
+        if (!argValues) return;
 
         await this._executor(
             Object.fromEntries(argValues),
