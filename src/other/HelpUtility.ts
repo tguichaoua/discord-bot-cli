@@ -3,7 +3,6 @@ import { Localization } from "../models/localization/Localization";
 import { MessageEmbed } from "discord.js";
 import { ParsableLocalization } from "../models/localization/ParsableLocalization";
 import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
-import { Signature } from "../models/Signature";
 import { FlagDefinition } from "../models/definition/FlagDefinition";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
 
