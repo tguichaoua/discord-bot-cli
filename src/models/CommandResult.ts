@@ -20,15 +20,31 @@ export type CommandResult =
         readonly status: "not prefixed" | "command not found";
     } | ({
         readonly status: "parsing error";
-        readonly got: string;
-    } & (
-            {
-                readonly type: "arg";
-                readonly arg: Readonly<ArgDefinition>;
-            } | {
-                readonly type: "flag";
-                readonly flag: Readonly<FlagDefinition>;
-            }
+    } &
+        (
+            (
+                {
+                    readonly type: "arg";
+                    readonly arg: Readonly<ArgDefinition>;
+                    readonly got: string;
+                }
+            ) |
+            (
+                {
+                    readonly type: "flag";
+                    readonly flag: Readonly<FlagDefinition>;
+                } &
+                (
+                    {
+                        readonly reason: "unknown flag";
+                        readonly name: string;
+                    } |
+                    {
+                        readonly reason: "invalid value";
+                        readonly got: string;
+                    }
+                )
+            )
         )
     );
 
@@ -60,6 +76,9 @@ export namespace CommandResultUtils {
     export function failParseArg(arg: Readonly<ArgDefinition>, got: string): CommandResult { return { status: "parsing error", type: "arg", got, arg }; }
 
     /** @internal */
-    export function failParseFlag(flag: Readonly<FlagDefinition>, got: string): CommandResult { return { status: "parsing error", type: "flag", got, flag }; }
+    export function failParseFlagUnknown(flag: Readonly<FlagDefinition>, name: string): CommandResult { return { status: "parsing error", type: "flag", flag, reason: "unknown flag", name }; }
+
+    /** @internal */
+    export function failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult { return { status: "parsing error", type: "flag", flag, reason: "invalid value", got }; }
 
 }
