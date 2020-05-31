@@ -1,11 +1,9 @@
 import { Command } from "./Command";
-import { Signature } from "./Signature";
 
 export type CommandResult =
     {
         status: "ok",
         command: Command,
-        signature: Signature,
         result: any
     } |
     {
@@ -13,7 +11,7 @@ export type CommandResult =
         error: any,
     } |
     {
-        status: "signature not found" | "guild only" | "dev only",
+        status: "guild only" | "dev only",
         command: Command,
     } |
     {
@@ -21,8 +19,8 @@ export type CommandResult =
     };
 
 /** @ignore */
-export function ok(command: Command, signature: Signature, result: any): CommandResult {
-    return { status: "ok", command, signature, result };
+export function ok(command: Command, result: any): CommandResult {
+    return { status: "ok", command, result };
 }
 
 /** @ignore */
@@ -43,11 +41,6 @@ export function guildOnly(command: Command): CommandResult {
 /** @ignore */
 export function notPrefixed(): CommandResult {
     return { status: "not prefixed" };
-}
-
-/** @ignore */
-export function signatureNotFound(command: Command): CommandResult {
-    return { status: "signature not found", command };
 }
 
 /** @ignore */
