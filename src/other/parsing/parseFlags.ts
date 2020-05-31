@@ -59,5 +59,5 @@ export function parseFlags(
         i--;
     }
 
-    return flagValues;
+    return { args, flagValues };
 }
