@@ -1,6 +1,6 @@
 import { makeCommand } from "discord-bot-cli";
 
-const cmd = makeCommand("NAME", {
+const cmd = makeCommand("$NAME$", {
     description: "DESCRIPTION"
 });
 
