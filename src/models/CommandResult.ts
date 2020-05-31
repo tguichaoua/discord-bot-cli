@@ -32,7 +32,6 @@ export type CommandResult =
             (
                 {
                     readonly type: "flag";
-                    readonly flag: Readonly<FlagDefinition>;
                 } &
                 (
                     {
@@ -41,6 +40,7 @@ export type CommandResult =
                     } |
                     {
                         readonly reason: "invalid value";
+                        readonly flag: Readonly<FlagDefinition>;
                         readonly got: string;
                     }
                 )
@@ -76,7 +76,7 @@ export namespace CommandResultUtils {
     export function failParseArg(arg: Readonly<ArgDefinition>, got: string): CommandResult { return { status: "parsing error", type: "arg", got, arg }; }
 
     /** @internal */
-    export function failParseFlagUnknown(flag: Readonly<FlagDefinition>, name: string): CommandResult { return { status: "parsing error", type: "flag", flag, reason: "unknown flag", name }; }
+    export function failParseFlagUnknown(name: string): CommandResult { return { status: "parsing error", type: "flag", reason: "unknown flag", name }; }
 
     /** @internal */
     export function failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult { return { status: "parsing error", type: "flag", flag, reason: "invalid value", got }; }
