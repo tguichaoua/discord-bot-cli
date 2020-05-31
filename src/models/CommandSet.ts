@@ -4,7 +4,7 @@ import path from "path";
 import { Message } from "discord.js";
 
 import { Command } from "./Command";
-import * as com from "../com";
+import { Com } from "../com";
 import * as CommandResult from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
@@ -22,12 +22,12 @@ export class CommandSet {
 
     private _loadFile(path: string) {
         try {
-            const cmd = require(path);
-            if (!(cmd instanceof Command)) throw TypeError("Not of type Command.");
-            if (cmd.ignored) throw Error("Command is ignored.");
-            this._commands.set(cmd.name, cmd);
+            const commandData = require(path);
+            const cmd = Command.build(commandData);
+            if (cmd.ignored) Com.warn(`Command "${cmd.name}" has been ignored.`);
+            else this._commands.set(cmd.name, cmd);
         } catch (e) {
-            com.error(`Fail to load command at ${path} :`, e);
+            Com.error(`Fail to load command at ${path} :`, e);
         }
     }
 
