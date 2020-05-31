@@ -13,6 +13,8 @@ import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
 import { Char } from '../utils/char';
 import { CommandExecutor } from './CommandExecutor';
+import { parseFlags } from '../other/parsing/parseFlags';
+import { parseArgs } from '../other/parsing/parseArgs';
 
 
 export class Command {
@@ -112,71 +114,88 @@ export class Command {
 
     /** @internal */
     async execute(message: Message, args: string[], options: ParseOptions, commandSet: CommandSet) {
-        
 
-        /// OLD CODE
-        const flagInfos: FlagInfo[] = [];
+        if (!this._executor) return;
 
-        for (let i = 0; i < args.length; i++) {
-            let inFlag = args[i];
+        const flags = parseFlags(message, args, this.flags, this._flagsShortcuts);
+        if (!flags) return;
 
-            if (inFlag.match(/^--[^-].+$/)) {
-                const part = inFlag.substring(2).split(/=(.+)/);
-                let value = part.length > 1 ? part[1] : undefined;
-                flagInfos.push({ type: "full", name: part[0], value });
-            } else if (inFlag.match(/^-[a-zA-Z]$/)) {
-                flagInfos.push({
-                    type: "shortcut",
-                    name: inFlag.substring(1),
-                    valueIndex: i + 1 === args.length ? undefined : i
-                });
-            } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
-                const flagNames = inFlag.substring(1).split("");
+        const argValues = parseArgs(message, flags.args, this.args);
 
-                for (const flagName of flagNames) {
-                    flagInfos.push({
-                        type: "shortcut",
-                        name: flagName,
-                    });
-                }
-            } else
-                continue;
-
-            args.splice(i, 1); // remove the flag from args
-            i--; // make sure to not skip an argument.
-        }
-
-
-
-
-
-        for (const s of this._signatures) {
-            try {
-                const parsedData = s.tryParse(message, args, flagInfos);
-                if (parsedData) {
-                    const result = await s.executor(
-                        {
-                            message,
-                            args: parsedData.parsedArgs,
-                            flags: parsedData.parsedFlags,
-                            rest: parsedData.rest,
-                            context,
-                            options,
-                            commandSet
-                        }
-                    );
-                    return CommandResult.ok(this, s, result);
-                }
-            } catch (e) {
-                return CommandResult.error(e);
+        await this._executor(
+            Object.fromEntries(argValues),
+            Object.fromEntries(flags.flagValues),
+            {
+                rest: [],
+                message,
+                options,
+                commandSet
             }
-        }
+        );
 
-        if (options.helpOnSignatureNotFound) {
-            const embed = HelpUtility.Command.embedHelp(this, options.prefix, options.localization);
-            await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
-        }
+        // /// OLD CODE
+        // const flagInfos: FlagInfo[] = [];
 
-        return CommandResult.signatureNotFound(this);
+        // for (let i = 0; i < args.length; i++) {
+        //     let inFlag = args[i];
+
+        //     if (inFlag.match(/^--[^-].+$/)) {
+        //         const part = inFlag.substring(2).split(/=(.+)/);
+        //         let value = part.length > 1 ? part[1] : undefined;
+        //         flagInfos.push({ type: "full", name: part[0], value });
+        //     } else if (inFlag.match(/^-[a-zA-Z]$/)) {
+        //         flagInfos.push({
+        //             type: "shortcut",
+        //             name: inFlag.substring(1),
+        //             valueIndex: i + 1 === args.length ? undefined : i
+        //         });
+        //     } else if (inFlag.match(/^-[a-zA-Z]{2,}$/)) {
+        //         const flagNames = inFlag.substring(1).split("");
+
+        //         for (const flagName of flagNames) {
+        //             flagInfos.push({
+        //                 type: "shortcut",
+        //                 name: flagName,
+        //             });
+        //         }
+        //     } else
+        //         continue;
+
+        //     args.splice(i, 1); // remove the flag from args
+        //     i--; // make sure to not skip an argument.
+        // }
+
+
+
+
+
+        // for (const s of this._signatures) {
+        //     try {
+        //         const parsedData = s.tryParse(message, args, flagInfos);
+        //         if (parsedData) {
+        //             const result = await s.executor(
+        //                 {
+        //                     message,
+        //                     args: parsedData.parsedArgs,
+        //                     flags: parsedData.parsedFlags,
+        //                     rest: parsedData.rest,
+        //                     context,
+        //                     options,
+        //                     commandSet
+        //                 }
+        //             );
+        //             return CommandResult.ok(this, s, result);
+        //         }
+        //     } catch (e) {
+        //         return CommandResult.error(e);
+        //     }
+        // }
+
+        // if (options.helpOnSignatureNotFound) {
+        //     const embed = HelpUtility.Command.embedHelp(this, options.prefix, options.localization);
+        //     await message.author.send(`You make an error typing the following command\n\`${message.content}\``, embed);
+        // }
+
+        // return CommandResult.signatureNotFound(this);
     }
 }
