@@ -27,25 +27,3 @@ export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "news channel" ? NewsChannel :
     Name extends "store channel" ? StoreChannel :
     never;
-
-/** @internal */
-export function getDefaultValue(name: ParsableTypeName): ParsableType {
-    switch (name) {
-        case "string": return "";
-        case "integer": case "float": return 0;
-        case "boolean": return false;
-
-        case "user":
-        case "role":
-
-        case "channel":
-        case "guild channel":
-        case "dm channel":
-        case "text channel":
-        case "voice channel":
-        case "category channel":
-        case "news channel":
-        case "store channel":
-            return null;
-    }
-}
