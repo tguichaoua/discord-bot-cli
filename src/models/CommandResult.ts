@@ -18,9 +18,11 @@ export type CommandResult =
     } |
     {
         readonly status: "not prefixed" | "command not found";
-    } | ({
-        readonly status: "parsing error";
-    } &
+    } |
+    (
+        {
+            readonly status: "parsing error";
+        } &
         (
             (
                 {
