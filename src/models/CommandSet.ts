@@ -46,7 +46,7 @@ export class CommandSet {
                 this._loadFile(filePath);
             }
         } catch (e) {
-            com.error(`Fail to load commands in ${commandDirPath} :`, e);
+            Com.error(`Fail to load commands in ${commandDirPath} :`, e);
         }
     }
 
