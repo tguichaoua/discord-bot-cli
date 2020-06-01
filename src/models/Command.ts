@@ -96,6 +96,7 @@ export class Command {
             {
                 rest: args.rest,
                 message,
+                guild: message.guild,
                 options,
                 commandSet
             }

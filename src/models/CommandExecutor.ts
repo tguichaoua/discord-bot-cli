@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, Guild } from "discord.js";
 import { CommandSet } from "./CommandSet";
 
 import { CommandDefinition } from "./definition/CommandDefinition";
@@ -20,9 +20,10 @@ export type CommandExecutor<T extends CommandDefinition> =
         )
         },
         others: {
-            rest: string[],
-            message: Message,
-            options: ParseOptions,
-            commandSet: CommandSet
+            rest: string[];
+            message: Message & { guild: Guild | (T["guildOnly"] extends true ? never : null) };
+            guild: Guild | (T["guildOnly"] extends true ? never : null);
+            options: ParseOptions;
+            commandSet: CommandSet;
         }
     ) => any | Promise<any>;
