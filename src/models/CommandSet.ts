@@ -14,11 +14,11 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
+import { CommandCollection } from "./CommandCollection";
 
 export class CommandSet {
 
-    private _commands = new Map<string, Command>();
-    private _alias = new Map<string, Command>();
+    private _commands = new CommandCollection();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
 
@@ -28,19 +28,7 @@ export class CommandSet {
             const command = Command.build(commandData);
             if (command.ignored) Com.warn(`Command ignored (${path})`);
             else {
-                if (this._commands.has(command.name)) {
-                    Com.warn("Command name already taken (${path})");
-                } else {
-                    this._commands.set(command.name, command);
-
-                    for (const alias of command.alias) {
-                        const other = this._alias.get(alias)
-                        if (other)
-                            Com.warn(`The alias '${alias}' of '${command.name})' is already taken by ${other.name} (${path})`);
-                        else
-                            this._alias.set(alias, command);
-                    }
-                }
+                if (!this._commands.add(command)) Com.warn(`Command name already taken (${path})`);
             }
         } catch (e) {
             Com.error(`Fail to load command at ${path} :`, e);
@@ -85,7 +73,7 @@ export class CommandSet {
     }
 
     get(commandName: string) {
-        return this._commands.get(commandName) ?? this._alias.get(commandName);
+        return this._commands.get(commandName);
     }
 
     /** @internal */

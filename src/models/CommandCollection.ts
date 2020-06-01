@@ -3,28 +3,28 @@ import { Command } from "./Command";
 export class CommandCollection {
 
     private _commands = new Map<string, Command>();
-    private _alias = new Map<string, Command>();
+    private _alias = new Map<string, Command | undefined>();
 
-    public add(command: Command): { added: boolean, duplicateAlias: string[] } {
+    public add(command: Command): boolean {
         if (this._commands.has(command.name)) {
-            return { added: false, duplicateAlias: [] };
+            return false;
         } else {
             this._commands.set(command.name, command);
 
-            const duplicateAlias: string[] = [];
             for (const alias of command.alias) {
-                const other = this._alias.get(alias)
-                if (other)
-                    duplicateAlias.push(alias);
+                if (this._alias.has(alias))
+                    this._alias.set(alias, undefined);
                 else
                     this._alias.set(alias, command);
             }
 
-            return { added: true, duplicateAlias }
+            return true;
         }
     }
 
     public get(name: string): Command | undefined {
         return this._commands.get(name) ?? this._alias.get(name);
     }
+
+    public values() { return this._commands.values(); }
 }
