@@ -11,7 +11,9 @@ export function parseFlags(
     shortcuts?: ReadonlyMap<string, string>
 ) {
     const args = [...inputArguments];
-    const flagValues = new Map<string, ParsableType | undefined>();
+    const flagValues = new Map<string, ParsableType | undefined>(
+        Array.from(flagDefinitions.entries()).map(([k, v]) => [k, v.defaultValue])
+    );
 
     function parse(index: number, flagName: string, flagValue?: string, dontUseNextArg?: boolean) {
         const flag = flagDefinitions.get(flagName);
