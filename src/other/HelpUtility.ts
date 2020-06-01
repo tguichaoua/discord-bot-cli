@@ -41,7 +41,8 @@ export namespace HelpUtility {
             if (flags !== "")
                 embed.addField("flags", flags, true);
 
-            const alias = command.alias.map(a => `**${a}**`).join("\n");
+            const collection = command.parent?.subs ?? command.commandSet.commands;
+            const alias = command.alias.filter(a => collection.hasAlias(a)).map(a => `**${a}**`).join("\n");
             if (alias !== "")
                 embed.addField("alias", alias, true);
 
