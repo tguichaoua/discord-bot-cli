@@ -32,12 +32,14 @@ export namespace HelpUtility {
             const args = Array.from(command.args.entries())
                 .map(([name, arg]) => Arg.descriptionString(name, arg, localization.typeNames, loc?.args ? loc.args[name] : undefined))
                 .join("\n");
-            embed.addField("arguments", args, true);
+            if (args !== "")
+                embed.addField("arguments", args, true);
 
             const flags = Array.from(command.flags.entries())
                 .map(([name, flag]) => Flag.descriptionString(name, flag, localization.typeNames, loc?.flags ? loc.flags[name] : undefined))
                 .join("\n");
-            embed.addField("flags", flags, true);
+            if (flags !== "")
+                embed.addField("flags", flags, true);
 
             const alias = command.alias.map(a => `**${a}**`).join("\n");
             if (alias !== "")
@@ -61,7 +63,7 @@ export namespace HelpUtility {
             for (const cmd of command.subs.values())
                 //str += `**${cmd.name}** ${localization.commands[cmd.name]?.description ?? cmd.description}\n`;
                 str += `**${cmd.name}**\n`;
-            if (str !== '')
+            if (str !== "")
                 embed.addField('Sub Commands', str, true);
 
             return embed;
