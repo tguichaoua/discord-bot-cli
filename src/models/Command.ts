@@ -18,6 +18,7 @@ export class Command {
 
     private constructor(
         public readonly name: string,
+        public readonly alias: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly subs: ReadonlyMap<string, Command>,
@@ -38,6 +39,7 @@ export class Command {
         const subs = new Map<string, Command>();
         const cmd = new Command(
             data.name,
+            data.def.alias ?? [],
             data.def.description ?? "",
             parent,
             subs,
