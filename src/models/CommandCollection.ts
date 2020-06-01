@@ -1,10 +1,17 @@
 import { Command } from "./Command";
 
-export class CommandCollection {
+export class ReadonlyCommandCollection {
+    protected _commands = new Map<string, Command>();
+    protected _alias = new Map<string, Command | undefined>();
 
-    private _commands = new Map<string, Command>();
-    private _alias = new Map<string, Command | undefined>();
+    public get(name: string): Command | undefined {
+        return this._commands.get(name) ?? this._alias.get(name);
+    }
 
+    public values() { return this._commands.values(); }
+}
+
+export class CommandCollection extends ReadonlyCommandCollection {
     public add(command: Command): boolean {
         if (this._commands.has(command.name)) {
             return false;
@@ -21,10 +28,4 @@ export class CommandCollection {
             return true;
         }
     }
-
-    public get(name: string): Command | undefined {
-        return this._commands.get(name) ?? this._alias.get(name);
-    }
-
-    public values() { return this._commands.values(); }
 }
