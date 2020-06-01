@@ -18,15 +18,30 @@ import { CommandResultError } from "./CommandResultError";
 export class CommandSet {
 
     private _commands = new Map<string, Command>();
+    private _alias = new Map<string, Command>();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
 
     private _loadFile(path: string) {
         try {
             const commandData = require(path).default;
-            const cmd = Command.build(commandData);
-            if (cmd.ignored) Com.warn(`Command "${cmd.name}" has been ignored.`);
-            else this._commands.set(cmd.name, cmd);
+            const command = Command.build(commandData);
+            if (command.ignored) Com.warn(`Command ignored (${path})`);
+            else {
+                if (this._commands.has(command.name)) {
+                    Com.warn("Command name already taken (${path})");
+                } else {
+                    this._commands.set(command.name, command);
+
+                    for (const alias of command.alias) {
+                        const other = this._alias.get(alias)
+                        if (other)
+                            Com.warn(`The alias '${alias}' of '${command.name})' is already taken by ${other.name} (${path})`);
+                        else
+                            this._alias.set(alias, command);
+                    }
+                }
+            }
         } catch (e) {
             Com.error(`Fail to load command at ${path} :`, e);
         }
@@ -70,13 +85,13 @@ export class CommandSet {
     }
 
     get(commandName: string) {
-        return this._commands.get(commandName);
+        return this._commands.get(commandName) ?? this._alias.get(commandName);
     }
 
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
-        let cmd = this._commands.get(_args[0]);
+        let cmd = this.get(_args[0]);
 
         if (cmd) {
             let sub: Command | undefined = cmd;
