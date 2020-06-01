@@ -1,8 +1,12 @@
 import { Command } from "./Command";
 
-export class ReadonlyCommandCollection {
+export class ReadonlyCommandCollection implements Iterable<Command> {
     protected _commands = new Map<string, Command>();
     protected _alias = new Map<string, Command | undefined>();
+
+    [Symbol.iterator](): Iterator<Command> {
+        return this._commands.values();
+    }
 
     public get(name: string): Command | undefined {
         return this._commands.get(name) ?? this._alias.get(name);

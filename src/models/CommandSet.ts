@@ -14,13 +14,15 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
-import { CommandCollection } from "./CommandCollection";
+import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 
 export class CommandSet {
 
     private _commands = new CommandCollection();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
+
+    get commands() { return this._commands as ReadonlyCommandCollection; }
 
     private _loadFile(path: string) {
         try {
@@ -93,11 +95,6 @@ export class CommandSet {
         } else {
             return { args: _args };
         }
-    }
-
-    /** Return a iterable of commands */
-    commands() {
-        return this._commands.values();
     }
 
     /**
