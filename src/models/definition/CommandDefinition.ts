@@ -3,6 +3,8 @@ import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
 
 export interface CommandDefinition {
+    /** alias names for this command */
+    readonly alias?: string[];
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
