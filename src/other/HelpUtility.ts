@@ -27,8 +27,21 @@ export namespace HelpUtility {
                     .map(([name, arg]) => Arg.usageString(name, arg, loc?.args ? loc.args[name] : undefined))
                     .join(" ")
                 + (command.rest ? `[...${loc?.rest?.name ?? command.rest.name}]` : "");
+            embed.addField("usage", usageString, false);
 
-            embed.addField("usage", usageString);
+            const args = Array.from(command.args.entries())
+                .map(([name, arg]) => Arg.descriptionString(name, arg, localization.typeNames, loc?.args ? loc.args[name] : undefined))
+                .join("\n");
+            embed.addField("arguments", args, true);
+
+            const flags = Array.from(command.flags.entries())
+                .map(([name, flag]) => Flag.descriptionString(name, flag, localization.typeNames, loc?.flags ? loc.flags[name] : undefined))
+                .join("\n");
+            embed.addField("flags", flags, true);
+
+            const alias = command.alias.map(a => `**${a}**`).join("\n");
+            if (alias !== "")
+                embed.addField("alias", alias, true);
 
             // if there is only 1 signature without any argument (nor rest), don't display this signature.
             // if (!(command.signatures.length === 1 && command.signatures[0].arguments.length === 0 && !command.signatures[0].rest)) {
@@ -46,9 +59,10 @@ export namespace HelpUtility {
 
             let str = '';
             for (const cmd of command.subs.values())
-                str += `**${cmd.name}** ${localization.commands[cmd.name]?.description ?? cmd.description}\n`;
+                //str += `**${cmd.name}** ${localization.commands[cmd.name]?.description ?? cmd.description}\n`;
+                str += `**${cmd.name}**\n`;
             if (str !== '')
-                embed.addField('Sub Commands', str);
+                embed.addField('Sub Commands', str, true);
 
             return embed;
         }
@@ -92,13 +106,15 @@ export namespace HelpUtility {
         }
 
         export function descriptionString(argumentName: string, argument: ArgDefinition, typeNameLocalization: TypeNameLocalization, localization?: ParsableLocalization, ) {
-            return `**${usageString(argumentName, argument, localization)}** *(${typeNameLocalization[argument.type]})* - ${localization?.description ?? argument.description}`;
+            const description = localization?.description ?? argument.description;
+            return `**${usageString(argumentName, argument, localization)}** *(${typeNameLocalization[argument.type]})*${description ? " - " + description : ""}`;
         }
     }
 
     export namespace Flag {
         export function descriptionString(flagName: string, flag: FlagDefinition, typeNameLocalization: TypeNameLocalization, localization?: ParsableLocalization) {
-            return `**--${flagName}${(flag.shortcut ? ` -${flag.shortcut}` : "")}** *(${typeNameLocalization[flag.type]})* - ${localization?.description ?? flag.description}`;
+            const description = localization?.description ?? flag.description;
+            return `**--${flagName}${(flag.shortcut ? ` -${flag.shortcut}` : "")}** *(${typeNameLocalization[flag.type]})*${description ? " - " + description : ""}`;
         }
     }
 }
