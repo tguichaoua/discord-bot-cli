@@ -38,23 +38,23 @@ export class Command {
         const subs = new Map<string, Command>();
         const cmd = new Command(
             data.name,
-            data.data.description ?? "",
+            data.def.description ?? "",
             parent,
             subs,
-            new Map(data.data.args ? Object.entries(data.data.args) : []),
-            data.data.rest,
-            new Map(data.data.flags ? Object.entries(data.data.flags) : []),
-            new Map(data.data.flags ?
-                Object.entries(data.data.flags)
+            new Map(data.def.args ? Object.entries(data.def.args) : []),
+            data.def.rest,
+            new Map(data.def.flags ? Object.entries(data.def.flags) : []),
+            new Map(data.def.flags ?
+                Object.entries(data.def.flags)
                     .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] { return a[1].shortcut !== undefined })
                     .map(([k, v]) => [v.shortcut, k]) :
                 []
             ),
             data.executor,
-            data.data.deleteCommandMessage ?? true,
-            data.data.ignore ?? false,
-            data.data.dev ?? false,
-            data.data.guildOnly ?? false,
+            data.def.deleteCommandMessage ?? true,
+            data.def.ignore ?? false,
+            data.def.dev ?? false,
+            data.def.guildOnly ?? false,
         );
 
         for (const subName in data.subs)
