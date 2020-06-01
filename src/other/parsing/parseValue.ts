@@ -8,7 +8,7 @@ const ID_PATTERN = /^\d{17,21}$/;
 /** @internal 
  * Return undefined if parse fail.
 */
-export function parseValue(parseData: ParsableDefinition, message: Message, argument: string): ParsableType | undefined {
+export function parseValue(parseData: ParsableDefinition, message: Message, argument: string): { value: ParsableType | undefined, message?: string } {
     let value = undefined;
 
     function resolveChannel(type: keyof typeof ChannelType) {
@@ -94,6 +94,10 @@ export function parseValue(parseData: ParsableDefinition, message: Message, argu
             else if (ID_PATTERN.test(argument)) value = resolveChannel("text");
             break;
     }
-    if (value !== undefined && (!parseData.validator || (parseData.validator as (o: any) => boolean)(value)))
-        return value;
+
+    if (value === undefined) return { value };
+    const validation = parseData.validator ? (parseData.validator as (o: any) => boolean | string)(value) : undefined;
+
+    if (validation === true || validation === undefined) return { value };
+    return { value: undefined, message: typeof validation === "string" ? validation : undefined };
 }

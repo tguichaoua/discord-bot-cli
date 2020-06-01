@@ -139,8 +139,10 @@ export class CommandSet {
         try {
             return CommandResultUtils.ok(command, await command.execute(message, args, opts, this));
         } catch (e) {
-            if (e instanceof CommandResultError)
+            if (e instanceof CommandResultError) {
+                if (e.replyMessage && e.replyMessage !== "") await message.reply(e.replyMessage).catch(() => { });
                 return e.commandResult;
+            }
             else
                 return CommandResultUtils.error(e);
         }
