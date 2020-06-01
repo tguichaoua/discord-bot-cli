@@ -1,31 +1,27 @@
-import { Command, CommandQuery } from "../index";
 import { MessageEmbed } from "discord.js";
 import { template } from "../utils/template";
+import { makeCommand } from "../other/makeCommand";
 
-module.exports = new Command("list", {
+const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
-    signatures: [{
-        executor: executor,
-        args: {
-            page: {
-                type: "integer",
-                optional: true,
-                defaultValue: 1,
-                description: "The page of the list to display.",
-                validator: p => p >= 1
-            }
+    args: {
+        page: {
+            type: "integer",
+            optional: true,
+            defaultValue: 1,
+            description: "The page of the list to display.",
+            validator: p => p >= 1
         }
-    }]
+    }
 });
 
-async function executor({ message, args, commandSet, options, context }: CommandQuery) {
-    const page = args.get("page") as number;
+cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
 
     let allCommands = Array.from(commandSet.commands());
 
     // if the author is not a dev. Hide devOnly commands.
     if (!options.devIDs.includes(message.author.id))
-        allCommands = allCommands.filter(c => !c.isDevOnly);
+        allCommands = allCommands.filter(c => !c.devOnly);
 
     const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
 
@@ -44,7 +40,8 @@ async function executor({ message, args, commandSet, options, context }: Command
     let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
 
     if (options.list)
-        return await options.list({ message, options, context, allCommands, commands, page, pageCount });
+        throw new Error("Not implemented");
+    //return await options.list({ message, options, context, allCommands, commands, page, pageCount });
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
@@ -55,3 +52,5 @@ async function executor({ message, args, commandSet, options, context }: Command
 
     message.author.send({ embed });
 }
+
+export default cmd;

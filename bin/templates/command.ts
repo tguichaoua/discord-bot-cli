@@ -1,14 +1,11 @@
-import { Command, CommandQuery } from "discord-bot-cli";
+import { makeCommand } from "discord-bot-cli";
 
-module.exports = new Command("$NAME$", {
-    description: "...",
-    signatures: [
-        {
-            executor: executor,
-        }
-    ]
+const cmd = makeCommand("$NAME$", {
+    description: "DESCRIPTION"
 });
 
-async function executor(query: CommandQuery) {
+cmd.executor = async ({ }, { }, { }) => {
 
-}
+};
+
+export default cmd;

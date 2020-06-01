@@ -4,8 +4,8 @@ import path from "path";
 import { Message } from "discord.js";
 
 import { Command } from "./Command";
-import * as com from "../com";
-import * as CommandResult from "./CommandResult";
+import { Com } from "../com";
+import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
 import defaultLocalization from "../data/localization.json";
@@ -13,25 +13,22 @@ import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
+import { CommandResultError } from "./CommandResultError";
 
-export class CommandSet<Context = any> {
+export class CommandSet {
 
-    private _commands = new Map<string, Command<Context>>();
+    private _commands = new Map<string, Command>();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
 
     private _loadFile(path: string) {
         try {
-            const cmd = require(path);
-            if (!(cmd instanceof Command)) throw TypeError("Not of type Command.");
-            if (cmd.ignored) throw Error("Command is ignored.");
-            if (cmd.signatures.length === 0 && cmd.subsCount === 0) {
-                com.log(`The command at ${path} have been ignored because have no signature and no sub command.`);
-                return;
-            }
-            this._commands.set(cmd.name, cmd);
+            const commandData = require(path).default;
+            const cmd = Command.build(commandData);
+            if (cmd.ignored) Com.warn(`Command "${cmd.name}" has been ignored.`);
+            else this._commands.set(cmd.name, cmd);
         } catch (e) {
-            com.error(`Fail to load command at ${path} :`, e);
+            Com.error(`Fail to load command at ${path} :`, e);
         }
     }
 
@@ -50,7 +47,7 @@ export class CommandSet<Context = any> {
                 this._loadFile(filePath);
             }
         } catch (e) {
-            com.error(`Fail to load commands in ${commandDirPath} :`, e);
+            Com.error(`Fail to load commands in ${commandDirPath} :`, e);
         }
     }
 
@@ -86,7 +83,7 @@ export class CommandSet<Context = any> {
             do {
                 cmd = sub;
                 _args.shift();
-                sub = cmd.getSubCommand(_args[0]);
+                sub = cmd.subs.get(_args[0]);
             } while (sub);
 
             return { command: cmd, args: _args };
@@ -101,27 +98,12 @@ export class CommandSet<Context = any> {
     }
 
     /**
-     * Init all commands.
-     * @param context - a context object that is send to command when executed. (can store database or other data)
-     */
-    async init(context: Context) {
-        for (const cmd of this._commands.values()) {
-            if (cmd.isInitialized) continue;
-            try {
-                await cmd.init(context, this);
-            } catch (e) {
-                com.error('fail to init the following command\n', cmd, '\ncause :', e);
-            }
-        }
-    }
-
-    /**
      * Check if there is a command in the given message and execute it.
      * @param message
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, context: Context, options?: DeepPartial<ParseOptions>) {
+    async parse(message: Message, options?: DeepPartial<ParseOptions>): Promise<CommandResult> {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
@@ -132,34 +114,35 @@ export class CommandSet<Context = any> {
             throw OptionsError("listCommandPerPage");
 
         // Extract command & arguments from message
-        if (!message.content.startsWith(opts.prefix)) return CommandResult.notPrefixed();
+        if (!message.content.startsWith(opts.prefix)) return CommandResultUtils.notPrefixed();
 
         // extract the command & arguments from message
-
-        const inArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
+        const rawArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
             .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
 
-        const { command, args } = this.resolve(inArgs);
+        const { command, args } = this.resolve(rawArgs);
 
         if (!command) {
             if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
-            return CommandResult.commandNotFound();
+            return CommandResultUtils.commandNotFound();
         }
 
-        
         if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
-        
+
         if (command.guildOnly && !message.guild) {
-            await message.reply(template(opts.localization.misc.guildOnlyWarning, {command: HelpUtility.Command.fullName(command)}));
-            return CommandResult.guildOnly(command);
+            await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtility.Command.fullName(command) }));
+            return CommandResultUtils.guildOnly(command);
         }
 
-        if (command.isDevOnly && !(opts.devIDs.includes(message.author.id))) return CommandResult.devOnly(command);
+        if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResultUtils.devOnly(command);
 
         try {
-            return await command.execute(message, args, context, opts, this);
+            return CommandResultUtils.ok(command, await command.execute(message, args, opts, this));
         } catch (e) {
-            return CommandResult.error(e);
+            if (e instanceof CommandResultError)
+                return e.commandResult;
+            else
+                return CommandResultUtils.error(e);
         }
     }
 }

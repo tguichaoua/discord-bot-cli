@@ -1,3 +1,4 @@
+export { makeCommand } from "./other/makeCommand";
 export { Command } from "./models/Command";
 export { CommandSet } from "./models/CommandSet";
 export { ParseOptions } from "./models/ParseOptions";

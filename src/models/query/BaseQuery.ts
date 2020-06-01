@@ -1,8 +1,7 @@
 import { Message } from "discord.js";
 import { ParseOptions } from "../ParseOptions";
 
-export interface BaseQuery<Context = any> {
+export interface BaseQuery {
     readonly message: Message;
-    readonly context: Context;
     readonly options: ParseOptions;
 }
