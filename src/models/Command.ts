@@ -22,6 +22,7 @@ export class Command {
         public readonly alias: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
+        public readonly commandSet: CommandSet,
         public readonly subs: ReadonlyCommandCollection,
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         public readonly rest: Readonly<RestDefinition> | undefined,
@@ -34,15 +35,16 @@ export class Command {
         public readonly guildOnly: boolean
     ) { }
 
-    static build<T extends CommandDefinition>(data: CommandData<T>): Command { return Command._build(data, null); }
+    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command { return Command._build(commandSet, data, null); }
 
-    private static _build<T extends CommandDefinition>(data: CommandData<T>, parent: Command | null): Command {
+    private static _build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>, parent: Command | null): Command {
         const subs = new CommandCollection();
         const cmd = new Command(
             data.name,
             data.def.alias ?? [],
             data.def.description ?? "",
             parent,
+            commandSet,
             subs,
             new Map(data.def.args ? Object.entries(data.def.args) : []),
             data.def.rest,
@@ -61,7 +63,7 @@ export class Command {
         );
 
         for (const subName in data.subs)
-            subs.add(Command._build(data.subs[subName], cmd));
+            subs.add(Command._build(commandSet, data.subs[subName], cmd));
         return cmd;
     }
 
