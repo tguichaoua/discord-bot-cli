@@ -9,6 +9,10 @@ export class ReadonlyCommandCollection {
     }
 
     public values() { return this._commands.values(); }
+
+    public hasAlias(alias: string) : boolean {
+        return !!this._alias.get(alias);
+    }
 }
 
 export class CommandCollection extends ReadonlyCommandCollection {
