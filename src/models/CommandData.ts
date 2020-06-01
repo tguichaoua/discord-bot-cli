@@ -3,7 +3,7 @@ import { CommandExecutor } from "./CommandExecutor";
 
 export interface CommandData<T extends CommandDefinition> {
     /** @internal */
-    readonly data: T;
+    readonly def: T;
     /** @interface */
     readonly name: string;
 

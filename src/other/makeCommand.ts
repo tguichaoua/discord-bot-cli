@@ -8,7 +8,7 @@ export function makeCommand<T extends CommandDefinition>(name: string, definitio
     }
 
     return {
-        data: definition,
+        def: definition,
         name,
         subs
     };

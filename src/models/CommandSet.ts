@@ -14,19 +14,24 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtility } from "../other/HelpUtility";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
+import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 
 export class CommandSet {
 
-    private _commands = new Map<string, Command>();
+    private _commands = new CommandCollection();
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
+
+    get commands() { return this._commands as ReadonlyCommandCollection; }
 
     private _loadFile(path: string) {
         try {
             const commandData = require(path).default;
-            const cmd = Command.build(commandData);
-            if (cmd.ignored) Com.warn(`Command "${cmd.name}" has been ignored.`);
-            else this._commands.set(cmd.name, cmd);
+            const command = Command.build(this, commandData);
+            if (command.ignored) Com.warn(`Command ignored (${path})`);
+            else {
+                if (!this._commands.add(command)) Com.warn(`Command name already taken (${path})`);
+            }
         } catch (e) {
             Com.error(`Fail to load command at ${path} :`, e);
         }
@@ -76,7 +81,7 @@ export class CommandSet {
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
-        let cmd = this._commands.get(_args[0]);
+        let cmd = this.get(_args[0]);
 
         if (cmd) {
             let sub: Command | undefined = cmd;
@@ -90,11 +95,6 @@ export class CommandSet {
         } else {
             return { args: _args };
         }
-    }
-
-    /** Return a iterable of commands */
-    commands() {
-        return this._commands.values();
     }
 
     /**

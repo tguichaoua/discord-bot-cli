@@ -12,15 +12,18 @@ import { parseArgs } from '../other/parsing/parseArgs';
 import { RestDefinition } from './definition/RestDefinition';
 import { CommandResultUtils } from './CommandResult';
 import { CommandResultError } from './CommandResultError';
+import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
 
 
 export class Command {
 
     private constructor(
         public readonly name: string,
+        public readonly alias: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
-        public readonly subs: ReadonlyMap<string, Command>,
+        public readonly commandSet: CommandSet,
+        public readonly subs: ReadonlyCommandCollection,
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         public readonly rest: Readonly<RestDefinition> | undefined,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
@@ -32,33 +35,35 @@ export class Command {
         public readonly guildOnly: boolean
     ) { }
 
-    static build<T extends CommandDefinition>(data: CommandData<T>): Command { return Command._build(data, null); }
+    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command { return Command._build(commandSet, data, null); }
 
-    private static _build<T extends CommandDefinition>(data: CommandData<T>, parent: Command | null): Command {
-        const subs = new Map<string, Command>();
+    private static _build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>, parent: Command | null): Command {
+        const subs = new CommandCollection();
         const cmd = new Command(
             data.name,
-            data.data.description ?? "",
+            data.def.alias ?? [],
+            data.def.description ?? "",
             parent,
+            commandSet,
             subs,
-            new Map(data.data.args ? Object.entries(data.data.args) : []),
-            data.data.rest,
-            new Map(data.data.flags ? Object.entries(data.data.flags) : []),
-            new Map(data.data.flags ?
-                Object.entries(data.data.flags)
+            new Map(data.def.args ? Object.entries(data.def.args) : []),
+            data.def.rest,
+            new Map(data.def.flags ? Object.entries(data.def.flags) : []),
+            new Map(data.def.flags ?
+                Object.entries(data.def.flags)
                     .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] { return a[1].shortcut !== undefined })
                     .map(([k, v]) => [v.shortcut, k]) :
                 []
             ),
             data.executor,
-            data.data.deleteCommandMessage ?? true,
-            data.data.ignore ?? false,
-            data.data.dev ?? false,
-            data.data.guildOnly ?? false,
+            data.def.deleteCommandMessage ?? true,
+            data.def.ignore ?? false,
+            data.def.dev ?? false,
+            data.def.guildOnly ?? false,
         );
 
         for (const subName in data.subs)
-            subs.set(subName, Command._build(data.subs[subName], cmd));
+            subs.add(Command._build(commandSet, data.subs[subName], cmd));
         return cmd;
     }
 

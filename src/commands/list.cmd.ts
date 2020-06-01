@@ -17,7 +17,7 @@ const cmd = makeCommand("list", {
 
 cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
 
-    let allCommands = Array.from(commandSet.commands());
+    let allCommands = Array.from(commandSet.commands);
 
     // if the author is not a dev. Hide devOnly commands.
     if (!options.devIDs.includes(message.author.id))
