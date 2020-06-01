@@ -6,7 +6,7 @@ interface Parsable<TypeName extends ParsableTypeName> {
     /** The type in which is parsed the value. */
     readonly type: TypeName;
     /** Used to check if parsed value satisfy certain conditions. */
-    readonly validator?: (value: ParsableTypeOf<TypeName>) => boolean;
+    readonly validator?: (value: ParsableTypeOf<TypeName>) => boolean | string;
     /** The default value if there is no value to parse. */
     readonly defaultValue?: ParsableTypeOf<TypeName>;
 }
