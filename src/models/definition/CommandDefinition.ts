@@ -19,7 +19,7 @@ export interface CommandDefinition {
     /** Determine if a user can use this commands. 
      * If the result is a string, the command is not executed and a message with the string is returned.
      */
-    readonly canUse: CanUseCommandCb;
+    readonly canUse?: CanUseCommandCb;
 
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };

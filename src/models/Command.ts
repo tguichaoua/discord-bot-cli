@@ -13,6 +13,7 @@ import { RestDefinition } from './definition/RestDefinition';
 import { CommandResultUtils } from './CommandResult';
 import { CommandResultError } from './CommandResultError';
 import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
+import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 
 
 export class Command {
@@ -29,6 +30,7 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
+        public readonly canUse: CanUseCommandCb | undefined,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -56,6 +58,7 @@ export class Command {
                 []
             ),
             data.executor,
+            data.def.canUse,
             data.def.deleteCommandMessage ?? true,
             data.def.ignore ?? false,
             data.def.dev ?? false,
