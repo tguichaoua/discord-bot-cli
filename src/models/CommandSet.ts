@@ -107,6 +107,10 @@ export class CommandSet {
 
         function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
 
+        async function Reply(content: string) {
+            await message.reply(content).catch(() => { });
+        }
+
         const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
 
         // check options
@@ -136,11 +140,17 @@ export class CommandSet {
 
         if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResultUtils.devOnly(command);
 
+        if (command.canUse) {
+            const result = command.canUse(message.author);
+            if (typeof result === "string") await Reply(result);
+            if (result !== true) return CommandResultUtils.unauthorizedUser(command);
+        }
+
         try {
             return CommandResultUtils.ok(command, await command.execute(message, args, opts, this));
         } catch (e) {
             if (e instanceof CommandResultError) {
-                if (e.replyMessage && e.replyMessage !== "") await message.reply(e.replyMessage).catch(() => { });
+                if (e.replyMessage && e.replyMessage !== "") await Reply(e.replyMessage);
                 return e.commandResult;
             }
             else
