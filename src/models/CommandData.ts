@@ -4,7 +4,7 @@ import { CommandExecutor } from "./CommandExecutor";
 export interface CommandData<T extends CommandDefinition> {
     /** @internal */
     readonly def: T;
-    /** @interface */
+    /** @internal */
     readonly name: string;
 
     /** Called when the command is executed. */
