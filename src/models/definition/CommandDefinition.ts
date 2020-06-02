@@ -16,8 +16,9 @@ export interface CommandDefinition {
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
 
-    /** Determine if a user can use this commands. 
-     * If the result is a string, the command is not executed and a message with the string is returned.
+    /** Determine if a user can use this commands.
+     * If the result is true, the command is executed.
+     * If the result is a string, the command is not executed and a reply message with the string is returned.
      */
     readonly canUse?: CanUseCommandCb;
 
