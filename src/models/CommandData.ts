@@ -1,5 +1,5 @@
 import { CommandDefinition } from "./definition/CommandDefinition";
-import { CommandExecutor } from "./CommandExecutor";
+import { CommandExecutor } from "./callbacks/CommandExecutor";
 
 export interface CommandData<T extends CommandDefinition> {
     /** @internal */

@@ -6,7 +6,7 @@ import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
 import { Char } from '../utils/char';
-import { CommandExecutor } from './CommandExecutor';
+import { CommandExecutor } from './callbacks/CommandExecutor';
 import { parseFlags } from '../other/parsing/parseFlags';
 import { parseArgs } from '../other/parsing/parseArgs';
 import { RestDefinition } from './definition/RestDefinition';
