@@ -1,7 +1,6 @@
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
-import { User } from "discord.js";
 import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
 
 export interface CommandDefinition {
