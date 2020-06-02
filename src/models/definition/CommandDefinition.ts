@@ -1,6 +1,7 @@
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
+import { User } from "discord.js";
 
 export interface CommandDefinition {
     /** alias names for this command */
@@ -13,6 +14,11 @@ export interface CommandDefinition {
     readonly flags?: { readonly [name: string]: FlagDefinition };
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
+
+    /** Determine if a user can use this commands. 
+     * If the result is a string, the command is not executed and a message with the string is returned.
+     */
+    readonly canUse: (user: User) => boolean | string;
 
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
