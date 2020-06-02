@@ -4,6 +4,7 @@ import { CommandSet } from "../CommandSet";
 import { CommandDefinition } from "../definition/CommandDefinition";
 import { ParsableTypeOf } from "../ParsableType";
 import { ParseOptions } from "../ParseOptions";
+import { CommandExecuteData } from "../data/CommandExecuteData";
 
 export type CommandExecutor<T extends CommandDefinition> =
     (
@@ -19,11 +20,5 @@ export type CommandExecutor<T extends CommandDefinition> =
             | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"] ? undefined : never)
         )
         },
-        others: {
-            rest: string[];
-            message: Message & { guild: Guild | (T["guildOnly"] extends true ? never : null) };
-            guild: Guild | (T["guildOnly"] extends true ? never : null);
-            options: ParseOptions;
-            commandSet: CommandSet;
-        }
+        others: { rest: string[]; } & CommandExecuteData<T>
     ) => any | Promise<any>;
