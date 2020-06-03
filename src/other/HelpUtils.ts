@@ -53,26 +53,26 @@ export namespace HelpUtils {
                 .setDescription(rawHelp.description + (rawHelp.command.guildOnly ? "\n`guild only`" : ""));
 
             const usageString = prefix + rawHelp.fullName + " " + rawHelp.args.map(a => a.usageString).join(" ") + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField("usage", `\`${usageString}\``, false);
+            embed.addField(localization.help.usage, `\`${usageString}\``, false);
 
             const args = rawHelp.args
                 .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
                 .join("\n");
-            if (args !== "") embed.addField("arguments", args, true);
+            if (args !== "") embed.addField(localization.help.arguments, args, true);
 
             const flags = rawHelp.flags
                 .map(f => `\`--${f.name}\`` + (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") + ` *${f.typeName}*` + (f.description !== "" ? `\n⮩  ${f.description}` : ""))
                 .join("\n");
-            if (flags !== "") embed.addField("flags", flags, true);
+            if (flags !== "") embed.addField(localization.help.flags, flags, true);
 
             const subs = rawHelp.subs
                 .map(s => `\`${s.command.name}\`` + (s.description !== "" ? `\n⮩  ${s.description}` : ""))
                 .join("\n")
-            if (subs !== "") embed.addField('sub commands', subs, true);
+            if (subs !== "") embed.addField(localization.help.subCommands, subs, true);
 
             const aliases = rawHelp.aliases
                 .map(a => `\`${a}\``).join(" ");
-            if (aliases !== "") embed.addField("aliases", aliases, true);
+            if (aliases !== "") embed.addField(localization.help.aliases, aliases, true);
 
             return embed;
         }
