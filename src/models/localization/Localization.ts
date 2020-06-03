@@ -4,6 +4,10 @@ import { TypeNameLocalization } from "./TypeNameLocalization";
 export interface Localization {
     typeNames: TypeNameLocalization;
     help: {
+        tags: {
+            guildOnly: string;
+            devOnly: string;
+        }
         usage: string;
         arguments: string;
         flags: string;
@@ -11,7 +15,6 @@ export interface Localization {
         aliases: string;
         default: string;
         commandNotFound: string;
-        guildOnlyTag: string;
     };
     list: {
         title: string;

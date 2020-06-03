@@ -42,7 +42,11 @@ export namespace HelpUtils {
                 rest = { name, description, usageString };
             }
 
-            return { command, fullName, aliases, description, args, flags, subs, rest };
+            const tags: string[] = [];
+            if (command.devOnly) tags.push(localization.help.tags.devOnly);
+            if (command.guildOnly) tags.push(localization.help.tags.guildOnly);
+
+            return { command, fullName, aliases, description, args, flags, subs, rest, tags };
         }
 
         export function embedHelp(command: Command, prefix: string, localization: Localization) {
@@ -50,7 +54,11 @@ export namespace HelpUtils {
 
             const embed = new MessageEmbed()
                 .setTitle(rawHelp.fullName)
-                .setDescription(rawHelp.description + (rawHelp.command.guildOnly ? "\n`guild only`" : ""));
+                .setDescription(rawHelp.description + (
+                    rawHelp.tags.length === 0 ?
+                        "" :
+                        "\n\n" + rawHelp.tags.map(t => `\`${t}\``).join(" ")
+                ));
 
             const usageString = prefix + rawHelp.fullName + " " + rawHelp.args.map(a => a.usageString).join(" ") + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
             embed.addField(localization.help.usage, `\`${usageString}\``, false);
