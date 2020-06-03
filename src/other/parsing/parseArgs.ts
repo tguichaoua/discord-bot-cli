@@ -20,8 +20,8 @@ export function parseArgs(
         } else {
             const val = args.shift() as string;
             const parsed = parseValue(def, message, val);
-            if (!parsed) throw new CommandResultError(CommandResultUtils.failParseArgInvalid(def, val));
-            value = parsed;
+            if (parsed.value === undefined) throw new CommandResultError(CommandResultUtils.failParseArgInvalid(def, val), parsed.message);
+            value = parsed.value;
         }
         argValues.set(name, value);
     }

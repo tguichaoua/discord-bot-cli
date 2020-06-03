@@ -1,11 +1,11 @@
 import { Message, Guild } from "discord.js";
-import { CommandSet } from "./CommandSet";
+import { CommandSet } from "../CommandSet";
 
-import { CommandDefinition } from "./definition/CommandDefinition";
-import { ParsableTypeOf } from "./ParsableType";
-import { ParseOptions } from "./ParseOptions";
+import { CommandDefinition } from "../definition/CommandDefinition";
+import { ParsableTypeOf } from "../ParsableType";
+import { ParseOptions } from "../ParseOptions";
 
-export type CommandExecutor<T extends CommandDefinition> =
+export type CommandExecutor<T extends CommandDefinition = CommandDefinition> =
     (
         args: { [name in keyof T["args"]]: (
             ParsableTypeOf<NonNullable<T["args"]>[name]["type"]>

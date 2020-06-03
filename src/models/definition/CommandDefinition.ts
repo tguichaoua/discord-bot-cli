@@ -1,8 +1,9 @@
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
+import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
 
-export interface CommandDefinition {
+export type CommandDefinition = {
     /** alias names for this command */
     readonly alias?: string[];
     /** The description of this command. Used by help command. */
@@ -13,6 +14,12 @@ export interface CommandDefinition {
     readonly flags?: { readonly [name: string]: FlagDefinition };
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
+
+    /** Determine if a user can use this commands.
+     * If the result is true, the command is executed.
+     * If the result is a string, the command is not executed and a reply message with the string is returned.
+     */
+    readonly canUse?: CanUseCommandCb;
 
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
@@ -28,3 +35,22 @@ export interface CommandDefinition {
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
 }
+// & (
+//     {
+//         readonly guildOnly: true;
+//         readonly canUse?: (user: User, guild: number) => boolean;
+//     } |
+//     {
+//         readonly guildOnly: false;
+//         readonly canUse?: (user: User, guild: number | null) => boolean;
+//     } | {
+//         readonly canUse?: (user: User, guild: number | null) => boolean;
+//     }
+// )
+
+// function makeCommand<T extends Omit<CommandDefinition, "canUse"> & { guildOnly: true; canUse?: CanUseCommandCb<T> }>(name: string, definition: T): CommandData<T>;
+// function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T>;
+// function makeCommand(name: string, definition: CommandDefinition): CommandData<CommandDefinition> {
+
+//     return {} as any;
+// }

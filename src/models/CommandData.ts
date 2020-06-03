@@ -1,10 +1,10 @@
 import { CommandDefinition } from "./definition/CommandDefinition";
-import { CommandExecutor } from "./CommandExecutor";
+import { CommandExecutor } from "./callbacks/CommandExecutor";
 
 export interface CommandData<T extends CommandDefinition> {
     /** @internal */
     readonly def: T;
-    /** @interface */
+    /** @internal */
     readonly name: string;
 
     /** Called when the command is executed. */
