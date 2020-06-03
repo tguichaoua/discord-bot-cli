@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { makeCommand } from "../other/makeCommand";
 import { ListUtils } from "../other/ListUtils";
+import { reply } from "../utils/reply";
 
 const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
@@ -24,7 +25,7 @@ cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
 
     embed.setDescription(descriptions);
 
-    message.author.send({ embed });
+    await reply(message, { embed });
 }
 
 export default cmd;
