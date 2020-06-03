@@ -19,7 +19,7 @@ export class Command {
 
     private constructor(
         public readonly name: string,
-        public readonly alias: readonly string[],
+        public readonly aliases: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly commandSet: CommandSet,
@@ -40,7 +40,7 @@ export class Command {
         const subs = new CommandCollection();
         const cmd = new Command(
             data.name,
-            data.def.alias ?? [],
+            data.def.aliases ?? [],
             data.def.description ?? "",
             parent,
             commandSet,

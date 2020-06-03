@@ -23,7 +23,7 @@ export namespace HelpUtils {
             const description = commandLocalization.description ?? command.description;
 
             const collection = command.parent?.subs ?? command.commandSet.commands;
-            const aliases = command.alias.filter(a => collection.hasAlias(a));
+            const aliases = command.aliases.filter(a => collection.hasAlias(a));
 
             const args = Array.from(command.args.entries())
                 .map(([name, arg]) => Arg.getRawHelp(arg, name, commandLocalization, localization.typeNames));
