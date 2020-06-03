@@ -17,13 +17,8 @@ cmd.executor = async ({ }, { }, { rest, options, commandSet, message }) => {
         if (!command || args.length != 0)
             await message.author.send(template(options.localization.help.commandNotFound, { command: cmdPath.join(" ") }));
         else {
-            if (options.help)
-                throw new Error("Not implemented");
-            //return await options.help({});
-            else {
-                const embed = HelpUtils.Command.embedHelp(command, options.prefix, options.localization);
-                await message.author.send({ embed });
-            }
+            const embed = HelpUtils.Command.embedHelp(command, options.prefix, options.localization);
+            await message.author.send({ embed });
         }
     }
 }

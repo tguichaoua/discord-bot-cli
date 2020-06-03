@@ -39,10 +39,6 @@ cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
 
     let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
 
-    if (options.list)
-        throw new Error("Not implemented");
-    //return await options.list({ message, options, context, allCommands, commands, page, pageCount });
-
     const embed = new MessageEmbed()
         .setColor("#0099ff")
         .setTitle(`Page ${page}/${pageCount}`);
