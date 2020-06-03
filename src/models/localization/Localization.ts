@@ -9,7 +9,7 @@ export interface Localization {
         guildOnlyTag: string;
     };
     list: {
-        invalidPage: string;
+        title: string;
     };
     commands: { [name: string]: CommandLocalization };
     misc: {

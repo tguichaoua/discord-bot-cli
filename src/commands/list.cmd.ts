@@ -16,7 +16,7 @@ cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
-        .setTitle("Command List");
+        .setTitle(options.localization.list.title);
 
     const descriptions = detail ?
         commands.map(c => `\`${c.command.name}\` ${c.description}`).join("\n") :
