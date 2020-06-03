@@ -1,50 +1,28 @@
 import { MessageEmbed } from "discord.js";
-import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
+import { ListUtils } from "../other/ListUtils";
 
 const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
-    args: {
-        page: {
-            type: "integer",
-            optional: true,
-            defaultValue: 1,
-            description: "The page of the list to display.",
-            validator: p => p >= 1
-        }
+    flags: {
+        detail: { type: "boolean", shortcut: "d", description: "Provide commands description" },
     }
 });
 
-cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
+cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
 
-    let allCommands = Array.from(commandSet.commands);
-
-    // if the author is not a dev. Hide devOnly commands.
-    if (!options.devIDs.includes(message.author.id))
-        allCommands = allCommands.filter(c => !c.devOnly);
-
-    const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
-
-    if (page > pageCount) {
-        await message.author.send(template(options.localization.list.invalidPage, { page_count: pageCount.toString() }));
-        return;
-    }
-
-    // sort commands by name
-    allCommands.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-    });
-
-    let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
+    const raw = ListUtils.getRawListData(commandSet, options.localization);
+    const commands = options.devIDs.includes(message.author.id) ? raw.commands : raw.commands.filter(c => !c.command.devOnly);
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(`Page ${page}/${pageCount}`);
+        .setTitle("Command List");
 
-    for (const cmd of commands)
-        embed.addField(cmd.name, options.localization.commands[cmd.name]?.description ?? cmd.description);
+    const descriptions = detail ?
+        commands.map(c => `\`${c.command.name}\` ${c.description}`).join("\n") :
+        commands.map(c => `\`${c.command.name}\``).join(" ");
+
+    embed.setDescription(descriptions);
 
     message.author.send({ embed });
 }
