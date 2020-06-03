@@ -61,7 +61,7 @@ export namespace HelpUtils {
                 ));
 
             const usageString = prefix + rawHelp.fullName + (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField(localization.help.usage, `\`${usageString}\``, false);
+            embed.addField(localization.help.usage, `**\`${usageString}\`**`, false);
 
             const args = rawHelp.args
                 .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
@@ -74,13 +74,13 @@ export namespace HelpUtils {
             if (flags !== "") embed.addField(localization.help.flags, flags, true);
 
             const subs = rawHelp.subs
-                .map(s => `\`${s.command.name}\`` + (s.description !== "" ? `\n⮩  ${s.description}` : ""))
+                .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
                 .join("\n")
-            if (subs !== "") embed.addField(localization.help.subCommands, subs, true);
+            if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
 
             const aliases = rawHelp.aliases
                 .map(a => `\`${a}\``).join(" ");
-            if (aliases !== "") embed.addField(localization.help.aliases, aliases, true);
+            if (aliases !== "") embed.addField(localization.help.aliases, aliases, false);
 
             return embed;
         }
