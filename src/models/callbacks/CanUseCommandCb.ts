@@ -1,5 +1,3 @@
-import { User } from "discord.js";
-import { CommandDefinition } from "../definition/CommandDefinition";
-import { CommandExecuteData } from "../data/CommandExecuteData";
+import { User, Message } from "discord.js";
 
-export type CanUseCommandCb<T extends CommandDefinition = CommandDefinition> = (user: User, data: CommandExecuteData<T>) => boolean | string;
+export type CanUseCommandCb = (user: User, message: Message) => boolean | string;

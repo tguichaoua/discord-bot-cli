@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, User } from 'discord.js';
 import { CommandSet } from "./CommandSet";
 import { ParseOptions } from './ParseOptions';
 import { CommandData } from './CommandData';
@@ -30,7 +30,7 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
-        public readonly canUse: CanUseCommandCb | undefined,
+        private readonly _canUse: CanUseCommandCb | undefined,
         public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
@@ -84,6 +84,16 @@ export class Command {
     }
 
     // =====================================================
+
+    canUse(user: User, message: Message): boolean | string {
+        if (this.parent) {
+            const res = this.parent.canUse(user, message);
+            if (res !== true) return res;
+        }
+        if (this._canUse)
+            return this._canUse(user, message);
+        return true;
+    }
 
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
