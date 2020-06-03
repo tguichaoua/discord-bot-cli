@@ -1,4 +1,4 @@
-import { HelpUtility } from "../other/HelpUtility";
+import { HelpUtils } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
 
@@ -21,7 +21,7 @@ cmd.executor = async ({ }, { }, { rest, options, commandSet, message }) => {
                 throw new Error("Not implemented");
             //return await options.help({});
             else {
-                const embed = HelpUtility.Command.embedHelp(command, options.prefix, options.localization);
+                const embed = HelpUtils.Command.embedHelp(command, options.prefix, options.localization);
                 await message.author.send({ embed });
             }
         }

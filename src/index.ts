@@ -11,4 +11,4 @@ export { ListQuery } from "./models/query/ListQuery";
 
 export { DeepPartial } from "./utils/DeepPartial";
 
-export { HelpUtility } from "./other/HelpUtility"
+export { HelpUtils as HelpUtility } from "./other/HelpUtils"
