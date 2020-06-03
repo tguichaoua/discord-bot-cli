@@ -13,6 +13,7 @@ export interface Localization {
         flags: string;
         subCommands: string;
         aliases: string;
+        examples: string;
         default: string;
         commandNotFound: string;
     };

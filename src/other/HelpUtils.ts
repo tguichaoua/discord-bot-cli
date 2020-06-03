@@ -82,6 +82,9 @@ export namespace HelpUtils {
                 .map(a => `\`${a}\``).join(" ");
             if (aliases !== "") embed.addField(localization.help.aliases, aliases, false);
 
+            const exemples = rawHelp.command.examples.map(e => `\`${e}\``).join("\n");
+            if (exemples !== "") embed.addField(localization.help.examples, exemples, false);
+
             return embed;
         }
     }

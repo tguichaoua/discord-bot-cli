@@ -20,6 +20,7 @@ export class Command {
     private constructor(
         public readonly name: string,
         public readonly aliases: readonly string[],
+        public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly commandSet: CommandSet,
@@ -41,6 +42,7 @@ export class Command {
         const cmd = new Command(
             data.name,
             data.def.aliases ?? [],
+            data.def.examples ?? [],
             data.def.description ?? "",
             parent,
             commandSet,

@@ -5,6 +5,8 @@ import { RestDefinition } from "./RestDefinition";
 export interface CommandDefinition {
     /** alias names for this command */
     readonly aliases?: string[];
+    /** A list of example for this command. */
+    readonly examples?: string[];
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
