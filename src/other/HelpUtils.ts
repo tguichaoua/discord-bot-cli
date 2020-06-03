@@ -61,7 +61,7 @@ export namespace HelpUtils {
             if (args !== "") embed.addField("arguments", args, true);
 
             const flags = rawHelp.flags
-                .map(f => `\`--${f.name}\` *${f.typeName}*` + (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") + (f.description !== "" ? `\n⮩  ${f.description}` : ""))
+                .map(f => `\`--${f.name}\`` + (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") + ` *${f.typeName}*` + (f.description !== "" ? `\n⮩  ${f.description}` : ""))
                 .join("\n");
             if (flags !== "") embed.addField("flags", flags, true);
 
