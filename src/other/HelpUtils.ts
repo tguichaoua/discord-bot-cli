@@ -60,7 +60,7 @@ export namespace HelpUtils {
                         "\n\n" + rawHelp.tags.map(t => `\`${t}\``).join(" ")
                 ));
 
-            const usageString = prefix + rawHelp.fullName + " " + rawHelp.args.map(a => a.usageString).join(" ") + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
+            const usageString = prefix + rawHelp.fullName + (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
             embed.addField(localization.help.usage, `\`${usageString}\``, false);
 
             const args = rawHelp.args
