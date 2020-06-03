@@ -122,12 +122,7 @@ export class CommandSet {
 
         const { command, args } = this.resolve(rawArgs);
 
-        if (!command) {
-            if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
-            return CommandResultUtils.commandNotFound();
-        }
-
-        if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
+        if (!command) return CommandResultUtils.commandNotFound();
 
         if (command.guildOnly && !message.guild) {
             await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtils.Command.getFullName(command) }));
@@ -151,7 +146,6 @@ export class CommandSet {
 const defaultOptions: ParseOptions = {
     prefix: "",
     helpOnSignatureNotFound: true,
-    deleteMessageIfCommandNotFound: true,
     devIDs: [],
     listCommandPerPage: 5,
     localization: defaultLocalization,

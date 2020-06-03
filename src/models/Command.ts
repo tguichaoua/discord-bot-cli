@@ -29,7 +29,6 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
-        public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean
@@ -56,7 +55,6 @@ export class Command {
                 []
             ),
             data.executor,
-            data.def.deleteCommandMessage ?? true,
             data.def.ignore ?? false,
             data.def.devOnly ?? false,
             data.def.guildOnly ?? false,
