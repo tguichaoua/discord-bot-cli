@@ -24,7 +24,7 @@ export interface CommandDefinition {
     /** If set to true, the message that trigger this command is automatically deleted. (default is true). [inheritable] */
     readonly deleteCommandMessage?: boolean;
     /** If set to true, only user registred as dev via `ParseCommand.devIDs` can execute, get help or list this command. (default is false). [inheritable] */
-    readonly dev?: boolean;
+    readonly devOnly?: boolean;
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
 }

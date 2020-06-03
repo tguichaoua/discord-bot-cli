@@ -58,7 +58,7 @@ export class Command {
             data.executor,
             data.def.deleteCommandMessage ?? true,
             data.def.ignore ?? false,
-            data.def.dev ?? false,
+            data.def.devOnly ?? false,
             data.def.guildOnly ?? false,
         );
 
