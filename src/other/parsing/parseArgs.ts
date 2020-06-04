@@ -5,6 +5,7 @@ import { ArgDefinition } from "../../models/definition/ArgDefinition";
 import { CommandResultUtils } from "../../models/CommandResult";
 import { CommandResultError } from "../../models/CommandResultError";
 
+/** @internal */
 export function parseArgs(
     message: Message, inputArguments: readonly string[],
     argDefinitions: ReadonlyMap<string, ArgDefinition>

@@ -1,3 +1,6 @@
+import { DeepPartial } from "./utils/DeepPartial";
+import { ParseOptions } from "querystring";
+
 export { makeCommand } from "./other/makeCommand";
 export { Command } from "./models/Command";
 export { CommandSet } from "./models/CommandSet";
@@ -5,6 +8,7 @@ export { ParseOptions } from "./models/ParseOptions";
 export { CommandResult } from "./models/CommandResult";
 export { Localization } from "./models/localization/Localization";
 
-export { DeepPartial } from "./utils/DeepPartial";
+export type PartialParseOptions = DeepPartial<ParseOptions>;
 
-export { HelpUtils as HelpUtility } from "./other/HelpUtils"
+export { HelpUtils } from "./other/HelpUtils";
+export { ListUtils } from "./other/ListUtils";

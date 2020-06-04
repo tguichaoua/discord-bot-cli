@@ -5,6 +5,7 @@ import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
 import { CommandResultUtils } from "../../models/CommandResult";
 import { CommandResultError } from "../../models/CommandResultError";
 
+/** @internal */
 export function parseFlags(
     message: Message, inputArguments: readonly string[],
     flagDefinitions: ReadonlyMap<string, ParsableDefinition>,

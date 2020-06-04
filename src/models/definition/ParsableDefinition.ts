@@ -11,7 +11,7 @@ interface Parsable<TypeName extends ParsableTypeName> {
     readonly defaultValue?: ParsableTypeOf<TypeName>;
 }
 
-// I not found a better solution.
+// I have not found a better solution.
 type WrapParsable<T extends ParsableTypeName> = T extends any ? Parsable<T> : never;
 
 export type ParsableDefinition = WrapParsable<ParsableTypeName>;

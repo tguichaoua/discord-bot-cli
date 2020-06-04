@@ -4,7 +4,7 @@ import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
 
 export type CommandDefinition = {
-    /** alias names for this command */
+    /** alias names for this command. */
     readonly aliases?: string[];
     /** A list of example for this command. */
     readonly examples?: string[];
@@ -26,7 +26,7 @@ export type CommandDefinition = {
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
 
-    /** If set to true, undefined inheritable properties are inherited from parent command. (default is false). */
+    /** If set to true, undefined inheritable properties are inherited from parent command. (default is true). */
     readonly inherit?: boolean;
     /** If set to true, this command is not loaded. (default is false). [inheritable] */
     readonly ignore?: boolean;
