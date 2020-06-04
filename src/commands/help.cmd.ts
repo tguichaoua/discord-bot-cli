@@ -5,7 +5,14 @@ import { reply } from "../utils/reply";
 
 const cmd = makeCommand("help", {
     description: "Provide help on commands.",
-    rest: { name: "command name", description: "The name of the command to get help." }
+    rest: { name: "command name", description: "The name of the command to get help." },
+    examples: [
+        "help",
+        "help list",
+        "help help",
+        "help command subCommand",
+        "help command subCommand1 subCommand2",
+    ]
 });
 
 cmd.executor = async ({ }, { }, { rest, options, commandSet, message }) => {

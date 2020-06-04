@@ -7,7 +7,11 @@ const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
     flags: {
         detail: { type: "boolean", shortcut: "d", description: "Provide commands description" },
-    }
+    },
+    examples: [
+        "list",
+        "list -d"
+    ]
 });
 
 cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
