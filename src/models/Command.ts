@@ -110,6 +110,7 @@ export class Command {
                 rest: args.rest,
                 message,
                 guild: message.guild,
+                member: message.member,
                 options,
                 commandSet
             }

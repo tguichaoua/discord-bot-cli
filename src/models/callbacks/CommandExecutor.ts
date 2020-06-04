@@ -1,4 +1,4 @@
-import { Message, Guild } from "discord.js";
+import { Message, Guild, GuildMember } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
 import { CommandDefinition } from "../definition/CommandDefinition";
@@ -21,8 +21,12 @@ export type CommandExecutor<T extends CommandDefinition = CommandDefinition> =
         },
         others: {
             readonly rest: string[];
-            readonly message: Message & { readonly guild: Guild | (T["guildOnly"] extends true ? never : null) };
+            readonly message: Message & {
+                readonly guild: Guild | (T["guildOnly"] extends true ? never : null);
+                readonly member: GuildMember | (T["guildOnly"] extends true ? never : null);
+            };
             readonly guild: Guild | (T["guildOnly"] extends true ? never : null);
+            readonly member: GuildMember | (T["guildOnly"] extends true ? never : null);
             readonly options: ParseOptions;
             readonly commandSet: CommandSet;
         }
