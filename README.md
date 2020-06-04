@@ -4,14 +4,12 @@ An easy way to build a command-based discord bot
 <a href="https://www.npmjs.com/package/discord-bot-cli" target="_blank"><img src="https://img.shields.io/npm/v/discord-bot-cli"/></a>
 <img src="https://img.shields.io/github/last-commit/baanloh/discord-bot-cli"/>
 
-## Dependency
-<img src="https://img.shields.io/npm/dependency-version/discord-bot-cli/discord.js"/>
-
 ## Install
 `npm i discord-bot-cli`
 
 ## Documentation
-<a href="https://baanloh.github.io/discord-bot-cli/v3/index.html">Docs</a>
+<a href="https://baanloh.github.io/discord-bot-cli/v3/index.html">Docs</a><br>
+<a href="https://github.com/baanloh/discord-bot-cli/wiki">Wiki</a>
 
 ## Usage
 ```typescript
@@ -21,13 +19,10 @@ import { CommandSet } from "discord-bot-cli";
 
 // === setup objects ========================================================
 const client = new Discord.Client();
-const commands = new CommandSet();
+const commands = new CommandSet({ prefix: "." });
 
-commands.loadCommands("./cmds/");
-commands.buildin("help", "list"); // or commands.buildin("all");
-
-// === define const =========================================================
-const context = {}; // put here context data like database
+commands.loadCommands("./commands/");
+commands.buildin("all");
 
 // === Discord events ==========================================
 
@@ -36,38 +31,12 @@ client.on("ready", () => {
 });
 
 client.on("message", async msg => {
-
     if (msg.author.bot) return; // ignore message from bots
 
-    console.log(">", msg.content);
-    const result = await commands.parse(msg, context, {
-        prefix: "!"
-    });
-
-    switch (result.status) {
-        case "ok":
-            console.log("=", result.result);
-            break;
-        case "error":
-            console.error("error", result.error);
-            break;
-        default:
-            console.log("@", result.status);
-    }
+    await commands.parse(msg);
 });
 
-// === init app ==================================================
-(async function () {
-    try {
-        console.log("INIT | init commands");
-        await commands.init(context);
-
-        console.log("INIT | loging to Discord");
-        await client.login(process.env.DISCORD_TOKEN);
-    } catch (e) {
-        console.error("on init |", e);
-    }
-})();
+client.login(process.env.DISCORD_TOKEN);
 ```
 
 ## CLI
