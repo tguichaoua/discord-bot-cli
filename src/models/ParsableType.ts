@@ -8,7 +8,6 @@ export type ParsableType = string | boolean | number |
     User | Role |
     Channel | GuildChannel | DMChannel | TextChannel | VoiceChannel | CategoryChannel | NewsChannel | StoreChannel;
 
-/** @internal */
 export type ParsableTypeOf<Name extends ParsableTypeName> =
     Name extends "string" ? string :
     Name extends "boolean" ? boolean :
