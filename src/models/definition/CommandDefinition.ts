@@ -35,22 +35,3 @@ export type CommandDefinition = {
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
 }
-// & (
-//     {
-//         readonly guildOnly: true;
-//         readonly canUse?: (user: User, guild: number) => boolean;
-//     } |
-//     {
-//         readonly guildOnly: false;
-//         readonly canUse?: (user: User, guild: number | null) => boolean;
-//     } | {
-//         readonly canUse?: (user: User, guild: number | null) => boolean;
-//     }
-// )
-
-// function makeCommand<T extends Omit<CommandDefinition, "canUse"> & { guildOnly: true; canUse?: CanUseCommandCb<T> }>(name: string, definition: T): CommandData<T>;
-// function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T>;
-// function makeCommand(name: string, definition: CommandDefinition): CommandData<CommandDefinition> {
-
-//     return {} as any;
-// }
