@@ -4,8 +4,8 @@ import { makeCommand } from "../other/makeCommand";
 import { reply } from "../utils/reply";
 
 const cmd = makeCommand("help", {
-    description: "Provide help on commands.",
-    rest: { name: "command name", description: "The name of the command to get help." },
+    description: "Provide help about a command.",
+    rest: { name: "command", description: "The name of the command." },
     examples: [
         "help",
         "help list",
