@@ -1,56 +1,35 @@
 import { MessageEmbed } from "discord.js";
-import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
+import { ListUtils } from "../other/ListUtils";
+import { reply } from "../utils/reply";
 
 const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
-    args: {
-        page: {
-            type: "integer",
-            optional: true,
-            defaultValue: 1,
-            description: "The page of the list to display.",
-            validator: p => p >= 1
-        }
-    }
+    flags: {
+        detail: { type: "boolean", shortcut: "d", description: "Provide commands description" },
+    },
+    examples: [
+        "list",
+        "list -d"
+    ]
 });
 
-cmd.executor = async ({ page }, { }, { commandSet, options, message }) => {
+cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
 
-    let allCommands = Array.from(commandSet.commands);
-
-    // if the author is not a dev. Hide devOnly commands.
-    if (!options.devIDs.includes(message.author.id))
-        allCommands = allCommands.filter(c => !c.devOnly);
-
-    const pageCount = Math.ceil(allCommands.length / options.listCommandPerPage);
-
-    if (page > pageCount) {
-        await message.author.send(template(options.localization.list.invalidPage, { page_count: pageCount.toString() }));
-        return;
-    }
-
-    // sort commands by name
-    allCommands.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-    });
-
-    let commands = allCommands.slice(options.listCommandPerPage * (page - 1), options.listCommandPerPage);
-
-    if (options.list)
-        throw new Error("Not implemented");
-    //return await options.list({ message, options, context, allCommands, commands, page, pageCount });
+    const raw = ListUtils.getRawListData(commandSet, options.localization);
+    const commands = options.devIDs.includes(message.author.id) ? raw.commands : raw.commands.filter(c => !c.command.devOnly);
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(`Page ${page}/${pageCount}`);
+        .setTitle(options.localization.list.title);
 
-    for (const cmd of commands)
-        embed.addField(cmd.name, options.localization.commands[cmd.name]?.description ?? cmd.description);
+    const descriptions = detail ?
+        commands.map(c => `\`${c.command.name}\` ${c.description}`).join("\n") :
+        commands.map(c => `\`${c.command.name}\``).join(" ");
 
-    message.author.send({ embed });
+    embed.setDescription(descriptions);
+
+    await reply(message, { embed });
 }
 
 export default cmd;

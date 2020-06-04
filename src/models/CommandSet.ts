@@ -11,7 +11,7 @@ import { ParseOptions } from "./ParseOptions";
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
-import { HelpUtility } from "../other/HelpUtility";
+import { HelpUtils } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
 import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
@@ -126,15 +126,10 @@ export class CommandSet {
 
         const { command, args } = this.resolve(rawArgs);
 
-        if (!command) {
-            if (opts.deleteMessageIfCommandNotFound && message.channel.type === 'text') await message.delete().catch(() => { });
-            return CommandResultUtils.commandNotFound();
-        }
-
-        if (command.deleteCommand && message.channel.type === 'text') await message.delete().catch(() => { });
+        if (!command) return CommandResultUtils.commandNotFound();
 
         if (command.guildOnly && !message.guild) {
-            await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtility.Command.fullName(command) }));
+            await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtils.Command.getFullName(command) }));
             return CommandResultUtils.guildOnly(command);
         }
 
@@ -161,7 +156,6 @@ export class CommandSet {
 const defaultOptions: ParseOptions = {
     prefix: "",
     helpOnSignatureNotFound: true,
-    deleteMessageIfCommandNotFound: true,
     devIDs: [],
     listCommandPerPage: 5,
     localization: defaultLocalization,

@@ -26,7 +26,7 @@ export class CommandCollection extends ReadonlyCommandCollection {
         } else {
             this._commands.set(command.name, command);
 
-            for (const alias of command.alias) {
+            for (const alias of command.aliases) {
                 if (this._alias.has(alias))
                     this._alias.set(alias, undefined);
                 else

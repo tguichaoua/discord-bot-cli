@@ -20,7 +20,8 @@ export class Command {
 
     private constructor(
         public readonly name: string,
-        public readonly alias: readonly string[],
+        public readonly aliases: readonly string[],
+        public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
         public readonly commandSet: CommandSet,
@@ -31,7 +32,6 @@ export class Command {
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
-        public readonly deleteCommand: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean
@@ -43,7 +43,8 @@ export class Command {
         const subs = new CommandCollection();
         const cmd = new Command(
             data.name,
-            data.def.alias ?? [],
+            data.def.aliases ?? [],
+            data.def.examples ?? [],
             data.def.description ?? "",
             parent,
             commandSet,
@@ -59,9 +60,8 @@ export class Command {
             ),
             data.executor,
             data.def.canUse,
-            data.def.deleteCommandMessage ?? true,
             data.def.ignore ?? false,
-            data.def.dev ?? false,
+            data.def.devOnly ?? false,
             data.def.guildOnly ?? false,
         );
 

@@ -5,7 +5,9 @@ import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
 
 export type CommandDefinition = {
     /** alias names for this command */
-    readonly alias?: string[];
+    readonly aliases?: string[];
+    /** A list of example for this command. */
+    readonly examples?: string[];
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
@@ -28,10 +30,8 @@ export type CommandDefinition = {
     readonly inherit?: boolean;
     /** If set to true, this command is not loaded. (default is false). [inheritable] */
     readonly ignore?: boolean;
-    /** If set to true, the message that trigger this command is automatically deleted. (default is true). [inheritable] */
-    readonly deleteCommandMessage?: boolean;
     /** If set to true, only user registred as dev via `ParseCommand.devIDs` can execute, get help or list this command. (default is false). [inheritable] */
-    readonly dev?: boolean;
+    readonly devOnly?: boolean;
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
 }

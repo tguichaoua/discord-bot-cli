@@ -16,33 +16,24 @@
         "store channel": "store channel"
     },
     "help": {
+        "usage": "usage",
+        "arguments": "arguments",
+        "flags": "flags",
+        "subCommands": "subCommands",
+        "aliases": "aliases",
+        "examples": "examples",
         "default": "Type `{{prefix}}list` to get a list of all commands or `{{prefix}}help <command name>` to get help on a command.",
         "commandNotFound": "The command/sub-command `{{command}}` cannot be found.",
-        "guildOnlyTag": "Guild Only"
-    },
-    "list": {
-        "invalidPage": "The number of the page must be between 1 and {{page_count}}."
-    },
-    "commands": {
-        "help": {
-            "name": "help",
-            "description": "Provide help on commands.",
-            "rest": {
-                "name": "command name",
-                "description": "The name of the command to get help."
-            }
-        },
-        "list": {
-            "name": "list",
-            "description": "Display a list of all avaible commands.",
-            "args": {
-                "page": {
-                    "name": "page",
-                    "description": "The page of the list to display."
-                }
-            }
+        "guildOnlyTag": "Guild Only",
+        "tags": {
+            "guildOnly": "Guild Only",
+            "devOnly": "Dev Only"
         }
     },
+    "list": {
+        "title": "Command List"
+    },
+    "commands": {},
     "misc": {
         "guildOnlyWarning": "The command `{{command}}` can only be executed from a server."
     }
