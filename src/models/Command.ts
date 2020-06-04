@@ -40,6 +40,10 @@ export class Command {
     static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command { return Command._build(commandSet, data, null); }
 
     private static _build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>, parent: Command | null): Command {
+        function resolveInheritance<K extends keyof Command>(prop: K, defaultValue: Command[K]): Command[K] {
+            return (((data.def.inherit ?? true) && parent) ? parent[prop] : defaultValue);
+        }
+
         const subs = new CommandCollection();
         const cmd = new Command(
             data.name,
@@ -60,9 +64,9 @@ export class Command {
             ),
             data.executor,
             data.def.canUse,
-            data.def.ignore ?? false,
-            data.def.devOnly ?? false,
-            data.def.guildOnly ?? false,
+            data.def.ignore ?? resolveInheritance("ignored", false),
+            data.def.devOnly ?? resolveInheritance("devOnly", false),
+            data.def.guildOnly ?? resolveInheritance("guildOnly", false),
         );
 
         for (const subName in data.subs)
