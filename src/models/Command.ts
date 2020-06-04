@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, User } from 'discord.js';
 import { CommandSet } from "./CommandSet";
 import { ParseOptions } from './ParseOptions';
 import { CommandData } from './CommandData';
@@ -6,13 +6,14 @@ import { CommandDefinition } from './definition/CommandDefinition';
 import { ArgDefinition } from './definition/ArgDefinition';
 import { FlagDefinition } from './definition/FlagDefinition';
 import { Char } from '../utils/char';
-import { CommandExecutor } from './CommandExecutor';
+import { CommandExecutor } from './callbacks/CommandExecutor';
 import { parseFlags } from '../other/parsing/parseFlags';
 import { parseArgs } from '../other/parsing/parseArgs';
 import { RestDefinition } from './definition/RestDefinition';
 import { CommandResultUtils } from './CommandResult';
 import { CommandResultError } from './CommandResultError';
 import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
+import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 
 
 export class Command {
@@ -30,6 +31,7 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
+        private readonly _canUse: CanUseCommandCb | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean
@@ -57,6 +59,7 @@ export class Command {
                 []
             ),
             data.executor,
+            data.def.canUse,
             data.def.ignore ?? false,
             data.def.devOnly ?? false,
             data.def.guildOnly ?? false,
@@ -81,6 +84,16 @@ export class Command {
     }
 
     // =====================================================
+
+    canUse(user: User, message: Message): boolean | string {
+        if (this.parent) {
+            const res = this.parent.canUse(user, message);
+            if (res !== true) return res;
+        }
+        if (this._canUse)
+            return this._canUse(user, message);
+        return true;
+    }
 
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {

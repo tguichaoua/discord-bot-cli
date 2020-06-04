@@ -20,9 +20,9 @@ export function parseFlags(
         if (!flag) throw new CommandResultError(CommandResultUtils.failParseFlagUnknown(flagName));
 
         if (flagValue) {
-            const value = parseValue(flag, message, flagValue);
-            if (value === undefined) throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(flag, flagValue));
-            flagValues.set(flagName, value);
+            const parsed = parseValue(flag, message, flagValue);
+            if (parsed.value === undefined) throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(flag, flagValue), parsed.message);
+            flagValues.set(flagName, parsed.value);
             args.splice(index, 1);
         } else {
             if (flag.type === "boolean") {
@@ -30,9 +30,9 @@ export function parseFlags(
                 args.splice(index, 1);
             } else {
                 if (dontUseNextArg || index + 1 >= args.length) throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(flag, ""));
-                const value = parseValue(flag, message, args[index + 1]);
-                if (value === undefined) throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(flag, args[index + 1]));
-                flagValues.set(flagName, value);
+                const parsed = parseValue(flag, message, args[index + 1]);
+                if (parsed.value === undefined) throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(flag, args[index + 1]), parsed.message);
+                flagValues.set(flagName, parsed.value);
                 args.splice(index, 2);
             }
         }
