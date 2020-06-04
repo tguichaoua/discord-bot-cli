@@ -31,13 +31,16 @@
     },
     "homepage": "https://github.com/baanloh/discord-bot-cli#readme",
     "devDependencies": {
+        "discord.js": "^12.2.0",
         "typedoc": "^0.17.7",
         "typescript": "^3.9.3"
     },
     "dependencies": {
         "@types/node": "^13.13.9",
         "@types/ws": "^7.2.5",
-        "discord.js": "^12.2.0",
         "meow": "^6.1.1"
+    },
+    "peerDependencies": {
+        "discord.js": "^12.2.0"
     }
 }
