@@ -2,6 +2,6 @@
 .github/
 docs/
 src/
-README.md
+node_modules/
 tsconfig.json
 typedoc.json
