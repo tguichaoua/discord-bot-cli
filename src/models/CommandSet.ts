@@ -113,10 +113,6 @@ export class CommandSet {
 
         const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
 
-        // check options
-        if (opts.listCommandPerPage < 1)
-            throw OptionsError("listCommandPerPage");
-
         // Extract command & arguments from message
         if (!message.content.startsWith(opts.prefix)) return CommandResultUtils.notPrefixed();
 
@@ -155,8 +151,6 @@ export class CommandSet {
 /** @internal */
 const defaultOptions: ParseOptions = {
     prefix: "",
-    helpOnSignatureNotFound: true,
     devIDs: [],
-    listCommandPerPage: 5,
     localization: defaultLocalization,
 };
