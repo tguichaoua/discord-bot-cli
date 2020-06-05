@@ -1,5 +1,5 @@
 # discord-bot-cli
-discord-bot-cli is a npm package based on discord.js to provide tools to make easy to create a command based bot for Discord.
+`discord-bot-cli` is a npm package based on [`discord.js`](https://www.npmjs.com/package/discord.js) to provide tools to make easy to create a command based bot for Discord.
 
 <a href="https://www.npmjs.com/package/discord-bot-cli" target="_blank"><img src="https://img.shields.io/npm/v/discord-bot-cli"/></a>
 <img src="https://img.shields.io/github/last-commit/baanloh/discord-bot-cli"/>
