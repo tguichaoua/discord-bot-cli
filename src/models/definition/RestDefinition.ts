@@ -1,0 +1,1 @@
+export type RestDefinition = { name: string, description?: string };

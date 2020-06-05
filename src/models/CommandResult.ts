@@ -1,51 +1,100 @@
-import {Command} from "./Command";
-import {Signature} from "./Signature";
+import { Command } from "./Command";
+import { ArgDefinition } from "./definition/ArgDefinition";
+import { FlagDefinition } from "./definition/FlagDefinition";
 
-export type CommandResult = 
-{
-    status:"ok",
-    command: Command,
-    signature: Signature,
-    result: any
-} |
-{
-    status: "error",
-    error: any,
-} |
-{
-    status: "signature not found",
-    command: Command,
-} |
-{
-    status: "dev only" | "not prefixed" | "command not found"
-};
+export type CommandResult =
+    {
+        readonly status: "ok";
+        readonly command: Command;
+        readonly result: any;
+    } |
+    {
+        readonly status: "error";
+        readonly error: any;
+    } |
+    {
+        readonly status: "no executor" | "guild only" | "dev only" | "unauthorized user";
+        readonly command: Command;
+    } |
+    {
+        readonly status: "not prefixed" | "command not found";
+    } |
+    (
+        {
+            readonly status: "parsing error";
+        } &
+        (
+            (
+                {
+                    readonly type: "arg";
+                    readonly arg: Readonly<ArgDefinition>;
+                } &
+                (
+                    {
+                        readonly reason: "invalid value";
+                        readonly got: string;
+                    } |
+                    {
+                        readonly reason: "missing argument";
+                    }
+                )
+            ) |
+            (
+                {
+                    readonly type: "flag";
+                } &
+                (
+                    {
+                        readonly reason: "unknown flag";
+                        readonly name: string;
+                    } |
+                    {
+                        readonly reason: "invalid value";
+                        readonly flag: Readonly<FlagDefinition>;
+                        readonly got: string;
+                    }
+                )
+            )
+        )
+    );
 
-/** @ignore */
-export function ok(command: Command, signature: Signature, result: any): CommandResult {
-    return { status: "ok", command, signature, result };
-}
 
-/** @ignore */
-export function error(error: any): CommandResult {
-    return { status: "error", error };
-}
+/** @internal */
+export namespace CommandResultUtils {
+    /** @internal */
+    export function ok(command: Command, result: any): CommandResult { return { status: "ok", command, result }; }
 
-/** @ignore */
-export function devOnly(): CommandResult {
-    return { status: "dev only" };
-}
+    /** @internal */
+    export function error(error: any): CommandResult { return { status: "error", error }; }
 
-/** @ignore */
-export function notPrefixed(): CommandResult {
-    return { status: "not prefixed" };
-}
+    /** @internal */
+    export function noExecutor(command: Command): CommandResult { return { status: "no executor", command }; }
 
-/** @ignore */
-export function signatureNotFound(command: Command): CommandResult {
-    return { status: "signature not found", command };
-}
+    /** @internal */
+    export function devOnly(command: Command): CommandResult { return { status: "dev only", command }; }
 
-/** @ignore */
-export function commandNotFound(): CommandResult {
-    return { status: "command not found" };
+    /** @internal */
+    export function guildOnly(command: Command): CommandResult { return { status: "guild only", command }; }
+
+    /** @internal */
+    export function unauthorizedUser(command: Command): CommandResult { return { status: "unauthorized user", command }; }
+
+    /** @internal */
+    export function notPrefixed(): CommandResult { return { status: "not prefixed" }; }
+
+    /** @internal */
+    export function commandNotFound(): CommandResult { return { status: "command not found" }; }
+
+    /** @internal */
+    export function failParseArgInvalid(arg: Readonly<ArgDefinition>, got: string): CommandResult { return { status: "parsing error", type: "arg", arg, reason: "invalid value", got }; }
+
+    /** @internal */
+    export function failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult { return { status: "parsing error", type: "arg", arg, reason: "missing argument" }; }
+
+    /** @internal */
+    export function failParseFlagUnknown(name: string): CommandResult { return { status: "parsing error", type: "flag", reason: "unknown flag", name }; }
+
+    /** @internal */
+    export function failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult { return { status: "parsing error", type: "flag", flag, reason: "invalid value", got }; }
+
 }

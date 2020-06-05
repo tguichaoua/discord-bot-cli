@@ -9,7 +9,7 @@
     },
     "scripts": {
         "docs": "typedoc ./src/",
-        "deldocs": "rm -rf ./docs/v3/",
+        "deldocs": "rm -rf ./docs/v4/",
         "build": "tsc",
         "clean": "rm -rf ./dist",
         "rebuild": "npm run clean && npm run build",
@@ -31,13 +31,16 @@
     },
     "homepage": "https://github.com/baanloh/discord-bot-cli#readme",
     "devDependencies": {
-        "typedoc": "^0.17.4",
-        "typescript": "^3.8.3"
+        "discord.js": "^12.2.0",
+        "typedoc": "^0.17.7",
+        "typescript": "^3.9.3"
     },
     "dependencies": {
-        "@types/node": "^13.11.1",
-        "@types/ws": "^7.2.3",
-        "discord.js": "^12.1.1",
-        "meow": "^6.1.0"
+        "@types/node": "^13.13.9",
+        "@types/ws": "^7.2.5",
+        "meow": "^6.1.1"
+    },
+    "peerDependencies": {
+        "discord.js": "^12.2.0"
     }
 }

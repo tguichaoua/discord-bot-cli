@@ -1,6 +1,8 @@
 # don't track compiled files
 dist/
 
+.vscode
+
 # Logs
 logs
 *.log
