@@ -28,6 +28,11 @@ export type CommandDefinition = {
      * If defined, this callback is called when help is needed for this command instead of default help.
      */
     readonly help?: HelpCb;
+    /**
+     * If set to true and `help` is defined, this command's `help` handler is used for sub command that not defined a `help` handler.
+     * (default is false)
+     */
+    readonly useHelpOnSubs?: boolean;
 
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
@@ -41,3 +46,4 @@ export type CommandDefinition = {
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
 }
+

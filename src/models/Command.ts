@@ -16,7 +16,6 @@ import { ReadonlyCommandCollection, CommandCollection } from './CommandCollectio
 import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 import { HelpCb } from './callbacks/HelpCb';
 
-
 export class Command {
 
     private constructor(
@@ -39,9 +38,16 @@ export class Command {
         public readonly guildOnly: boolean
     ) { }
 
-    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command { return Command._build(commandSet, data, null); }
+    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command {
+        return Command._build(commandSet, data, null, undefined);
+    }
 
-    private static _build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>, parent: Command | null): Command {
+    private static _build<T extends CommandDefinition>(
+        commandSet: CommandSet,
+        data: CommandData<T>,
+        parent: Command | null,
+        parentHelp: HelpCb | undefined,
+    ): Command {
         function resolveInheritance<K extends keyof Command>(prop: K, defaultValue: Command[K]): Command[K] {
             return (((data.def.inherit ?? true) && parent) ? parent[prop] : defaultValue);
         }
@@ -66,14 +72,19 @@ export class Command {
             ),
             data.executor,
             data.def.canUse,
-            data.def.help,
+            data.def.help ?? parentHelp,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
         );
 
         for (const subName in data.subs)
-            subs.add(Command._build(commandSet, data.subs[subName], cmd));
+            subs.add(Command._build(
+                commandSet,
+                data.subs[subName],
+                cmd,
+                (data.def.useHelpOnSubs ?? false) || (!data.def.help && !!parentHelp) ? cmd._help : undefined,
+            ));
         return cmd;
     }
 
