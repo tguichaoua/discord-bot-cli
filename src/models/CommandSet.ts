@@ -113,11 +113,17 @@ export class CommandSet {
 
         const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
 
-        // Extract command & arguments from message
-        if (!message.content.startsWith(opts.prefix)) return CommandResultUtils.notPrefixed();
+        let content: string;
+        const botMentionStr = `<@!${message.client.user?.id}>`
+        if (opts.allowMentionAsPrefix && message.content.startsWith(botMentionStr))
+            content = message.content.substring(botMentionStr.length);
+        else if (message.content.startsWith(opts.prefix))
+            content = message.content.substring(opts.prefix.length);
+        else
+            return CommandResultUtils.notPrefixed();
 
         // extract the command & arguments from message
-        const rawArgs = (message.content.substring(opts.prefix.length).match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
+        const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
             .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
 
         const { command, args } = this.resolve(rawArgs);
@@ -136,7 +142,9 @@ export class CommandSet {
         if (result !== true) return CommandResultUtils.unauthorizedUser(command);
 
         try {
-            return CommandResultUtils.ok(command, await command.execute(message, args, opts, this));
+            const result = await command.execute(message, args, opts, this);
+            if (command.deleteMessage && message.channel.type === "text") await message.delete().catch(() => { });
+            return CommandResultUtils.ok(command, result);
         } catch (e) {
             if (e instanceof CommandResultError) {
                 if (e.replyMessage && e.replyMessage !== "") await Reply(e.replyMessage);
@@ -153,4 +161,5 @@ const defaultOptions: ParseOptions = {
     prefix: "",
     devIDs: [],
     localization: defaultLocalization,
+    allowMentionAsPrefix: false,
 };

@@ -14,7 +14,7 @@ import { CommandResultUtils } from './CommandResult';
 import { CommandResultError } from './CommandResultError';
 import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
 import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
-
+import { HelpCb } from './callbacks/HelpCb';
 
 export class Command {
 
@@ -32,14 +32,23 @@ export class Command {
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
+        private readonly _help: HelpCb | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
-        public readonly guildOnly: boolean
+        public readonly guildOnly: boolean,
+        public readonly deleteMessage: boolean,
     ) { }
 
-    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command { return Command._build(commandSet, data, null); }
+    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command {
+        return Command._build(commandSet, data, null, undefined);
+    }
 
-    private static _build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>, parent: Command | null): Command {
+    private static _build<T extends CommandDefinition>(
+        commandSet: CommandSet,
+        data: CommandData<T>,
+        parent: Command | null,
+        parentHelp: HelpCb | undefined,
+    ): Command {
         function resolveInheritance<K extends keyof Command>(prop: K, defaultValue: Command[K]): Command[K] {
             return (((data.def.inherit ?? true) && parent) ? parent[prop] : defaultValue);
         }
@@ -64,13 +73,20 @@ export class Command {
             ),
             data.executor,
             data.def.canUse,
+            data.def.help ?? parentHelp,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
+            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false),
         );
 
         for (const subName in data.subs)
-            subs.add(Command._build(commandSet, data.subs[subName], cmd));
+            subs.add(Command._build(
+                commandSet,
+                data.subs[subName],
+                cmd,
+                (data.def.useHelpOnSubs ?? false) || (!data.def.help && !!parentHelp) ? cmd._help : undefined,
+            ));
         return cmd;
     }
 
@@ -96,6 +112,18 @@ export class Command {
         }
         if (this._canUse)
             return this._canUse(user, message);
+        return true;
+    }
+
+    /**
+     * Call the help handler of this command and return true.
+     * Return false if handler is undefined.
+     * @param message 
+     * @param options 
+     */
+    async help(message: Message, options: ParseOptions): Promise<boolean> {
+        if (!this._help) return false;
+        await this._help(this, { message, options, commandSet: this.commandSet });
         return true;
     }
 

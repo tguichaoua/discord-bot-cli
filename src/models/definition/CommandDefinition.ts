@@ -2,6 +2,7 @@ import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
+import { HelpCb } from "../callbacks/HelpCb";
 
 export type CommandDefinition = {
     /** alias names for this command. */
@@ -23,6 +24,16 @@ export type CommandDefinition = {
      */
     readonly canUse?: CanUseCommandCb;
 
+    /**
+     * If defined, this callback is called when help is needed for this command instead of default help.
+     */
+    readonly help?: HelpCb;
+    /**
+     * If set to true and `help` is defined, this command's `help` handler is used for sub command that not defined a `help` handler.
+     * (default is false)
+     */
+    readonly useHelpOnSubs?: boolean;
+
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
 
@@ -34,4 +45,7 @@ export type CommandDefinition = {
     readonly devOnly?: boolean;
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
+    /** If set to true, the command message will be deleted after command execution. */
+    readonly deleteMessage?: boolean;
 }
+
