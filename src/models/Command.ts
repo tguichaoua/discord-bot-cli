@@ -14,6 +14,7 @@ import { CommandResultUtils } from './CommandResult';
 import { CommandResultError } from './CommandResultError';
 import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
 import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
+import { HelpCb } from './callbacks/HelpCb';
 
 
 export class Command {
@@ -32,6 +33,7 @@ export class Command {
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
+        private readonly _help: HelpCb | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean
@@ -64,6 +66,7 @@ export class Command {
             ),
             data.executor,
             data.def.canUse,
+            data.def.help,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),

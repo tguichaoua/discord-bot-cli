@@ -2,6 +2,7 @@ import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
+import { HelpCb } from "../callbacks/HelpCb";
 
 export type CommandDefinition = {
     /** alias names for this command. */
@@ -22,6 +23,11 @@ export type CommandDefinition = {
      * If the result is a string, the command is not executed and a reply message with the string is returned.
      */
     readonly canUse?: CanUseCommandCb;
+
+    /**
+     * If defined, this callback is called when help is needed for this command instead of default help.
+     */
+    readonly help?: HelpCb;
 
     /** Sub-commands of this command. */
     readonly subs?: { readonly [name: string]: CommandDefinition };
