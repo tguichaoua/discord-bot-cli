@@ -7,4 +7,6 @@ export interface ParseOptions {
     devIDs: readonly string[];
     /** A localization object */
     localization: Localization;
+    /** If set to true, a mention to the bot can be used instead of a prefix (default is false). */
+    allowMentionAsPrefix: boolean;
 }

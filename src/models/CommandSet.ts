@@ -155,4 +155,5 @@ const defaultOptions: ParseOptions = {
     prefix: "",
     devIDs: [],
     localization: defaultLocalization,
+    allowMentionAsPrefix: false,
 };
