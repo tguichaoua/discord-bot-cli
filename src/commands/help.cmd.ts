@@ -25,6 +25,7 @@ cmd.executor = async ({ }, { }, { rest, options, commandSet, message }) => {
         if (!command || args.length != 0)
             await reply(message, template(options.localization.help.commandNotFound, { command: cmdPath.join(" ") }));
         else {
+            if (await command.help(message, options)) return;
             const embed = HelpUtils.Command.embedHelp(command, options.prefix, options.localization);
             await reply(message, { embed });
         }

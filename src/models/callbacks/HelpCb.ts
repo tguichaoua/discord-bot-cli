@@ -7,4 +7,4 @@ export type HelpCb = (command: Command, context: {
     message: Message;
     options: ParseOptions;
     commandSet: CommandSet;
-}) => void;
+}) => void | Promise<void>;

@@ -102,6 +102,18 @@ export class Command {
         return true;
     }
 
+    /**
+     * Call the help handler of this command and return true.
+     * Return false if handler is undefined.
+     * @param message 
+     * @param options 
+     */
+    async help(message: Message, options: ParseOptions): Promise<boolean> {
+        if (!this._help) return false;
+        await this._help(this, { message, options, commandSet: this.commandSet });
+        return true;
+    }
+
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
