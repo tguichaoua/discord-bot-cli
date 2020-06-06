@@ -35,7 +35,8 @@ export class Command {
         private readonly _help: HelpCb | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
-        public readonly guildOnly: boolean
+        public readonly guildOnly: boolean,
+        public readonly deleteMessage: boolean,
     ) { }
 
     static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command {
@@ -76,6 +77,7 @@ export class Command {
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
+            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false),
         );
 
         for (const subName in data.subs)
