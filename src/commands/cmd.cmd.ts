@@ -23,7 +23,7 @@ cmd.subs.reload.executor = async ({ command }, { }, { commandSet, message }) => 
         commandSet.reload(cmd);
         await message.channel.send(":white_check_mark: Command reloaded").catch(() => { });
     } catch (e) {
-        await message.channel.send(":x: Fail to reload command").catch(() => { });
+        await message.channel.send(`:x: Fail to reload command \`\`\`\n${e}\n\`\`\``).catch(() => { });
     }
 }
 
