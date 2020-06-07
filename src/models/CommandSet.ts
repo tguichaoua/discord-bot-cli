@@ -16,6 +16,8 @@ import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
 import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 
+type BuildInCommand = "help" | "list" | "cmd";
+
 export class CommandSet {
 
     private _commands = new CommandCollection();
@@ -55,12 +57,10 @@ export class CommandSet {
         }
     }
 
-    /**
-     * Load build-in commands.<br>
-     * `help`, `list`<br>
-     * `all` to load all build-in commands.
-     * @param buildinCommandNames - a list of build-in command name to load.
-     */
+    /** Load all build-in commands */
+    buildin(buildinCommandNames: "all"): void;
+    /** Load build-in commands. */
+    buildin(...buildinCommandNames: BuildInCommand[]): void;
     buildin(...buildinCommandNames: string[]) {
         if (buildinCommandNames.includes("all")) {
             this.loadCommands(__dirname + "/../commands");
