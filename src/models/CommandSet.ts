@@ -26,8 +26,7 @@ export class CommandSet {
 
     private _loadFile(path: string) {
         try {
-            const commandData = require(path).default;
-            const command = Command.build(this, commandData);
+            const command = Command.load(path, this);
             if (command.ignored) Com.warn(`Command ignored (${path})`);
             else {
                 if (!this._commands.add(command)) Com.warn(`Command name already taken (${path})`);
