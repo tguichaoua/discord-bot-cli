@@ -73,6 +73,14 @@ export class CommandSet {
         }
     }
 
+    /** Reload a command. */
+    reload(command: Command) {
+        if (!command.filepath) throw Error("Cannot reload sub command.");
+        this._commands.delete(command);
+        delete require.cache[command.filepath];
+        this._loadFile(command.filepath);
+    }
+
     get(commandName: string) {
         return this._commands.get(commandName);
     }
