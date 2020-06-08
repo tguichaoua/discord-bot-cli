@@ -47,10 +47,8 @@ function parse(type: ParsableType, str: string, message: Message): ParsableType 
         case "boolean":
             switch (str.toLocaleLowerCase()) {
                 case "true":
-                case "1":
                     return true;
                 case "false":
-                case "0":
                     return false;
             }
             break;
