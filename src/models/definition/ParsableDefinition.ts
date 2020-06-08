@@ -14,4 +14,4 @@ interface Parsable<TypeNames extends ParsableTypeName | readonly ParsableTypeNam
 // I have not found a better solution.
 type WrapParsable<T extends ParsableTypeName> = T extends any ? Parsable<T> : never;
 
-export type ParsableDefinition = WrapParsable<ParsableTypeName> | Parsable<ParsableTypeName[]>;
+export type ParsableDefinition = WrapParsable<ParsableTypeName> | Parsable<readonly ParsableTypeName[]>;
