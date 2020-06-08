@@ -19,6 +19,7 @@ import { HelpCb } from './callbacks/HelpCb';
 export class Command {
 
     private constructor(
+        public readonly filepath: string | null,
         public readonly name: string,
         public readonly aliases: readonly string[],
         public readonly examples: readonly string[],
@@ -39,11 +40,15 @@ export class Command {
         public readonly deleteMessage: boolean,
     ) { }
 
-    static build<T extends CommandDefinition>(commandSet: CommandSet, data: CommandData<T>): Command {
-        return Command._build(commandSet, data, null, undefined);
+    /** @internal */
+    static load(filepath: string, commandSet: CommandSet): Command {
+        const module = require(filepath);
+        if (!module.default) throw new Error("Command data must be exported as default.");
+        return Command._build(filepath, commandSet, module.default, null, undefined);
     }
 
     private static _build<T extends CommandDefinition>(
+        filepath: string | null,
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
@@ -55,6 +60,7 @@ export class Command {
 
         const subs = new CommandCollection();
         const cmd = new Command(
+            filepath,
             data.name,
             data.def.aliases ?? [],
             data.def.examples ?? [],
@@ -82,6 +88,7 @@ export class Command {
 
         for (const subName in data.subs)
             subs.add(Command._build(
+                null,
                 commandSet,
                 data.subs[subName],
                 cmd,

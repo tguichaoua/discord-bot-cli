@@ -1,11 +1,13 @@
 import { Message, Guild, GuildMember } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
-import { CommandDefinition } from "../definition/CommandDefinition";
+import { CommandDefinition, CommandSettings } from "../definition/CommandDefinition";
 import { ParsableTypeOf } from "../ParsableType";
 import { ParseOptions } from "../ParseOptions";
 
-export type CommandExecutor<T extends CommandDefinition = CommandDefinition> =
+type IsGuildOnly<S extends CommandSettings> = S["guildOnly"] extends true ? never : null;
+
+export type CommandExecutor<T extends CommandDefinition = CommandDefinition, S extends CommandSettings = {}> =
     (
         args: { readonly [name in keyof T["args"]]: (
             ParsableTypeOf<NonNullable<T["args"]>[name]["type"]>
@@ -22,11 +24,11 @@ export type CommandExecutor<T extends CommandDefinition = CommandDefinition> =
         others: {
             readonly rest: string[];
             readonly message: Message & {
-                readonly guild: Guild | (T["guildOnly"] extends true ? never : null);
-                readonly member: GuildMember | (T["guildOnly"] extends true ? never : null);
+                readonly guild: Guild | IsGuildOnly<S>;
+                readonly member: GuildMember | IsGuildOnly<S>;
             };
-            readonly guild: Guild | (T["guildOnly"] extends true ? never : null);
-            readonly member: GuildMember | (T["guildOnly"] extends true ? never : null);
+            readonly guild: Guild | IsGuildOnly<S>;
+            readonly member: GuildMember | IsGuildOnly<S>;
             readonly options: ParseOptions;
             readonly commandSet: CommandSet;
         }

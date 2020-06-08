@@ -39,6 +39,9 @@ export type CommandDefinition = {
 
     /** If set to true, undefined inheritable properties are inherited from parent command. (default is true). */
     readonly inherit?: boolean;
+} & CommandSettings;
+
+export type CommandSettings = {
     /** If set to true, this command is not loaded. (default is false). [inheritable] */
     readonly ignore?: boolean;
     /** If set to true, only user registred as dev via `ParseCommand.devIDs` can execute, get help or list this command. (default is false). [inheritable] */
@@ -48,4 +51,3 @@ export type CommandDefinition = {
     /** If set to true, the command message will be deleted after command execution. */
     readonly deleteMessage?: boolean;
 }
-
