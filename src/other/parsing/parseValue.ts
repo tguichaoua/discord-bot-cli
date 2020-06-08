@@ -9,95 +9,92 @@ const ID_PATTERN = /^\d{17,21}$/;
  * Return undefined if parse fail.
 */
 export function parseValue(parseData: ParsableDefinition, message: Message, argument: string): { value: ParsableType | undefined, message?: string } {
-    let value = undefined;
+
+    let value: ParsableType | undefined;
+    if (Array.isArray(parseData.type)) {
+        for (const t of parseData.type) {
+            value = parse(t, argument, message);
+            if (value !== undefined) break;
+        }
+    } else {
+        value = parse(parseData.type, argument, message);
+    }
+
+    if (value === undefined) return { value: undefined };
+    const validation = parseData.validator ? (parseData.validator as (o: any) => boolean | string)(value) : undefined;
+
+    if (validation === true || validation === undefined) return { value };
+    return { value: undefined, message: typeof validation === "string" ? validation : undefined };
+}
+
+function parse(type: ParsableType, str: string, message: Message): ParsableType | undefined {
 
     function resolveChannel(type: keyof typeof ChannelType) {
-        const ch = message.client.channels.resolve(argument);
+        const ch = message.client.channels.resolve(str);
         if (ch && ch.type === type)
             return ch;
         return undefined;
     }
 
-    switch (parseData.type) {
+    switch (type) {
         case "string":
-            value = argument;
-            break;
+            return str;
         case "integer":
-            value = parseInt(argument);
-            break;
+            return parseInt(str);
         case "float":
-            value = parseFloat(argument);
-            break;
+            return parseFloat(str);
         case "boolean":
-            switch (argument.toLocaleLowerCase()) {
+            switch (str.toLocaleLowerCase()) {
                 case "true":
                 case "1":
-                    value = true;
-                    break;
+                    return true;
                 case "false":
                 case "0":
-                    value = false;
-                    break;
+                    return false;
             }
             break;
 
         case "user":
-            const user = MessageMentions.USERS_PATTERN.exec(argument);
+            const user = MessageMentions.USERS_PATTERN.exec(str);
             MessageMentions.USERS_PATTERN.lastIndex = 0;
-            if (user) value = message.mentions.users.get(user[1]);
-            else if (ID_PATTERN.test(argument)) value = message.client.users.resolve(argument) ?? undefined;
-            break;
+            if (user) return message.mentions.users.get(user[1]);
+            else if (ID_PATTERN.test(str)) return message.client.users.resolve(str) ?? undefined;
 
         case "role":
-            const role = MessageMentions.ROLES_PATTERN.exec(argument);
+            const role = MessageMentions.ROLES_PATTERN.exec(str);
             MessageMentions.ROLES_PATTERN.lastIndex = 0;
-            if (role) value = message.mentions.roles.get(role[1]);
-            else if (ID_PATTERN.test(argument)) value = message.guild?.roles?.resolve(argument) ?? undefined;
-            break;
+            if (role) return message.mentions.roles.get(role[1]);
+            else if (ID_PATTERN.test(str)) return message.guild?.roles?.resolve(str) ?? undefined;
 
         case "channel":
-            if (ID_PATTERN.test(argument)) value = message.client.channels.resolve(argument) ?? undefined;
-            break;
+            if (ID_PATTERN.test(str)) return message.client.channels.resolve(str) ?? undefined;
 
         case "guild channel":
-            if (ID_PATTERN.test(argument)) {
-                const ch = message.client.channels.resolve(argument);
+            if (ID_PATTERN.test(str)) {
+                const ch = message.client.channels.resolve(str);
                 if (ch && ch.type !== "dm" && ch.type !== "unknown" && ch.type !== "group")
-                    value = ch;
+                    return ch;
             }
-            break;
 
         case "dm channel":
-            if (ID_PATTERN.test(argument)) value = resolveChannel("dm");
-            break;
+            if (ID_PATTERN.test(str)) return resolveChannel("dm");
 
         case "voice channel":
-            if (ID_PATTERN.test(argument)) value = resolveChannel("voice");
-            break;
+            if (ID_PATTERN.test(str)) return resolveChannel("voice");
 
         case "category channel":
-            if (ID_PATTERN.test(argument)) value = resolveChannel("category");
-            break;
+            if (ID_PATTERN.test(str)) return resolveChannel("category");
 
         case "news channel":
-            if (ID_PATTERN.test(argument)) value = resolveChannel("news");
-            break;
+            if (ID_PATTERN.test(str)) return resolveChannel("news");
 
         case "store channel":
-            if (ID_PATTERN.test(argument)) value = resolveChannel("store");
-            break;
+            if (ID_PATTERN.test(str)) return resolveChannel("store");
 
         case "text channel":
-            const channel = MessageMentions.CHANNELS_PATTERN.exec(argument);
+            const channel = MessageMentions.CHANNELS_PATTERN.exec(str);
             MessageMentions.CHANNELS_PATTERN.lastIndex = 0;
-            if (channel) value = message.mentions.channels.get(channel[1]);
-            else if (ID_PATTERN.test(argument)) value = resolveChannel("text");
-            break;
+            if (channel) return message.mentions.channels.get(channel[1]);
+            else if (ID_PATTERN.test(str)) return resolveChannel("text");
     }
-
-    if (value === undefined) return { value };
-    const validation = parseData.validator ? (parseData.validator as (o: any) => boolean | string)(value) : undefined;
-
-    if (validation === true || validation === undefined) return { value };
-    return { value: undefined, message: typeof validation === "string" ? validation : undefined };
 }
