@@ -9,6 +9,7 @@ import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
+import { ArrayUtils } from "../utils/array";
 
 export namespace HelpUtils {
 
@@ -92,7 +93,7 @@ export namespace HelpUtils {
     namespace Arg {
         export function getRawHelp(arg: ArgDefinition, name: string, localization: CommandLocalization, typeNamesLocalization: TypeNameLocalization): ArgumentRawHelp {
             const argLocalization = (localization.args ?? {})[name] ?? {};
-            const typeNames = Array.isArray(arg.type) ? arg.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[arg.type]];
+            const typeNames = ArrayUtils.isArray(arg.type) ? arg.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[arg.type]];
             const localizedName = argLocalization.name ?? name;
             const description = argLocalization.description ?? arg.description ?? "";
             let usageString: string;
@@ -110,7 +111,7 @@ export namespace HelpUtils {
     namespace Flag {
         export function getRawHelp(flag: FlagDefinition, name: string, localization: CommandLocalization, typeNamesLocalization: TypeNameLocalization): FlagRawHelp {
             const flagLocalization = (localization.flags ?? {})[name] ?? {};
-            const typeNames = Array.isArray(flag.type) ? flag.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[flag.type]];
+            const typeNames = ArrayUtils.isArray(flag.type) ? flag.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[flag.type]];
             const localizedName = flagLocalization.name ?? name;
             const description = flagLocalization.description ?? flag.description ?? "";
             const longUsageString = `--${name}`;
