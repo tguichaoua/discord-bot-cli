@@ -41,9 +41,11 @@ function parse(type: ParsableType, str: string, message: Message): ParsableType 
         case "string":
             return str;
         case "integer":
-            return parseInt(str);
+            const i = parseInt(str);
+            return isNaN(i) ? undefined : i;
         case "float":
-            return parseFloat(str);
+            const f = parseFloat(str);
+            return isNaN(f) ? undefined : f;
         case "boolean":
             switch (str.toLocaleLowerCase()) {
                 case "true":
