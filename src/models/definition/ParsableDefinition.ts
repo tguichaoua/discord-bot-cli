@@ -1,17 +1,17 @@
 import { ParsableTypeName, ParsableTypeOf } from "../ParsableType";
 
-interface Parsable<TypeName extends ParsableTypeName> {
+interface Parsable<TypeNames extends ParsableTypeName | ParsableTypeName[]> {
     /** Provide a description. */
     readonly description?: string;
     /** The type in which is parsed the value. */
-    readonly type: TypeName;
+    readonly type: TypeNames;
     /** Used to check if parsed value satisfy certain conditions. */
-    readonly validator?: (value: ParsableTypeOf<TypeName>) => boolean | string;
+    readonly validator?: (value: ParsableTypeOf<TypeNames>) => boolean | string;
     /** The default value if there is no value to parse. */
-    readonly defaultValue?: ParsableTypeOf<TypeName>;
+    readonly defaultValue?: ParsableTypeOf<TypeNames>;
 }
 
 // I have not found a better solution.
 type WrapParsable<T extends ParsableTypeName> = T extends any ? Parsable<T> : never;
 
-export type ParsableDefinition = WrapParsable<ParsableTypeName>;
+export type ParsableDefinition = WrapParsable<ParsableTypeName> | Parsable<ParsableTypeName[]>;
