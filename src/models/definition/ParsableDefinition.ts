@@ -1,6 +1,6 @@
 import { ParsableTypeName, ParsableTypeOf } from "../ParsableType";
 
-interface Parsable<TypeNames extends ParsableTypeName | ParsableTypeName[]> {
+interface Parsable<TypeNames extends ParsableTypeName | readonly ParsableTypeName[]> {
     /** Provide a description. */
     readonly description?: string;
     /** The type in which is parsed the value. */

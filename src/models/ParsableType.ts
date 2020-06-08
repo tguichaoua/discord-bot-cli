@@ -8,7 +8,7 @@ export type ParsableType = string | boolean | number |
     User | Role |
     Channel | GuildChannel | DMChannel | TextChannel | VoiceChannel | CategoryChannel | NewsChannel | StoreChannel;
 
-export type ParsableTypeOf<Names extends ParsableTypeName | ParsableTypeName[]> =
+export type ParsableTypeOf<Names extends ParsableTypeName | readonly ParsableTypeName[]> =
     Names extends ParsableTypeName ? TypeName2Type<Names> : TypeName2Type<Exclude<Names, ParsableTypeName>[number]>;
 
 type TypeName2Type<Name extends ParsableTypeName> =
