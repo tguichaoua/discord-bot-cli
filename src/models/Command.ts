@@ -17,6 +17,7 @@ import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 import { HelpCb } from './callbacks/HelpCb';
 import { parseValue } from '../other/parsing/parseValue';
 import { ParsableType } from './ParsableType';
+import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
 
 export class Command {
 
@@ -36,6 +37,7 @@ export class Command {
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
         private readonly _help: HelpCb | undefined,
+        public readonly throttling: ThrottlingDefinition | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
@@ -82,6 +84,7 @@ export class Command {
             data.executor,
             data.def.canUse,
             data.def.help ?? parentHelp,
+            data.def.throttling,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),

@@ -1,6 +1,6 @@
 export interface ThrottlingDefinition {
     /** Number of times the command can be used. */
-    count: number;
+    readonly count: number;
     /** Duration after which the usage count is reset. */
-    duration: number;
+    readonly duration: number;
 }
