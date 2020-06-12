@@ -3,6 +3,7 @@ import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
 import { HelpCb } from "../callbacks/HelpCb";
+import { ThrottlingDefinition } from "./ThrottlingDefinition";
 
 export type CommandDefinition = {
     /** alias names for this command. */
@@ -17,6 +18,8 @@ export type CommandDefinition = {
     readonly flags?: { readonly [name: string]: FlagDefinition };
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
+
+    readonly throttling?: ThrottlingDefinition;
 
     /** Determine if a user can use this commands.
      * If the result is true, the command is executed.
