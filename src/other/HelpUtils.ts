@@ -40,7 +40,8 @@ export namespace HelpUtils {
                 const name = commandLocalization?.rest?.name ?? command.rest.name;
                 const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
                 const usageString = `[...${name}]`;
-                rest = { name, description, usageString };
+                const typeName = localization.typeNames[command.rest.type];
+                rest = { name, description, usageString, typeName };
             }
 
             const tags: string[] = [];
