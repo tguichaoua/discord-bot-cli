@@ -1,1 +1,7 @@
-export type RestDefinition = { name: string, description?: string };
+import { ParsableTypeName } from "../ParsableType";
+
+export type RestDefinition = {
+    type: ParsableTypeName;
+    name: string;
+    description?: string;
+}
