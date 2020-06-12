@@ -41,8 +41,8 @@ export namespace HelpUtils {
                 const name = commandLocalization?.rest?.name ?? command.rest.name;
                 const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
                 const usageString = `[...${name}]`;
-                const typeName = localization.typeNames[command.rest.type];
-                rest = { name, description, usageString, typeName };
+                const typeNames = ArrayUtils.isArray(command.rest.type) ? command.rest.type.map(t => localization.typeNames[t]) : [localization.typeNames[command.rest.type]];
+                rest = { name, description, usageString, typeNames };
             }
 
             const tags: string[] = [];
@@ -71,7 +71,7 @@ export namespace HelpUtils {
                 .join("\n")
                 + (
                     (rawHelp.rest) ?
-                        `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, { type: rawHelp.rest.typeName })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
+                        `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, { type: rawHelp.rest.typeNames.join(" | ") })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
                         : ""
                 );
             if (args !== "") embed.addField(localization.help.arguments, args, true);
