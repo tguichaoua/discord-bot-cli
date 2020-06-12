@@ -21,6 +21,9 @@ import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
 
 export class Command {
 
+    private _usageCount = 0;
+    private _usageTimeout: NodeJS.Timeout | undefined = undefined;
+
     private constructor(
         public readonly filepath: string | null,
         public readonly name: string,
@@ -139,8 +142,16 @@ export class Command {
         return true;
     }
 
+    resetThrottling() {
+        if (this._usageTimeout) clearTimeout(this._usageTimeout);
+        this._usageTimeout = undefined;
+        this._usageCount = 0;
+    }
+
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
+
+        if (this.throttling && this._usageCount >= this.throttling.count) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
@@ -153,6 +164,11 @@ export class Command {
                 const parsed = parseValue(this.rest, message, e);
                 if (parsed.value !== undefined) rest.push(parsed.value);
             }
+        }
+
+        if (this.throttling) {
+            this._usageCount++;
+            if (!this._usageTimeout) this._usageTimeout = setTimeout(() => this.resetThrottling(), this.throttling.duration);
         }
 
         return await this._executor(
