@@ -15,6 +15,8 @@ import { CommandResultError } from './CommandResultError';
 import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
 import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 import { HelpCb } from './callbacks/HelpCb';
+import { parseValue } from '../other/parsing/parseValue';
+import { ParsableType } from './ParsableType';
 
 export class Command {
 
@@ -142,17 +144,25 @@ export class Command {
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         const args = parseArgs(message, flags.args, this.args);
 
+        const rest: ParsableType[] = [];
+        if (this.rest) {
+            for (let e of args.rest) {
+                const parsed = parseValue(this.rest, message, e);
+                if (parsed.value !== undefined) rest.push(parsed.value);
+            }
+        }
+
         return await this._executor(
             Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
-                rest: args.rest,
+                rest,
                 message,
                 guild: message.guild,
                 member: message.member,
                 options,
                 commandSet
-            }
+            } as any
         );
     }
 }

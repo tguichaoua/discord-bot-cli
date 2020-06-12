@@ -10,6 +10,7 @@ import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { ArrayUtils } from "../utils/array";
+import { template } from "../utils/template";
 
 export namespace HelpUtils {
 
@@ -40,7 +41,8 @@ export namespace HelpUtils {
                 const name = commandLocalization?.rest?.name ?? command.rest.name;
                 const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
                 const usageString = `[...${name}]`;
-                rest = { name, description, usageString };
+                const typeNames = ArrayUtils.isArray(command.rest.type) ? command.rest.type.map(t => localization.typeNames[t]) : [localization.typeNames[command.rest.type]];
+                rest = { name, description, usageString, typeNames };
             }
 
             const tags: string[] = [];
@@ -66,7 +68,12 @@ export namespace HelpUtils {
 
             const args = rawHelp.args
                 .map(a => `\`${a.name}\` *${a.typeNames.join(" | ")}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
-                .join("\n");
+                .join("\n")
+                + (
+                    (rawHelp.rest) ?
+                        `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, { type: rawHelp.rest.typeNames.join(" | ") })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
+                        : ""
+                );
             if (args !== "") embed.addField(localization.help.arguments, args, true);
 
             const flags = rawHelp.flags
@@ -76,7 +83,7 @@ export namespace HelpUtils {
 
             const subs = rawHelp.subs
                 .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
-                .join("\n")
+                .join("\n");
             if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
 
             const aliases = rawHelp.aliases

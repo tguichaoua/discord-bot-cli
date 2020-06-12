@@ -1,6 +1,6 @@
 import { CommandDefinition } from "../models/definition/CommandDefinition";
 import { CommandData } from "../models/CommandData";
-import { ParsableType, ParsableTypeName } from "../models/ParsableType";
+import { ParsableTypeName } from "../models/ParsableType";
 
 export function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T> {
     let subs = {} as any;
@@ -19,6 +19,9 @@ export function makeCommand<T extends CommandDefinition>(name: string, definitio
         if (Array.isArray(t))
             t.sort(sortParsableType);
     }
+
+    if (definition.rest && Array.isArray(definition.rest.type))
+        definition.rest.type.sort(sortParsableType);
 
     return {
         def: definition,

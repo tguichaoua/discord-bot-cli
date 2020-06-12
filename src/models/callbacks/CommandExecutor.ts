@@ -24,7 +24,7 @@ export type CommandExecutor<T extends CommandDefinition = CommandDefinition, S e
         )
         },
         others: {
-            readonly rest: string[];
+            readonly rest: undefined extends T["rest"] ? never : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
             readonly message: Message & {
                 readonly guild: Guild | IsGuildOnly<S>;
                 readonly member: GuildMember | IsGuildOnly<S>;
