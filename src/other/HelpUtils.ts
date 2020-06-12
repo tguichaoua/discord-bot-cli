@@ -10,6 +10,7 @@ import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { ArrayUtils } from "../utils/array";
+import { template } from "../utils/template";
 
 export namespace HelpUtils {
 
@@ -70,7 +71,7 @@ export namespace HelpUtils {
                 .join("\n")
                 + (
                     (rawHelp.rest) ?
-                        `\n\`${rawHelp.rest.name}\` *${rawHelp.rest.typeName}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
+                        `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, { type: rawHelp.rest.typeName })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
                         : ""
                 );
             if (args !== "") embed.addField(localization.help.arguments, args, true);

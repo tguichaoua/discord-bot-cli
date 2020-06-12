@@ -16,6 +16,7 @@ export interface Localization {
         examples: string;
         default: string;
         commandNotFound: string;
+        restTypeName: string;
     };
     list: {
         title: string;
