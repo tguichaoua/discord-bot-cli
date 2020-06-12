@@ -64,7 +64,7 @@ export namespace HelpUtils {
                 ));
 
             const usageString = prefix + rawHelp.fullName + (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField(localization.help.usage, `**\`${usageString}\`**`, false);
+            embed.addField(localization.help.usage, `**\`${usageString}\`**\n\n${localization.help.argUsageHint}`, false);
 
             const args = rawHelp.args
                 .map(a => `\`${a.name}\` *${a.typeNames.join(" | ")}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
