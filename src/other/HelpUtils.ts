@@ -67,7 +67,12 @@ export namespace HelpUtils {
 
             const args = rawHelp.args
                 .map(a => `\`${a.name}\` *${a.typeNames.join(" | ")}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
-                .join("\n");
+                .join("\n")
+                + (
+                    (rawHelp.rest) ?
+                        `\n\`${rawHelp.rest.name}\` *${rawHelp.rest.typeName}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
+                        : ""
+                );
             if (args !== "") embed.addField(localization.help.arguments, args, true);
 
             const flags = rawHelp.flags
@@ -77,7 +82,7 @@ export namespace HelpUtils {
 
             const subs = rawHelp.subs
                 .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
-                .join("\n")
+                .join("\n");
             if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
 
             const aliases = rawHelp.aliases
