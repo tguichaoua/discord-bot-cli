@@ -16,12 +16,12 @@
         "store channel": "store channel"
     },
     "help": {
-        "usage": "usage",
-        "arguments": "arguments",
-        "flags": "flags",
-        "subCommands": "subCommands",
-        "aliases": "aliases",
-        "examples": "examples",
+        "usage": "Usage",
+        "arguments": "Arguments",
+        "flags": "Flags",
+        "subCommands": "Sub commands",
+        "aliases": "Aliases",
+        "examples": "Examples",
         "default": "Type `{{prefix}}list` to get a list of all commands or `{{prefix}}help <command name>` to get help on a command.",
         "commandNotFound": "The command/sub-command `{{command}}` cannot be found.",
         "restTypeName": "list of {{type}}",
