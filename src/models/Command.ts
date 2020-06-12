@@ -16,6 +16,7 @@ import { ReadonlyCommandCollection, CommandCollection } from './CommandCollectio
 import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 import { HelpCb } from './callbacks/HelpCb';
 import { parseValue } from '../other/parsing/parseValue';
+import { ParsableType } from './ParsableType';
 
 export class Command {
 
@@ -143,11 +144,11 @@ export class Command {
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         const args = parseArgs(message, flags.args, this.args);
 
-        const rest: any[] = [];
+        const rest: ParsableType[] = [];
         if (this.rest) {
             for (let e of args.rest) {
                 const parsed = parseValue(this.rest, message, e);
-                if (parsed !== undefined) rest.push(parsed);
+                if (parsed.value !== undefined) rest.push(parsed.value);
             }
         }
 
