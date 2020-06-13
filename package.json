@@ -10,7 +10,6 @@
     "scripts": {
         "v": "npm --no-git-tag-version version",
         "docs": "typedoc ./src/",
-        "deldocs": "rm -rf ./docs/v4/",
         "build": "tsc",
         "clean": "rm -rf ./dist",
         "rebuild": "npm run clean && npm run build",
