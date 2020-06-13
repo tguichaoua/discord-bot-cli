@@ -36,7 +36,7 @@ export class Throttler {
     add(): boolean {
         const reachedLimit = this.throttled;
         this._current++;
-        if (!this._timeout) this._timeout = setTimeout(() => this.reset(), this.duration);
+        if (!this._timeout) this._timeout = setTimeout(() => this.reset(), this.duration * 1000);
         return reachedLimit;
     }
 }
