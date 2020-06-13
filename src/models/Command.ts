@@ -22,7 +22,7 @@ import { Throttler } from './Throttler';
 
 export class Command {
 
-    private _throttler?: Throttler;
+    private readonly _throttler: Throttler | null | undefined;
 
     private constructor(
         public readonly filepath: string | null,
@@ -40,14 +40,14 @@ export class Command {
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
         private readonly _help: HelpCb | undefined,
-        private readonly _throttling: ThrottlingDefinition | undefined,
+        throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
         public readonly deleteMessage: boolean,
     ) {
-        if (_throttling) this._throttler = new Throttler(_throttling.count, _throttling.duration);
+        this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
     }
 
     /** @internal */
@@ -112,6 +112,7 @@ export class Command {
     // === Getter =====================================================
 
     get throttler(): Throttler | undefined {
+        if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
         if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
         return undefined;

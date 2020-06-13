@@ -19,7 +19,7 @@ export type CommandDefinition = {
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
 
-    readonly throttling?: ThrottlingDefinition;
+    readonly throttling?: ThrottlingDefinition | null;
     /** If set to true, sub-commands while use this command's throttler. (default is true) */
     readonly useThrottlerForSubs?: boolean;
 
