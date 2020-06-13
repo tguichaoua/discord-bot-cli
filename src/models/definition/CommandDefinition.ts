@@ -20,6 +20,8 @@ export type CommandDefinition = {
     readonly rest?: RestDefinition;
 
     readonly throttling?: ThrottlingDefinition;
+    /** If set to true, sub-commands while use this command's throttler. (default is true) */
+    readonly useThrottlerForSubs?: boolean;
 
     /** Determine if a user can use this commands.
      * If the result is true, the command is executed.

@@ -41,6 +41,7 @@ export class Command {
         private readonly _canUse: CanUseCommandCb | undefined,
         private readonly _help: HelpCb | undefined,
         private readonly _throttling: ThrottlingDefinition | undefined,
+        private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
@@ -90,6 +91,7 @@ export class Command {
             data.def.canUse,
             data.def.help ?? parentHelp,
             data.def.throttling,
+            data.def.useThrottlerForSubs ?? true,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
@@ -109,8 +111,10 @@ export class Command {
 
     // === Getter =====================================================
 
-    get throttler() {
-        return this._throttler;
+    get throttler(): Throttler | undefined {
+        if (this._throttler) return this._throttler;
+        if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
+        return undefined;
     }
 
     /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
@@ -151,7 +155,7 @@ export class Command {
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
-        if (this._throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
@@ -166,7 +170,7 @@ export class Command {
             }
         }
 
-        this._throttler?.add();
+        this.throttler?.add();
 
         return await this._executor(
             Object.fromEntries(args.argValues),
