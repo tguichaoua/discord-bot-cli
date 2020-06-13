@@ -17,8 +17,12 @@ import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
 import { HelpCb } from './callbacks/HelpCb';
 import { parseValue } from '../other/parsing/parseValue';
 import { ParsableType } from './ParsableType';
+import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
+import { Throttler } from './Throttler';
 
 export class Command {
+
+    private readonly _throttler: Throttler | null | undefined;
 
     private constructor(
         public readonly filepath: string | null,
@@ -36,11 +40,15 @@ export class Command {
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
         private readonly _help: HelpCb | undefined,
+        throttling: ThrottlingDefinition | null | undefined,
+        private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
         public readonly deleteMessage: boolean,
-    ) { }
+    ) {
+        this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
+    }
 
     /** @internal */
     static load(filepath: string, commandSet: CommandSet): Command {
@@ -82,6 +90,8 @@ export class Command {
             data.executor,
             data.def.canUse,
             data.def.help ?? parentHelp,
+            data.def.throttling,
+            data.def.useThrottlerForSubs ?? true,
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
@@ -100,6 +110,13 @@ export class Command {
     }
 
     // === Getter =====================================================
+
+    get throttler(): Throttler | undefined {
+        if (this._throttler === null) return undefined;
+        if (this._throttler) return this._throttler;
+        if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
+        return undefined;
+    }
 
     /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
     getParents() {
@@ -139,6 +156,8 @@ export class Command {
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
+        if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
+
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
         const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
@@ -151,6 +170,8 @@ export class Command {
                 if (parsed.value !== undefined) rest.push(parsed.value);
             }
         }
+
+        this.throttler?.add();
 
         return await this._executor(
             Object.fromEntries(args.argValues),
