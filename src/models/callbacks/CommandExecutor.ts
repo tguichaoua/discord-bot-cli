@@ -4,6 +4,7 @@ import { CommandSet } from "../CommandSet";
 import { CommandDefinition, CommandSettings } from "../definition/CommandDefinition";
 import { ParsableTypeOf } from "../ParsableType";
 import { ParseOptions } from "../ParseOptions";
+import { Command } from "../Command";
 
 type IsGuildOnly<S extends CommandSettings> = S["guildOnly"] extends true ? never : null;
 
@@ -24,7 +25,7 @@ export type CommandExecutor<T extends CommandDefinition = CommandDefinition, S e
         )
         },
         others: {
-            readonly rest: undefined extends T["rest"] ? never : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
+            readonly rest: undefined extends T["rest"] ? void : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
             readonly message: Message & {
                 readonly guild: Guild | IsGuildOnly<S>;
                 readonly member: GuildMember | IsGuildOnly<S>;
@@ -33,5 +34,6 @@ export type CommandExecutor<T extends CommandDefinition = CommandDefinition, S e
             readonly member: GuildMember | IsGuildOnly<S>;
             readonly options: ParseOptions;
             readonly commandSet: CommandSet;
+            readonly command: Command;
         }
     ) => any | Promise<any>;

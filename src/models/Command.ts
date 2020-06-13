@@ -177,13 +177,14 @@ export class Command {
             Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
-                rest,
+                rest: rest as any,
                 message,
                 guild: message.guild,
                 member: message.member,
                 options,
-                commandSet
-            } as any
+                commandSet,
+                command: this,
+            }
         );
     }
 }
