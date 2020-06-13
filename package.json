@@ -1,6 +1,6 @@
 {
     "name": "discord-bot-cli",
-    "version": "4.2.0",
+    "version": "5.0.0",
     "description": "An easy way to build a command-based discord bot.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -10,7 +10,6 @@
     "scripts": {
         "v": "npm --no-git-tag-version version",
         "docs": "typedoc ./src/",
-        "deldocs": "rm -rf ./docs/v4/",
         "build": "tsc",
         "clean": "rm -rf ./dist",
         "rebuild": "npm run clean && npm run build",
