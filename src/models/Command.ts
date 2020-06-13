@@ -18,11 +18,11 @@ import { HelpCb } from './callbacks/HelpCb';
 import { parseValue } from '../other/parsing/parseValue';
 import { ParsableType } from './ParsableType';
 import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
+import { Throttler } from './Throttler';
 
 export class Command {
 
-    private _usageCount = 0;
-    private _usageTimeout: NodeJS.Timeout | undefined = undefined;
+    private _throttler?: Throttler;
 
     private constructor(
         public readonly filepath: string | null,
@@ -40,12 +40,14 @@ export class Command {
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
         private readonly _help: HelpCb | undefined,
-        public readonly throttling: ThrottlingDefinition | undefined,
+        private readonly _throttling: ThrottlingDefinition | undefined,
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
         public readonly deleteMessage: boolean,
-    ) { }
+    ) {
+        if (_throttling) this._throttler = new Throttler(_throttling.count, _throttling.duration);
+    }
 
     /** @internal */
     static load(filepath: string, commandSet: CommandSet): Command {
@@ -107,6 +109,10 @@ export class Command {
 
     // === Getter =====================================================
 
+    get throttler() {
+        return this._throttler;
+    }
+
     /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
     getParents() {
         const parents: Command[] = [];
@@ -142,16 +148,10 @@ export class Command {
         return true;
     }
 
-    resetThrottling() {
-        if (this._usageTimeout) clearTimeout(this._usageTimeout);
-        this._usageTimeout = undefined;
-        this._usageCount = 0;
-    }
-
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
 
-        if (this.throttling && this._usageCount >= this.throttling.count) throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (this._throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
@@ -166,10 +166,7 @@ export class Command {
             }
         }
 
-        if (this.throttling) {
-            this._usageCount++;
-            if (!this._usageTimeout) this._usageTimeout = setTimeout(() => this.resetThrottling(), this.throttling.duration);
-        }
+        this._throttler?.add();
 
         return await this._executor(
             Object.fromEntries(args.argValues),
