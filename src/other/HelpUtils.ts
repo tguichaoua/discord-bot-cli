@@ -9,6 +9,8 @@ import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
+import { ArrayUtils } from "../utils/array";
+import { template } from "../utils/template";
 
 export namespace HelpUtils {
 
@@ -39,7 +41,8 @@ export namespace HelpUtils {
                 const name = commandLocalization?.rest?.name ?? command.rest.name;
                 const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
                 const usageString = `[...${name}]`;
-                rest = { name, description, usageString };
+                const typeNames = ArrayUtils.isArray(command.rest.type) ? command.rest.type.map(t => localization.typeNames[t]) : [localization.typeNames[command.rest.type]];
+                rest = { name, description, usageString, typeNames };
             }
 
             const tags: string[] = [];
@@ -61,21 +64,26 @@ export namespace HelpUtils {
                 ));
 
             const usageString = prefix + rawHelp.fullName + (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) + (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField(localization.help.usage, `**\`${usageString}\`**`, false);
+            embed.addField(localization.help.usage, `**\`${usageString}\`**\n\n${localization.help.argUsageHint}`, false);
 
             const args = rawHelp.args
-                .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
-                .join("\n");
+                .map(a => `\`${a.name}\` *${a.typeNames.join(" | ")}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
+                .join("\n")
+                + (
+                    (rawHelp.rest) ?
+                        `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, { type: rawHelp.rest.typeNames.join(" | ") })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
+                        : ""
+                );
             if (args !== "") embed.addField(localization.help.arguments, args, true);
 
             const flags = rawHelp.flags
-                .map(f => `\`--${f.name}\`` + (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") + ` *${f.typeName}*` + (f.description !== "" ? `\n⮩  ${f.description}` : ""))
+                .map(f => `\`--${f.name}\`` + (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") + ` *${f.typeNames.join(" | ")}*` + (f.description !== "" ? `\n⮩  ${f.description}` : ""))
                 .join("\n");
             if (flags !== "") embed.addField(localization.help.flags, flags, true);
 
             const subs = rawHelp.subs
                 .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
-                .join("\n")
+                .join("\n");
             if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
 
             const aliases = rawHelp.aliases
@@ -90,9 +98,9 @@ export namespace HelpUtils {
     }
 
     namespace Arg {
-        export function getRawHelp(arg: ArgDefinition, name: string, localization: CommandLocalization, typeNames: TypeNameLocalization): ArgumentRawHelp {
+        export function getRawHelp(arg: ArgDefinition, name: string, localization: CommandLocalization, typeNamesLocalization: TypeNameLocalization): ArgumentRawHelp {
             const argLocalization = (localization.args ?? {})[name] ?? {};
-            const typeName = typeNames[arg.type];
+            const typeNames = ArrayUtils.isArray(arg.type) ? arg.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[arg.type]];
             const localizedName = argLocalization.name ?? name;
             const description = argLocalization.description ?? arg.description ?? "";
             let usageString: string;
@@ -103,20 +111,20 @@ export namespace HelpUtils {
                 usageString = `<${localizedName}>`;
             }
 
-            return { arg, typeName, name, localizedName, description, usageString };
+            return { arg, typeNames: typeNames, name, localizedName, description, usageString };
         }
     }
 
     namespace Flag {
-        export function getRawHelp(flag: FlagDefinition, name: string, localization: CommandLocalization, typeNames: TypeNameLocalization): FlagRawHelp {
+        export function getRawHelp(flag: FlagDefinition, name: string, localization: CommandLocalization, typeNamesLocalization: TypeNameLocalization): FlagRawHelp {
             const flagLocalization = (localization.flags ?? {})[name] ?? {};
-            const typeName = typeNames[flag.type];
+            const typeNames = ArrayUtils.isArray(flag.type) ? flag.type.map(t => typeNamesLocalization[t]) : [typeNamesLocalization[flag.type]];
             const localizedName = flagLocalization.name ?? name;
             const description = flagLocalization.description ?? flag.description ?? "";
             const longUsageString = `--${name}`;
             const shortUsageString = flag.shortcut ? `-${flag.shortcut}` : undefined;
 
-            return { flag, typeName, name, localizedName, description, longUsageString, shortUsageString };
+            return { flag, typeNames, name, localizedName, description, longUsageString, shortUsageString };
         }
     }
 }

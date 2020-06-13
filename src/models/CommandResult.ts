@@ -13,7 +13,7 @@ export type CommandResult =
         readonly error: any;
     } |
     {
-        readonly status: "no executor" | "guild only" | "dev only" | "unauthorized user";
+        readonly status: "no executor" | "guild only" | "dev only" | "unauthorized user" | "throttling";
         readonly command: Command;
     } |
     {
@@ -78,6 +78,9 @@ export namespace CommandResultUtils {
 
     /** @internal */
     export function unauthorizedUser(command: Command): CommandResult { return { status: "unauthorized user", command }; }
+
+    /** @internal */
+    export function throttling(command: Command): CommandResult { return { status: "throttling", command }; }
 
     /** @internal */
     export function notPrefixed(): CommandResult { return { status: "not prefixed" }; }
