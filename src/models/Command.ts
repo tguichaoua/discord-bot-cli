@@ -23,6 +23,7 @@ import { Throttler } from './Throttler';
 export class Command {
 
     private readonly _throttler: Throttler | null | undefined;
+    public readonly _throttlingAffectAdmin: boolean;
 
     private constructor(
         public readonly filepath: string | null,
@@ -48,6 +49,7 @@ export class Command {
         public readonly deleteMessage: boolean,
     ) {
         this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
+        this._throttlingAffectAdmin = throttling?.includeAdmin ?? false;
     }
 
     /** @internal */
@@ -171,7 +173,12 @@ export class Command {
             }
         }
 
-        this.throttler?.add();
+        if (
+            this.throttler &&
+            !options.devIDs.includes(message.author.id) &&
+            !(!this._throttlingAffectAdmin && message.member && message.member.permissions.has("ADMINISTRATOR"))
+        )
+            this.throttler.add();
 
         return await this._executor(
             Object.fromEntries(args.argValues),
