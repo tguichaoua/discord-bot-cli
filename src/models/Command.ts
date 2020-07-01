@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { Message, User, PermissionString, Guild } from 'discord.js';
 import { CommandSet } from "./CommandSet";
 import { ParseOptions } from './ParseOptions';
 import { CommandData } from './CommandData';
@@ -29,6 +29,7 @@ export class Command {
         public readonly filepath: string | null,
         public readonly name: string,
         public readonly aliases: readonly string[],
+        private readonly _clientPermissions: PermissionString[],
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -75,6 +76,7 @@ export class Command {
             filepath,
             data.name,
             data.def.aliases ?? [],
+            data.def.clientPermissions ?? [],
             data.def.examples ?? [],
             data.def.description ?? "",
             parent,
@@ -113,6 +115,8 @@ export class Command {
 
     // === Getter =====================================================
 
+    get clientPermissions() { return this._clientPermissions as readonly PermissionString[]; }
+
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
@@ -129,6 +133,11 @@ export class Command {
             parents.unshift(parent);
 
         return parents;
+    }
+
+    /** Return true if the client have required permission for this guild. */
+    hasClientPermissions(guild: Guild) {
+        return guild.me && guild.me.hasPermission(this._clientPermissions);
     }
 
     // =====================================================
