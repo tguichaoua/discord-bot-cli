@@ -19,6 +19,7 @@ import { parseValue } from '../other/parsing/parseValue';
 import { ParsableType } from './ParsableType';
 import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
 import { Throttler } from './Throttler';
+import { threadId } from 'worker_threads';
 
 export class Command {
 
@@ -166,6 +167,8 @@ export class Command {
 
     /** @internal */
     async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
+
+        if (message.guild && !this.hasClientPermissions(message.guild)) throw new CommandResultError(CommandResultUtils.clientPermissions(this));
 
         if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
 
