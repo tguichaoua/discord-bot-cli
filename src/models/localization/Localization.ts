@@ -14,6 +14,7 @@ export interface Localization {
         subCommands: string;
         aliases: string;
         examples: string;
+        bot_permissions: string;
         default: string;
         commandNotFound: string;
         restTypeName: string;
