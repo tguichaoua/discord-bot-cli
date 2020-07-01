@@ -1,3 +1,4 @@
+import { PermissionString } from "discord.js";
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
@@ -8,6 +9,8 @@ import { ThrottlingDefinition } from "./ThrottlingDefinition";
 export type CommandDefinition = {
     /** alias names for this command. */
     readonly aliases?: string[];
+    /** Define which permissions the client need to perform the command. */
+    readonly clientPermissions?: PermissionString[];
     /** A list of example for this command. */
     readonly examples?: string[];
     /** The description of this command. Used by help command. */
