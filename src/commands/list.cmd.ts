@@ -17,7 +17,13 @@ const cmd = makeCommand("list", {
 cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
 
     const raw = ListUtils.getRawListData(commandSet, options.localization);
-    const commands = options.devIDs.includes(message.author.id) ? raw.commands : raw.commands.filter(c => !c.command.devOnly);
+    const commands =
+        (
+            options.devIDs.includes(message.author.id) ?
+                raw.commands :
+                raw.commands.filter(c => !c.command.devOnly)
+        )
+            .filter(c => c.command.canUse(message.author, message) === true);
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")

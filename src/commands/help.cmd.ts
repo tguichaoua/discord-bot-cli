@@ -23,6 +23,7 @@ cmd.executor = async ({ }, { }, { rest, options, commandSet, message }) => {
         if (!command || args.length != 0)
             await reply(message, template(options.localization.help.commandNotFound, { command: rest.join(" ") }));
         else {
+            if (command.canUse(message.author, message) !== true) return;
             if (await command.help(message, options)) return;
             const embed = HelpUtils.Command.embedHelp(command, options.prefix, options.localization);
             await reply(message, { embed });
