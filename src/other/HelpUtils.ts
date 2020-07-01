@@ -92,7 +92,7 @@ export namespace HelpUtils {
 
             const clientPermissions = rawHelp.command.clientPermissions
                 .map(p => `\`${p}\``).join(" ");
-            if (clientPermissions !== "") embed.addField("", clientPermissions, false);
+            if (clientPermissions !== "") embed.addField(localization.help.bot_permissions, clientPermissions, false);
 
             const exemples = rawHelp.command.examples.map(e => `\`${e}\``).join("\n");
             if (exemples !== "") embed.addField(localization.help.examples, exemples, false);
