@@ -2,6 +2,7 @@
 .github/
 docs/
 src/
+test/
 node_modules/
 tsconfig.json
 typedoc.json
