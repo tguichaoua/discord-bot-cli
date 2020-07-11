@@ -47,9 +47,9 @@ export class CommandSet {
      * Load command from the given folder path.<br>
      * Command file must have the extension `.cmd.js`
      * @param commandDirPath - path to the folder where the commands are (relative to node entry point).
+     * @param includeTS - if set to true, file with `.cmd.ts` extension are also loaded. Usefull if you use `ts-node` (default is false)
      */
-    loadCommands(commandDirPath: string) {
-        console.log(commandDirPath);
+    loadCommands(commandDirPath: string, includeTS = false) {
         try {
             if (require.main)
                 commandDirPath = path.resolve(
@@ -58,7 +58,11 @@ export class CommandSet {
                 );
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
-                .filter((file) => file.endsWith(".cmd.js"));
+                .filter(
+                    (file) =>
+                        file.endsWith(".cmd.js") ||
+                        (includeTS && file.endsWith(".cmd.ts"))
+                );
             for (const file of cmdFiles) {
                 const filePath = path.resolve(
                     path.format({ dir: commandDirPath, base: file })
