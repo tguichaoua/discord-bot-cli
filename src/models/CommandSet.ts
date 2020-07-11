@@ -18,7 +18,6 @@ import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
-import { constants } from "buffer";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
