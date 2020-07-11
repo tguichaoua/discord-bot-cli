@@ -1,16 +1,16 @@
-const path = require("path");
-const fs = require("fs")
-const meow = require("meow");
+const { makeCommand } = require("discord-bot-cli");
 
+const cmd = makeCommand("$NAME$", {
+    description: "DESCRIPTION"
+});
 
-const helpString = `
-Create a new command file.
+cmd.executor = async({}, {}, {}) => {
 
-Usage
-    dbc cmd path/to/file_without_extension [options]
+};
 
+exports.default = cmd;
 Options
-    --lang, -l <js|ts>  Define the language. Javascript (js) or Typescript (ts). (Default = js)
+--lang, -l < js | ts > Define the language.Javascript(js) or Typescript(ts).(Default = js)
 `;
 
 module.exports = function() {
