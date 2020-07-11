@@ -4,7 +4,11 @@ import env from "./env.json";
 
 const commands = new CommandSet({ prefix: env.prefix, devIDs: env.devIDs });
 commands.loadCommands("commands");
-commands.buildin("all");
+
+// manually load build-in commands
+// because there are supposed to be JS in production
+// CommandSet#buildin not load TS files.
+commands.loadCommands("../src/commands", true);
 
 const client = new Client();
 
