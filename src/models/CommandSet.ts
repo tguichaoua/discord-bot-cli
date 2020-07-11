@@ -18,6 +18,7 @@ import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
+import { constants } from "buffer";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -49,6 +50,7 @@ export class CommandSet {
      * @param commandDirPath - path to the folder where the commands are (relative to node entry point).
      */
     loadCommands(commandDirPath: string) {
+        console.log(commandDirPath);
         try {
             if (require.main)
                 commandDirPath = path.resolve(
