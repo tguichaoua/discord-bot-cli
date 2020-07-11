@@ -10,6 +10,16 @@
 `npm i discord-bot-cli`  
 Check the [wiki](https://github.com/baanloh/discord-bot-cli/wiki/Installation-and-Setup) for more details.
 
+### Build settings
+If you use this package in a typescript project, you must enable `strict` flag to properly resolve types in commands in `tsconfig.json`:
+```jsonc
+{
+    "compilerOptions": {
+        "strict": true
+    }
+}
+```
+
 ## Documentation
 
 <a href="https://baanloh.github.io/discord-bot-cli/v3/index.html">Docs</a><br>
