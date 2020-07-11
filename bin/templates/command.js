@@ -8,4 +8,4 @@ cmd.executor = async({}, {}, {}) => {
 
 };
 
-export default cmd;
+exports.default = cmd;

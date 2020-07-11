@@ -1,14 +1,14 @@
-#!/usr/bin/env node
+const { makeCommand } = require("discord-bot-cli");
 
-const helpString = `
-    Usage
-        dbc <command> [options] [--help]
+const cmd = makeCommand("$NAME$", {
+    description: "DESCRIPTION"
+});
 
-    Commands
-        cmd, c      Create a new command file
-        loc, l      Create a new localization file
-`;
+cmd.executor = async({}, {}, {}) => {
 
+};
+
+exports.default = cmd;
 const [, , cmd] = process.argv;
 
 
