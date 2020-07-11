@@ -1,11 +1,9 @@
 import { makeCommand } from "discord-bot-cli";
 
 const cmd = makeCommand("$NAME$", {
-    description: "DESCRIPTION"
+    description: "DESCRIPTION",
 });
 
-cmd.executor = async ({ }, { }, { }) => {
-
-};
+cmd.executor = async ({}, {}, {}) => {};
 
 export default cmd;

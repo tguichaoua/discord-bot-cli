@@ -6,36 +6,35 @@ import { reply } from "../utils/reply";
 const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
     flags: {
-        detail: { type: "boolean", shortcut: "d", description: "Provide commands description." },
+        detail: {
+            type: "boolean",
+            shortcut: "d",
+            description: "Provide commands description.",
+        },
     },
-    examples: [
-        "list",
-        "list -d"
-    ]
+    examples: ["list", "list -d"],
 });
 
-cmd.executor = async ({ }, { detail }, { commandSet, options, message }) => {
-
+cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
     const raw = ListUtils.getRawListData(commandSet, options.localization);
-    const commands =
-        (
-            options.devIDs.includes(message.author.id) ?
-                raw.commands :
-                raw.commands.filter(c => !c.command.devOnly)
-        )
-            .filter(c => c.command.canUse(message.author, message) === true);
+    const commands = (options.devIDs.includes(message.author.id)
+        ? raw.commands
+        : raw.commands.filter((c) => !c.command.devOnly)
+    ).filter((c) => c.command.canUse(message.author, message) === true);
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
         .setTitle(options.localization.list.title);
 
-    const descriptions = detail ?
-        commands.map(c => `\`${c.command.name}\` ${c.description}`).join("\n") :
-        commands.map(c => `\`${c.command.name}\``).join(" ");
+    const descriptions = detail
+        ? commands
+              .map((c) => `\`${c.command.name}\` ${c.description}`)
+              .join("\n")
+        : commands.map((c) => `\`${c.command.name}\``).join(" ");
 
     embed.setDescription(descriptions);
 
     await reply(message, { embed });
-}
+};
 
 export default cmd;

@@ -7,7 +7,8 @@ import { CommandResultError } from "../../models/CommandResultError";
 
 /** @internal */
 export function parseArgs(
-    message: Message, inputArguments: readonly string[],
+    message: Message,
+    inputArguments: readonly string[],
     argDefinitions: ReadonlyMap<string, ArgDefinition>
 ) {
     const args = [...inputArguments];
@@ -16,12 +17,19 @@ export function parseArgs(
     for (const [name, def] of argDefinitions) {
         let value: ParsableType | undefined;
         if (args.length === 0) {
-            if (!def.optional) throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
+            if (!def.optional)
+                throw new CommandResultError(
+                    CommandResultUtils.failParseArgMissing(def)
+                );
             value = def.defaultValue;
         } else {
             const val = args.shift() as string;
             const parsed = parseValue(def, message, val);
-            if (parsed.value === undefined) throw new CommandResultError(CommandResultUtils.failParseArgInvalid(def, val), parsed.message);
+            if (parsed.value === undefined)
+                throw new CommandResultError(
+                    CommandResultUtils.failParseArgInvalid(def, val),
+                    parsed.message
+                );
             value = parsed.value;
         }
         argValues.set(name, value);

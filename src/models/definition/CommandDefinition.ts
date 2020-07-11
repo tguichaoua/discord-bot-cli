@@ -58,4 +58,4 @@ export type CommandSettings = {
     readonly guildOnly?: boolean;
     /** If set to true, the command message will be deleted after command execution. */
     readonly deleteMessage?: boolean;
-}
+};

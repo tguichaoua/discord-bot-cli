@@ -4,7 +4,7 @@ import path from "path";
 import { Message } from "discord.js";
 
 import { Command } from "./Command";
-import { Com } from "../com";
+import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
@@ -14,27 +14,32 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { HelpUtils } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
-import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
+import {
+    CommandCollection,
+    ReadonlyCommandCollection,
+} from "./CommandCollection";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
 export class CommandSet {
-
     private _commands = new CommandCollection();
 
-    constructor(private _defaultOptions?: DeepPartial<ParseOptions>) { }
+    constructor(private _defaultOptions?: DeepPartial<ParseOptions>) {}
 
-    get commands() { return this._commands as ReadonlyCommandCollection; }
+    get commands() {
+        return this._commands as ReadonlyCommandCollection;
+    }
 
     private _loadFile(path: string) {
         try {
             const command = Command.load(path, this);
-            if (command.ignored) Com.warn(`Command ignored (${path})`);
+            if (command.ignored) Logger.warn(`Command ignored (${path})`);
             else {
-                if (!this._commands.add(command)) Com.warn(`Command name already taken (${path})`);
+                if (!this._commands.add(command))
+                    Logger.warn(`Command name already taken (${path})`);
             }
         } catch (e) {
-            Com.error(`Fail to load command at ${path} :`, e);
+            Logger.error(`Fail to load command at ${path} :`, e);
         }
     }
 
@@ -46,14 +51,21 @@ export class CommandSet {
     loadCommands(commandDirPath: string) {
         try {
             if (require.main)
-                commandDirPath = path.resolve(path.dirname(require.main.filename), commandDirPath);
-            const cmdFiles = fs.readdirSync(commandDirPath).filter(file => file.endsWith('.cmd.js'));
+                commandDirPath = path.resolve(
+                    path.dirname(require.main.filename),
+                    commandDirPath
+                );
+            const cmdFiles = fs
+                .readdirSync(commandDirPath)
+                .filter((file) => file.endsWith(".cmd.js"));
             for (const file of cmdFiles) {
-                const filePath = path.resolve(path.format({ dir: commandDirPath, base: file }));
+                const filePath = path.resolve(
+                    path.format({ dir: commandDirPath, base: file })
+                );
                 this._loadFile(filePath);
             }
         } catch (e) {
-            Com.error(`Fail to load commands in ${commandDirPath} :`, e);
+            Logger.error(`Fail to load commands in ${commandDirPath} :`, e);
         }
     }
 
@@ -66,9 +78,14 @@ export class CommandSet {
             this.loadCommands(__dirname + "/../commands");
         } else {
             for (const name of buildinCommandNames) {
-                const filePath = path.resolve(path.format({ dir: __dirname + "../commands", name: name, ext: ".cmd.js" }));
-                if (fs.existsSync(filePath))
-                    this._loadFile(filePath);
+                const filePath = path.resolve(
+                    path.format({
+                        dir: __dirname + "../commands",
+                        name: name,
+                        ext: ".cmd.js",
+                    })
+                );
+                if (fs.existsSync(filePath)) this._loadFile(filePath);
             }
         }
     }
@@ -110,55 +127,77 @@ export class CommandSet {
      * @param context - a context object that is send to command when executed. (can store database or other data)
      * @param options - option de define the behaviour of the command parser.
      */
-    async parse(message: Message, options?: DeepPartial<ParseOptions>): Promise<CommandResult> {
-
-        function OptionsError(paramName: string) { return new Error(`Invalid options value: "${paramName}" is invalid.`); }
+    async parse(
+        message: Message,
+        options?: DeepPartial<ParseOptions>
+    ): Promise<CommandResult> {
+        // function OptionsError(paramName: string) {
+        //     return new Error(
+        //         `Invalid options value: "${paramName}" is invalid.`
+        //     );
+        // }
 
         async function Reply(content: string) {
-            await message.reply(content).catch(() => { });
+            await message.reply(content).catch(Logger.error);
         }
 
-        const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
+        const opts = deepMerge(
+            {},
+            defaultOptions,
+            this._defaultOptions,
+            options
+        );
 
         let content: string;
-        const botMentionStr = `<@!${message.client.user?.id}>`
-        if (opts.allowMentionAsPrefix && message.content.startsWith(botMentionStr))
+        const botMentionStr = `<@!${message.client.user?.id}>`;
+        if (
+            opts.allowMentionAsPrefix &&
+            message.content.startsWith(botMentionStr)
+        )
             content = message.content.substring(botMentionStr.length);
         else if (message.content.startsWith(opts.prefix))
             content = message.content.substring(opts.prefix.length);
-        else
-            return CommandResultUtils.notPrefixed();
+        else return CommandResultUtils.notPrefixed();
 
         // extract the command & arguments from message
-        const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || [])
-            .map(a => /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a);
+        const rawArgs = (
+            content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []
+        ).map((a) =>
+            /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a
+        );
 
         const { command, args } = this.resolve(rawArgs);
 
         if (!command) return CommandResultUtils.commandNotFound();
 
         if (command.guildOnly && !message.guild) {
-            await message.reply(template(opts.localization.misc.guildOnlyWarning, { command: HelpUtils.Command.getFullName(command) }));
+            await message.reply(
+                template(opts.localization.misc.guildOnlyWarning, {
+                    command: HelpUtils.Command.getFullName(command),
+                })
+            );
             return CommandResultUtils.guildOnly(command);
         }
 
-        if (command.devOnly && !(opts.devIDs.includes(message.author.id))) return CommandResultUtils.devOnly(command);
+        if (command.devOnly && !opts.devIDs.includes(message.author.id))
+            return CommandResultUtils.devOnly(command);
 
         const result = command.canUse(message.author, message);
         if (typeof result === "string") await Reply(result);
-        if (result !== true) return CommandResultUtils.unauthorizedUser(command);
+        if (result !== true)
+            return CommandResultUtils.unauthorizedUser(command);
 
         try {
             const result = await command.execute(message, args, opts, this);
-            if (command.deleteMessage && message.channel.type === "text") await message.delete().catch(() => { });
+            if (command.deleteMessage && message.channel.type === "text")
+                await message.delete().catch(Logger.error);
             return CommandResultUtils.ok(command, result);
         } catch (e) {
             if (e instanceof CommandResultError) {
-                if (e.replyMessage && e.replyMessage !== "") await Reply(e.replyMessage);
+                if (e.replyMessage && e.replyMessage !== "")
+                    await Reply(e.replyMessage);
                 return e.commandResult;
-            }
-            else
-                return CommandResultUtils.error(e);
+            } else return CommandResultUtils.error(e);
         }
     }
 }

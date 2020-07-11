@@ -7,7 +7,7 @@ export interface Localization {
         tags: {
             guildOnly: string;
             devOnly: string;
-        }
+        };
         usage: string;
         arguments: string;
         flags: string;
