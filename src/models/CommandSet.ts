@@ -4,7 +4,7 @@ import path from "path";
 import { Message } from "discord.js";
 
 import { Command } from "./Command";
-import { Com } from "../com";
+import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { ParseOptions } from "./ParseOptions";
 
@@ -33,13 +33,13 @@ export class CommandSet {
     private _loadFile(path: string) {
         try {
             const command = Command.load(path, this);
-            if (command.ignored) Com.warn(`Command ignored (${path})`);
+            if (command.ignored) Logger.warn(`Command ignored (${path})`);
             else {
                 if (!this._commands.add(command))
-                    Com.warn(`Command name already taken (${path})`);
+                    Logger.warn(`Command name already taken (${path})`);
             }
         } catch (e) {
-            Com.error(`Fail to load command at ${path} :`, e);
+            Logger.error(`Fail to load command at ${path} :`, e);
         }
     }
 
@@ -65,7 +65,7 @@ export class CommandSet {
                 this._loadFile(filePath);
             }
         } catch (e) {
-            Com.error(`Fail to load commands in ${commandDirPath} :`, e);
+            Logger.error(`Fail to load commands in ${commandDirPath} :`, e);
         }
     }
 
@@ -131,14 +131,14 @@ export class CommandSet {
         message: Message,
         options?: DeepPartial<ParseOptions>
     ): Promise<CommandResult> {
-        function OptionsError(paramName: string) {
-            return new Error(
-                `Invalid options value: "${paramName}" is invalid.`
-            );
-        }
+        // function OptionsError(paramName: string) {
+        //     return new Error(
+        //         `Invalid options value: "${paramName}" is invalid.`
+        //     );
+        // }
 
         async function Reply(content: string) {
-            await message.reply(content).catch(() => {});
+            await message.reply(content).catch(Logger.error);
         }
 
         const opts = deepMerge(
@@ -190,7 +190,7 @@ export class CommandSet {
         try {
             const result = await command.execute(message, args, opts, this);
             if (command.deleteMessage && message.channel.type === "text")
-                await message.delete().catch(() => {});
+                await message.delete().catch(Logger.error);
             return CommandResultUtils.ok(command, result);
         } catch (e) {
             if (e instanceof CommandResultError) {

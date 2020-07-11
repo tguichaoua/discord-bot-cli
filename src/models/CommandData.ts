@@ -6,7 +6,7 @@ import { CommandExecutor } from "./callbacks/CommandExecutor";
 
 export interface CommandData<
     T extends CommandDefinition,
-    S extends CommandSettings = {}
+    S extends CommandSettings = Record<string, unknown>
 > {
     /** @internal */
     readonly def: T;

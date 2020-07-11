@@ -15,7 +15,7 @@ const cmd = makeCommand("list", {
     examples: ["list", "list -d"],
 });
 
-cmd.executor = async ({}, { detail }, { commandSet, options, message }) => {
+cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
     const raw = ListUtils.getRawListData(commandSet, options.localization);
     const commands = (options.devIDs.includes(message.author.id)
         ? raw.commands

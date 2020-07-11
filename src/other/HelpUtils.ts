@@ -1,4 +1,4 @@
-import { Command } from "../models/Command";
+import { Command } from "../models/Command"; /* eslint-disable-line @typescript-eslint/no-unused-vars */ // due to namespace Command: will be remove in future
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed } from "discord.js";
 import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
@@ -12,7 +12,13 @@ import { CommandLocalization } from "../models/localization/CommandLocalization"
 import { ArrayUtils } from "../utils/array";
 import { template } from "../utils/template";
 
+// TODO: remove namespace for HelpUtils and Command
+// replace by a single class CommandHelp
+// breaking change !
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace HelpUtils {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     export namespace Command {
         export function getFullName(command: Command) {
             return command
@@ -190,70 +196,70 @@ export namespace HelpUtils {
             return embed;
         }
     }
+}
 
-    namespace Arg {
-        export function getRawHelp(
-            arg: ArgDefinition,
-            name: string,
-            localization: CommandLocalization,
-            typeNamesLocalization: TypeNameLocalization
-        ): ArgumentRawHelp {
-            const argLocalization = (localization.args ?? {})[name] ?? {};
-            const typeNames = ArrayUtils.isArray(arg.type)
-                ? arg.type.map((t) => typeNamesLocalization[t])
-                : [typeNamesLocalization[arg.type]];
-            const localizedName = argLocalization.name ?? name;
-            const description =
-                argLocalization.description ?? arg.description ?? "";
-            let usageString: string;
-            if (arg.optional) {
-                const defaultValue = arg.defaultValue
-                    ? ` = ${arg.defaultValue}`
-                    : "";
-                usageString = `[${localizedName}${defaultValue}]`;
-            } else {
-                usageString = `<${localizedName}>`;
-            }
-
-            return {
-                arg,
-                typeNames: typeNames,
-                name,
-                localizedName,
-                description,
-                usageString,
-            };
+abstract class Arg {
+    static getRawHelp(
+        arg: ArgDefinition,
+        name: string,
+        localization: CommandLocalization,
+        typeNamesLocalization: TypeNameLocalization
+    ): ArgumentRawHelp {
+        const argLocalization = (localization.args ?? {})[name] ?? {};
+        const typeNames = ArrayUtils.isArray(arg.type)
+            ? arg.type.map((t) => typeNamesLocalization[t])
+            : [typeNamesLocalization[arg.type]];
+        const localizedName = argLocalization.name ?? name;
+        const description =
+            argLocalization.description ?? arg.description ?? "";
+        let usageString: string;
+        if (arg.optional) {
+            const defaultValue = arg.defaultValue
+                ? ` = ${arg.defaultValue}`
+                : "";
+            usageString = `[${localizedName}${defaultValue}]`;
+        } else {
+            usageString = `<${localizedName}>`;
         }
+
+        return {
+            arg,
+            typeNames: typeNames,
+            name,
+            localizedName,
+            description,
+            usageString,
+        };
     }
+}
 
-    namespace Flag {
-        export function getRawHelp(
-            flag: FlagDefinition,
-            name: string,
-            localization: CommandLocalization,
-            typeNamesLocalization: TypeNameLocalization
-        ): FlagRawHelp {
-            const flagLocalization = (localization.flags ?? {})[name] ?? {};
-            const typeNames = ArrayUtils.isArray(flag.type)
-                ? flag.type.map((t) => typeNamesLocalization[t])
-                : [typeNamesLocalization[flag.type]];
-            const localizedName = flagLocalization.name ?? name;
-            const description =
-                flagLocalization.description ?? flag.description ?? "";
-            const longUsageString = `--${name}`;
-            const shortUsageString = flag.shortcut
-                ? `-${flag.shortcut}`
-                : undefined;
+abstract class Flag {
+    static getRawHelp(
+        flag: FlagDefinition,
+        name: string,
+        localization: CommandLocalization,
+        typeNamesLocalization: TypeNameLocalization
+    ): FlagRawHelp {
+        const flagLocalization = (localization.flags ?? {})[name] ?? {};
+        const typeNames = ArrayUtils.isArray(flag.type)
+            ? flag.type.map((t) => typeNamesLocalization[t])
+            : [typeNamesLocalization[flag.type]];
+        const localizedName = flagLocalization.name ?? name;
+        const description =
+            flagLocalization.description ?? flag.description ?? "";
+        const longUsageString = `--${name}`;
+        const shortUsageString = flag.shortcut
+            ? `-${flag.shortcut}`
+            : undefined;
 
-            return {
-                flag,
-                typeNames,
-                name,
-                localizedName,
-                description,
-                longUsageString,
-                shortUsageString,
-            };
-        }
+        return {
+            flag,
+            typeNames,
+            name,
+            localizedName,
+            description,
+            longUsageString,
+            shortUsageString,
+        };
     }
 }

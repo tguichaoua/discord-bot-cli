@@ -15,7 +15,7 @@ type IsGuildOnly<S extends CommandSettings> = S["guildOnly"] extends true
 
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
-    S extends CommandSettings = {}
+    S extends CommandSettings = Record<string, unknown>
 > = (
     args: {
         readonly [name in keyof T["args"]]:

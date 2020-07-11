@@ -1,5 +1,6 @@
 import { makeCommand } from "../other/makeCommand";
 import { Command } from "..";
+import { Logger } from "../logger";
 
 const cmd = makeCommand("cmd", {
     devOnly: true,
@@ -38,10 +39,10 @@ const cmd = makeCommand("cmd", {
     },
 });
 
-cmd.subs.reload.executor = async ({ command }, {}, { commandSet, message }) => {
+cmd.subs.reload.executor = async ({ command }, _f, { commandSet, message }) => {
     const cmd = commandSet.get(command);
     if (!cmd) {
-        await message.channel.send(":x: Command not found").catch(() => {});
+        await message.channel.send(":x: Command not found").catch(Logger.error);
         return;
     }
 
@@ -49,11 +50,11 @@ cmd.subs.reload.executor = async ({ command }, {}, { commandSet, message }) => {
         commandSet.reload(cmd);
         await message.channel
             .send(":white_check_mark: Command reloaded")
-            .catch(() => {});
+            .catch(Logger.error);
     } catch (e) {
         await message.channel
             .send(`:x: Fail to reload command \`\`\`\n${e}\n\`\`\``)
-            .catch(() => {});
+            .catch(Logger.error);
     }
 };
 

@@ -19,7 +19,7 @@ const cmd = makeCommand("help", {
     ],
 });
 
-cmd.executor = async ({}, {}, { rest, options, commandSet, message }) => {
+cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
     if (rest.length === 0)
         await reply(
             message,

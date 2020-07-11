@@ -56,59 +56,59 @@ export type CommandResult =
       ));
 
 /** @internal */
-export namespace CommandResultUtils {
+export abstract class CommandResultUtils {
     /** @internal */
-    export function ok(command: Command, result: any): CommandResult {
+    static ok(command: Command, result: any): CommandResult {
         return { status: "ok", command, result };
     }
 
     /** @internal */
-    export function error(error: any): CommandResult {
+    static error(error: any): CommandResult {
         return { status: "error", error };
     }
 
     /** @internal */
-    export function noExecutor(command: Command): CommandResult {
+    static noExecutor(command: Command): CommandResult {
         return { status: "no executor", command };
     }
 
     /** @internal */
-    export function devOnly(command: Command): CommandResult {
+    static devOnly(command: Command): CommandResult {
         return { status: "dev only", command };
     }
 
     /** @internal */
-    export function guildOnly(command: Command): CommandResult {
+    static guildOnly(command: Command): CommandResult {
         return { status: "guild only", command };
     }
 
     /** @internal */
-    export function unauthorizedUser(command: Command): CommandResult {
+    static unauthorizedUser(command: Command): CommandResult {
         return { status: "unauthorized user", command };
     }
 
     /** @internal */
-    export function throttling(command: Command): CommandResult {
+    static throttling(command: Command): CommandResult {
         return { status: "throttling", command };
     }
 
     /** @internal */
-    export function clientPermissions(command: Command): CommandResult {
+    static clientPermissions(command: Command): CommandResult {
         return { status: "client permissions", command };
     }
 
     /** @internal */
-    export function notPrefixed(): CommandResult {
+    static notPrefixed(): CommandResult {
         return { status: "not prefixed" };
     }
 
     /** @internal */
-    export function commandNotFound(): CommandResult {
+    static commandNotFound(): CommandResult {
         return { status: "command not found" };
     }
 
     /** @internal */
-    export function failParseArgInvalid(
+    static failParseArgInvalid(
         arg: Readonly<ArgDefinition>,
         got: string
     ): CommandResult {
@@ -122,9 +122,7 @@ export namespace CommandResultUtils {
     }
 
     /** @internal */
-    export function failParseArgMissing(
-        arg: Readonly<ArgDefinition>
-    ): CommandResult {
+    static failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult {
         return {
             status: "parsing error",
             type: "arg",
@@ -134,7 +132,7 @@ export namespace CommandResultUtils {
     }
 
     /** @internal */
-    export function failParseFlagUnknown(name: string): CommandResult {
+    static failParseFlagUnknown(name: string): CommandResult {
         return {
             status: "parsing error",
             type: "flag",
@@ -144,7 +142,7 @@ export namespace CommandResultUtils {
     }
 
     /** @internal */
-    export function failParseFlagInvalid(
+    static failParseFlagInvalid(
         flag: Readonly<FlagDefinition>,
         got: string
     ): CommandResult {

@@ -50,12 +50,14 @@ function parse(
     switch (type) {
         case "string":
             return str;
-        case "integer":
+        case "integer": {
             const i = parseInt(str);
             return isNaN(i) ? undefined : i;
-        case "float":
+        }
+        case "float": {
             const f = parseFloat(str);
             return isNaN(f) ? undefined : f;
+        }
         case "boolean":
             switch (str.toLocaleLowerCase()) {
                 case "true":
@@ -65,23 +67,28 @@ function parse(
             }
             break;
 
-        case "user":
+        case "user": {
             const user = MessageMentions.USERS_PATTERN.exec(str);
             MessageMentions.USERS_PATTERN.lastIndex = 0;
             if (user) return message.mentions.users.get(user[1]);
             else if (ID_PATTERN.test(str))
                 return message.client.users.resolve(str) ?? undefined;
+            else return undefined;
+        }
 
-        case "role":
+        case "role": {
             const role = MessageMentions.ROLES_PATTERN.exec(str);
             MessageMentions.ROLES_PATTERN.lastIndex = 0;
             if (role) return message.mentions.roles.get(role[1]);
             else if (ID_PATTERN.test(str))
                 return message.guild?.roles?.resolve(str) ?? undefined;
+            else return undefined;
+        }
 
         case "channel":
             if (ID_PATTERN.test(str))
                 return message.client.channels.resolve(str) ?? undefined;
+            else return undefined;
 
         case "guild channel":
             if (ID_PATTERN.test(str)) {
@@ -94,26 +101,33 @@ function parse(
                 )
                     return ch;
             }
+            return undefined;
 
         case "dm channel":
             if (ID_PATTERN.test(str)) return resolveChannel("dm");
+            return undefined;
 
         case "voice channel":
             if (ID_PATTERN.test(str)) return resolveChannel("voice");
+            return undefined;
 
         case "category channel":
             if (ID_PATTERN.test(str)) return resolveChannel("category");
+            return undefined;
 
         case "news channel":
             if (ID_PATTERN.test(str)) return resolveChannel("news");
+            return undefined;
 
         case "store channel":
             if (ID_PATTERN.test(str)) return resolveChannel("store");
+            return undefined;
 
-        case "text channel":
+        case "text channel": {
             const channel = MessageMentions.CHANNELS_PATTERN.exec(str);
             MessageMentions.CHANNELS_PATTERN.lastIndex = 0;
             if (channel) return message.mentions.channels.get(channel[1]);
             else if (ID_PATTERN.test(str)) return resolveChannel("text");
+        }
     }
 }

@@ -4,8 +4,8 @@ import { Command } from "../models/Command";
 import { CommandRawList } from "../models/data/list/CommandRawList";
 import { Localization } from "../models/localization/Localization";
 
-export namespace ListUtils {
-    export function getRawListData(
+export abstract class ListUtils {
+    static getRawListData(
         commandSet: CommandSet,
         localization: Localization
     ): ListRawData {
@@ -19,15 +19,14 @@ export namespace ListUtils {
 
         return { commands };
     }
+}
 
-    function getCommandRaw(
-        command: Command,
-        localization: Localization
-    ): CommandRawList {
-        const description =
-            localization.commands[command.name]?.description ??
-            command.description;
+function getCommandRaw(
+    command: Command,
+    localization: Localization
+): CommandRawList {
+    const description =
+        localization.commands[command.name]?.description ?? command.description;
 
-        return { command, description };
-    }
+    return { command, description };
 }
