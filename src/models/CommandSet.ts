@@ -197,6 +197,9 @@ export class CommandSet {
                 return CommandResultUtils.unauthorizedUser(command);
         }
 
+        if (message.member && !command.hasPermissions(message.member))
+            return CommandResultUtils.unauthorizedUser(command);
+
         try {
             const result = await command.execute(message, args, opts, this);
             if (command.deleteMessage && message.channel.type === "text")

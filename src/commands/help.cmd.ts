@@ -40,7 +40,7 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
             if (
                 (!options.devIDs.includes(message.author.id) ||
                     !options.skipDevsPermissionsChecking) &&
-                command.canUse(message.author, message) !== true
+                !command.checkPermissions(message)
             )
                 return;
 

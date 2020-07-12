@@ -204,6 +204,14 @@ export class Command {
         return true;
     }
 
+    /** Return true if the author of the message pass the `canUse` and the `hasPermissions`. */
+    checkPermissions(message: Message): boolean {
+        return (
+            this.canUse(message.author, message) === true &&
+            (!message.member || this.hasPermissions(message.member))
+        );
+    }
+
     /**
      * Call the help handler of this command and return true.
      * Return false if handler is undefined.
