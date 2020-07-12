@@ -213,4 +213,5 @@ const defaultOptions: ParseOptions = {
     devIDs: [],
     localization: defaultLocalization,
     allowMentionAsPrefix: false,
+    checkDevsPermissions: false,
 };
