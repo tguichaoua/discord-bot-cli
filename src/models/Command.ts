@@ -1,4 +1,10 @@
-import { Message, User, PermissionString, Guild } from "discord.js";
+import {
+    Message,
+    User,
+    PermissionString,
+    Guild,
+    GuildMember,
+} from "discord.js";
 import { CommandSet } from "./CommandSet";
 import { ParseOptions } from "./ParseOptions";
 import { CommandData } from "./CommandData";
@@ -32,7 +38,7 @@ export class Command {
         public readonly name: string,
         public readonly aliases: readonly string[],
         private readonly _clientPermissions: PermissionString[],
-        private readonly _userPermissions: PermissionString[],
+        private readonly _userPermissions: PermissionString[] | undefined,
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -94,7 +100,7 @@ export class Command {
             data.name,
             data.def.aliases ?? [],
             data.def.clientPermissions ?? [],
-            data.def.userPermissions ?? [],
+            data.def.userPermissions,
             data.def.examples ?? [],
             data.def.description ?? "",
             parent,
@@ -176,6 +182,15 @@ export class Command {
     /** Return true if the client have required permission for this guild. */
     hasClientPermissions(guild: Guild) {
         return guild.me && guild.me.hasPermission(this._clientPermissions);
+    }
+
+    /** Return true if the member has required permissions to execute this command. */
+    hasPermissions(member: GuildMember): boolean {
+        if (!this._userPermissions) {
+            if (this.parent) return this.parent.hasPermissions(member);
+            else return true;
+        }
+        return member.hasPermission(this._userPermissions);
     }
 
     // =====================================================
