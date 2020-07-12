@@ -187,10 +187,15 @@ export class CommandSet {
         if (command.devOnly && !opts.devIDs.includes(message.author.id))
             return CommandResultUtils.devOnly(command);
 
-        const result = command.canUse(message.author, message);
-        if (typeof result === "string") await Reply(result);
-        if (result !== true)
-            return CommandResultUtils.unauthorizedUser(command);
+        if (
+            opts.devIDs.includes(message.author.id) &&
+            !opts.checkDevsPermissions
+        ) {
+            const result = command.canUse(message.author, message);
+            if (typeof result === "string") await Reply(result);
+            if (result !== true)
+                return CommandResultUtils.unauthorizedUser(command);
+        }
 
         try {
             const result = await command.execute(message, args, opts, this);
