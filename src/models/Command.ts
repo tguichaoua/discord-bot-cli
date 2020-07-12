@@ -252,6 +252,7 @@ export class Command {
                 message,
                 guild: message.guild,
                 member: message.member,
+                channel: message.channel,
                 options,
                 commandSet,
                 command: this,
