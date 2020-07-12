@@ -37,7 +37,13 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
                 })
             );
         else {
-            if (command.canUse(message.author, message) !== true) return;
+            if (
+                (!options.devIDs.includes(message.author.id) ||
+                    !options.skipDevsPermissionsChecking) &&
+                command.canUse(message.author, message) !== true
+            )
+                return;
+
             if (await command.help(message, options)) return;
             const embed = HelpUtils.Command.embedHelp(
                 command,
