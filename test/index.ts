@@ -7,7 +7,7 @@ const commands = new CommandSet({
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
 });
-commands.loadCommands("commands");
+commands.loadCommands("commands", true);
 
 // manually load build-in commands
 // because there are supposed to be JS in production
