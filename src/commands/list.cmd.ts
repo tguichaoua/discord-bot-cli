@@ -17,10 +17,17 @@ const cmd = makeCommand("list", {
 
 cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
     const raw = ListUtils.getRawListData(commandSet, options.localization);
-    const commands = (options.devIDs.includes(message.author.id)
+    let commands = options.devIDs.includes(message.author.id)
         ? raw.commands
-        : raw.commands.filter((c) => !c.command.devOnly)
-    ).filter((c) => c.command.canUse(message.author, message) === true);
+        : raw.commands.filter((c) => !c.command.devOnly);
+
+    if (
+        !options.devIDs.includes(message.author.id) ||
+        !options.skipDevsPermissionsChecking
+    )
+        commands = commands.filter(
+            (c) => c.command.canUse(message.author, message) === true
+        );
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
