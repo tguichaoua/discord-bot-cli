@@ -1,4 +1,10 @@
-import { Message, User, PermissionString, Guild } from "discord.js";
+import {
+    Message,
+    User,
+    PermissionString,
+    Guild,
+    GuildMember,
+} from "discord.js";
 import { CommandSet } from "./CommandSet";
 import { ParseOptions } from "./ParseOptions";
 import { CommandData } from "./CommandData";
@@ -32,6 +38,7 @@ export class Command {
         public readonly name: string,
         public readonly aliases: readonly string[],
         private readonly _clientPermissions: PermissionString[],
+        private readonly _userPermissions: PermissionString[] | undefined,
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -93,6 +100,7 @@ export class Command {
             data.name,
             data.def.aliases ?? [],
             data.def.clientPermissions ?? [],
+            data.def.userPermissions,
             data.def.examples ?? [],
             data.def.description ?? "",
             parent,
@@ -148,6 +156,10 @@ export class Command {
         return this._clientPermissions as readonly PermissionString[];
     }
 
+    get userPermissions() {
+        return this._userPermissions as readonly PermissionString[];
+    }
+
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
@@ -172,6 +184,15 @@ export class Command {
         return guild.me && guild.me.hasPermission(this._clientPermissions);
     }
 
+    /** Return true if the member has required permissions to execute this command. */
+    hasPermissions(member: GuildMember): boolean {
+        if (!this._userPermissions) {
+            if (this.parent) return this.parent.hasPermissions(member);
+            else return true;
+        }
+        return member.hasPermission(this._userPermissions);
+    }
+
     // =====================================================
 
     canUse(user: User, message: Message): boolean | string {
@@ -181,6 +202,14 @@ export class Command {
         }
         if (this._canUse) return this._canUse(user, message);
         return true;
+    }
+
+    /** Return true if the author of the message pass the `canUse` and the `hasPermissions`. */
+    checkPermissions(message: Message): boolean {
+        return (
+            this.canUse(message.author, message) === true &&
+            (!message.member || this.hasPermissions(message.member))
+        );
     }
 
     /**

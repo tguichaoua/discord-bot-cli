@@ -187,6 +187,16 @@ export namespace HelpUtils {
                     false
                 );
 
+            const userPermissions = rawHelp.command.userPermissions
+                .map((p) => `\`${p}\``)
+                .join(" ");
+            if (userPermissions !== "")
+                embed.addField(
+                    localization.help.user_permissions,
+                    userPermissions,
+                    false
+                );
+
             const exemples = rawHelp.command.examples
                 .map((e) => `\`${e}\``)
                 .join("\n");

@@ -25,9 +25,7 @@ cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
         !options.devIDs.includes(message.author.id) ||
         !options.skipDevsPermissionsChecking
     )
-        commands = commands.filter(
-            (c) => c.command.canUse(message.author, message) === true
-        );
+        commands = commands.filter((c) => c.command.checkPermissions(message));
 
     const embed = new MessageEmbed()
         .setColor("#0099ff")
