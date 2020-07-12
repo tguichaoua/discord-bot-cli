@@ -2,8 +2,12 @@ import { Client } from "discord.js";
 import { CommandSet } from "../src/index";
 import env from "./env.json";
 
-const commands = new CommandSet({ prefix: env.prefix, devIDs: env.devIDs });
-commands.loadCommands("commands");
+const commands = new CommandSet({
+    prefix: env.prefix,
+    devIDs: env.devIDs,
+    skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
+});
+commands.loadCommands("commands", true);
 
 // manually load build-in commands
 // because there are supposed to be JS in production
