@@ -188,8 +188,8 @@ export class CommandSet {
             return CommandResultUtils.devOnly(command);
 
         if (
-            opts.devIDs.includes(message.author.id) &&
-            !opts.checkDevsPermissions
+            !opts.devIDs.includes(message.author.id) ||
+            !opts.skipDevsPermissionsChecking
         ) {
             const result = command.canUse(message.author, message);
             if (typeof result === "string") await Reply(result);
@@ -218,5 +218,5 @@ const defaultOptions: ParseOptions = {
     devIDs: [],
     localization: defaultLocalization,
     allowMentionAsPrefix: false,
-    checkDevsPermissions: false,
+    skipDevsPermissionsChecking: false,
 };
