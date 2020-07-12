@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, DMChannel } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
 import {
@@ -14,6 +14,24 @@ type IsGuildOnly<
     True,
     False
 > = S["guildOnly"] extends true ? True : False;
+
+type MessageExtension<S> = {
+    readonly guild: IsGuildOnly<
+        S,
+        NonNullable<Message["guild"]>,
+        Message["guild"]
+    >;
+    readonly member: IsGuildOnly<
+        S,
+        NonNullable<Message["member"]>,
+        Message["member"]
+    >;
+    readonly channel: IsGuildOnly<
+        S,
+        Exclude<Message["channel"], DMChannel>,
+        Message["channel"]
+    >;
+};
 
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
@@ -41,30 +59,9 @@ export type CommandExecutor<
         readonly rest: undefined extends T["rest"]
             ? void
             : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
-        readonly message: Message & {
-            readonly guild: IsGuildOnly<
-                S,
-                NonNullable<Message["guild"]>,
-                Message["guild"]
-            >;
-            readonly member: IsGuildOnly<
-                S,
-                NonNullable<Message["member"]>,
-                Message["member"]
-            >;
-        };
-        readonly guild: IsGuildOnly<
-            S,
-            NonNullable<Message["guild"]>,
-            Message["guild"]
-        >;
-        readonly member: IsGuildOnly<
-            S,
-            NonNullable<Message["member"]>,
-            Message["member"]
-        >;
+        readonly message: Message & MessageExtension<S>;
         readonly options: ParseOptions;
         readonly commandSet: CommandSet;
         readonly command: Command;
-    }
+    } & MessageExtension<S>
 ) => any | Promise<any>;
