@@ -32,6 +32,7 @@ export class Command {
         public readonly name: string,
         public readonly aliases: readonly string[],
         private readonly _clientPermissions: PermissionString[],
+        private readonly _userPermissions: PermissionString[],
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -93,6 +94,7 @@ export class Command {
             data.name,
             data.def.aliases ?? [],
             data.def.clientPermissions ?? [],
+            data.def.userPermissions ?? [],
             data.def.examples ?? [],
             data.def.description ?? "",
             parent,
@@ -146,6 +148,10 @@ export class Command {
 
     get clientPermissions() {
         return this._clientPermissions as readonly PermissionString[];
+    }
+
+    get userPermissions() {
+        return this._userPermissions as readonly PermissionString[];
     }
 
     get throttler(): Throttler | undefined {

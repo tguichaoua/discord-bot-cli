@@ -11,6 +11,8 @@ export type CommandDefinition = {
     readonly aliases?: string[];
     /** Define which permissions the client need to perform the command. */
     readonly clientPermissions?: PermissionString[];
+    /** If the command come from a guild, the user must have these permissions to execute this command. */
+    readonly userPermissions?: PermissionString[];
     /** A list of example for this command. */
     readonly examples?: string[];
     /** The description of this command. Used by help command. */
