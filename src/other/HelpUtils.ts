@@ -125,7 +125,10 @@ export namespace HelpUtils {
                 (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
             embed.addField(
                 localization.help.usage,
-                `**\`${usageString}\`**\n\n${localization.help.argUsageHint}`,
+                `**\`${usageString}\`**` +
+                    (rawHelp.args.length !== 0
+                        ? `\n\n${localization.help.argUsageHint}`
+                        : ""),
                 false
             );
 
