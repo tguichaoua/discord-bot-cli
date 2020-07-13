@@ -18,6 +18,7 @@ import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
+import PathUtils from "../utils/PathUtils";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -51,11 +52,7 @@ export class CommandSet {
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
-            if (require.main)
-                commandDirPath = path.resolve(
-                    path.dirname(require.main.filename),
-                    commandDirPath
-                );
+            commandDirPath = PathUtils.resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
                 .filter(
