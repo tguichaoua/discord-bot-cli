@@ -12,6 +12,7 @@
         "test": "npm run lint",
         "test:build": "tsc",
         "start": "ts-node test/index.ts",
+        "start:log": "ts-node test/log.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
         "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
