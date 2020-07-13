@@ -19,6 +19,7 @@ import {
     ReadonlyCommandCollection,
 } from "./CommandCollection";
 import PathUtils from "../utils/PathUtils";
+import chalk from "chalk";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -32,15 +33,20 @@ export class CommandSet {
     }
 
     private _loadFile(path: string) {
+        const debugPath = chalk.underline(
+            PathUtils.relativeFromEntryPoint(path)
+        );
+        Logger.debug(`load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
-            if (command.ignored) Logger.warn(`Command ignored (${path})`);
+            if (command.ignored)
+                Logger.warn(`Command ignored from ${debugPath}`);
             else {
                 if (!this._commands.add(command))
-                    Logger.warn(`Command name already taken (${path})`);
+                    Logger.warn(`Command name already taken. (${debugPath})`);
             }
         } catch (e) {
-            Logger.error(`Fail to load command at ${path} :`, e);
+            Logger.error(`Fail to load command from ${debugPath}\n`, e);
         }
     }
 
