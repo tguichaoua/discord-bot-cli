@@ -20,6 +20,7 @@ import {
 } from "./CommandCollection";
 import PathUtils from "../utils/PathUtils";
 import chalk from "chalk";
+import { CommandLoadError } from "./errors/CommandLoadError";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -36,17 +37,24 @@ export class CommandSet {
         const debugPath = chalk.underline(
             PathUtils.relativeFromEntryPoint(path)
         );
-        Logger.debug(`load command from ${debugPath}`);
+        Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
-            if (command.ignored)
-                Logger.warn(`Command ignored from ${debugPath}`);
+            if (command.ignored) Logger.log(`Command ignored ${debugPath}`);
             else {
                 if (!this._commands.add(command))
-                    Logger.warn(`Command name already taken. (${debugPath})`);
+                    Logger.warn(
+                        `Command not loaded, the name is already taken. (${debugPath})`
+                    );
             }
         } catch (e) {
-            Logger.error(`Fail to load command from ${debugPath}\n`, e);
+            if (e instanceof CommandLoadError) e = e.message;
+            Logger.error(
+                `Fail to load command from ${debugPath}\n${chalk.red(
+                    "Error:"
+                )}`,
+                e
+            );
         }
     }
 

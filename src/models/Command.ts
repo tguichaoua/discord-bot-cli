@@ -28,6 +28,7 @@ import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { Throttler } from "./Throttler";
+import { CommandLoadError } from "./errors/CommandLoadError";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
@@ -68,7 +69,9 @@ export class Command {
     static load(filepath: string, commandSet: CommandSet): Command {
         const module = require(filepath); // eslint-disable-line @typescript-eslint/no-var-requires
         if (!module.default)
-            throw new Error("Command data must be exported as default.");
+            throw new CommandLoadError(
+                "Command data must be exported as default."
+            );
         return Command._build(
             filepath,
             commandSet,
