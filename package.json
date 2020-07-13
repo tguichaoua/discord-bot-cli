@@ -20,7 +20,7 @@
         "build:clean": "shx rm -rf ./dist",
         "rebuild": "npm run build:clean && npm run build",
         "prepublishOnly": "npm run rebuild",
-        "copy:assets": "shx mkdir -p ./dist/assets && shx cp -r ./src/assets ./dist"
+        "copy:assets": "shx cp -r ./src/assets ./dist"
     },
     "repository": {
         "type": "git",
