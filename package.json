@@ -10,6 +10,7 @@
     "scripts": {
         "v": "npm --no-git-tag-version version",
         "test": "npm run lint",
+        "test:build": "tsc",
         "start": "ts-node test/index.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
