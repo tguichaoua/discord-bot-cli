@@ -152,12 +152,12 @@ export class Command {
 
     // === Getter =====================================================
 
-    get clientPermissions() {
-        return this._clientPermissions as readonly PermissionString[];
+    get clientPermissions(): readonly PermissionString[] {
+        return this._clientPermissions;
     }
 
-    get userPermissions() {
-        return this._userPermissions as readonly PermissionString[];
+    get userPermissions(): readonly PermissionString[] | undefined {
+        return this._userPermissions;
     }
 
     get throttler(): Throttler | undefined {
