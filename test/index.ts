@@ -1,6 +1,9 @@
 import { Client } from "discord.js";
 import { CommandSet } from "../src/index";
+import { Logger } from "../src/logger";
 import env from "./env.json";
+
+Logger.enableDebug = true;
 
 const commands = new CommandSet({
     prefix: env.prefix,
