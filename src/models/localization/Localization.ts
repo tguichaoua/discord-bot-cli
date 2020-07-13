@@ -7,7 +7,7 @@ export interface Localization {
         tags: {
             guildOnly: string;
             devOnly: string;
-        }
+        };
         usage: string;
         arguments: string;
         flags: string;
@@ -15,6 +15,7 @@ export interface Localization {
         aliases: string;
         examples: string;
         bot_permissions: string;
+        user_permissions: string;
         default: string;
         commandNotFound: string;
         restTypeName: string;

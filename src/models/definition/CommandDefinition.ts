@@ -11,6 +11,10 @@ export type CommandDefinition = {
     readonly aliases?: string[];
     /** Define which permissions the client need to perform the command. */
     readonly clientPermissions?: PermissionString[];
+    /** If the command come from a guild, the user must have these permissions to execute this command.
+     * Inherited from parent command if not defined.
+     */
+    readonly userPermissions?: PermissionString[];
     /** A list of example for this command. */
     readonly examples?: string[];
     /** The description of this command. Used by help command. */
@@ -58,4 +62,4 @@ export type CommandSettings = {
     readonly guildOnly?: boolean;
     /** If set to true, the command message will be deleted after command execution. */
     readonly deleteMessage?: boolean;
-}
+};

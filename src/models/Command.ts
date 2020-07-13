@@ -1,28 +1,36 @@
-import { Message, User, PermissionString, Guild } from 'discord.js';
+import {
+    Message,
+    User,
+    PermissionString,
+    Guild,
+    GuildMember,
+} from "discord.js";
 import { CommandSet } from "./CommandSet";
-import { ParseOptions } from './ParseOptions';
-import { CommandData } from './CommandData';
-import { CommandDefinition } from './definition/CommandDefinition';
-import { ArgDefinition } from './definition/ArgDefinition';
-import { FlagDefinition } from './definition/FlagDefinition';
-import { Char } from '../utils/char';
-import { CommandExecutor } from './callbacks/CommandExecutor';
-import { parseFlags } from '../other/parsing/parseFlags';
-import { parseArgs } from '../other/parsing/parseArgs';
-import { RestDefinition } from './definition/RestDefinition';
-import { CommandResultUtils } from './CommandResult';
-import { CommandResultError } from './CommandResultError';
-import { ReadonlyCommandCollection, CommandCollection } from './CommandCollection';
-import { CanUseCommandCb } from './callbacks/CanUseCommandCb';
-import { HelpCb } from './callbacks/HelpCb';
-import { parseValue } from '../other/parsing/parseValue';
-import { ParsableType } from './ParsableType';
-import { ThrottlingDefinition } from './definition/ThrottlingDefinition';
-import { Throttler } from './Throttler';
-import { threadId } from 'worker_threads';
+import { ParseOptions } from "./ParseOptions";
+import { CommandData } from "./CommandData";
+import { CommandDefinition } from "./definition/CommandDefinition";
+import { ArgDefinition } from "./definition/ArgDefinition";
+import { FlagDefinition } from "./definition/FlagDefinition";
+import { Char } from "../utils/char";
+import { CommandExecutor } from "./callbacks/CommandExecutor";
+import { parseFlags } from "../other/parsing/parseFlags";
+import { parseArgs } from "../other/parsing/parseArgs";
+import { RestDefinition } from "./definition/RestDefinition";
+import { CommandResultUtils } from "./CommandResult";
+import { CommandResultError } from "./CommandResultError";
+import {
+    ReadonlyCommandCollection,
+    CommandCollection,
+} from "./CommandCollection";
+import { CanUseCommandCb } from "./callbacks/CanUseCommandCb";
+import { HelpCb } from "./callbacks/HelpCb";
+import { parseValue } from "../other/parsing/parseValue";
+import { ParsableType } from "./ParsableType";
+import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
+import { Throttler } from "./Throttler";
+import { CommandLoadError } from "./errors/CommandLoadError";
 
 export class Command {
-
     private readonly _throttler: Throttler | null | undefined;
     public readonly _throttlingIncludeAdmins: boolean;
 
@@ -31,6 +39,7 @@ export class Command {
         public readonly name: string,
         public readonly aliases: readonly string[],
         private readonly _clientPermissions: PermissionString[],
+        private readonly _userPermissions: PermissionString[] | undefined,
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -48,17 +57,28 @@ export class Command {
         public readonly ignored: boolean,
         public readonly devOnly: boolean,
         public readonly guildOnly: boolean,
-        public readonly deleteMessage: boolean,
+        public readonly deleteMessage: boolean
     ) {
-        this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
+        this._throttler = throttling
+            ? new Throttler(throttling.count, throttling.duration)
+            : throttling;
         this._throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
     }
 
     /** @internal */
     static load(filepath: string, commandSet: CommandSet): Command {
-        const module = require(filepath);
-        if (!module.default) throw new Error("Command data must be exported as default.");
-        return Command._build(filepath, commandSet, module.default, null, undefined);
+        const module = require(filepath); // eslint-disable-line @typescript-eslint/no-var-requires
+        if (!module.default)
+            throw new CommandLoadError(
+                "Command data must be exported as default."
+            );
+        return Command._build(
+            filepath,
+            commandSet,
+            module.default,
+            null,
+            undefined
+        );
     }
 
     private static _build<T extends CommandDefinition>(
@@ -66,10 +86,15 @@ export class Command {
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
-        parentHelp: HelpCb | undefined,
+        parentHelp: HelpCb | undefined
     ): Command {
-        function resolveInheritance<K extends keyof Command>(prop: K, defaultValue: Command[K]): Command[K] {
-            return (((data.def.inherit ?? true) && parent) ? parent[prop] : defaultValue);
+        function resolveInheritance<K extends keyof Command>(
+            prop: K,
+            defaultValue: Command[K]
+        ): Command[K] {
+            return (data.def.inherit ?? true) && parent
+                ? parent[prop]
+                : defaultValue;
         }
 
         const subs = new CommandCollection();
@@ -78,6 +103,7 @@ export class Command {
             data.name,
             data.def.aliases ?? [],
             data.def.clientPermissions ?? [],
+            data.def.userPermissions,
             data.def.examples ?? [],
             data.def.description ?? "",
             parent,
@@ -86,11 +112,19 @@ export class Command {
             new Map(data.def.args ? Object.entries(data.def.args) : []),
             data.def.rest,
             new Map(data.def.flags ? Object.entries(data.def.flags) : []),
-            new Map(data.def.flags ?
-                Object.entries(data.def.flags)
-                    .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] { return a[1].shortcut !== undefined })
-                    .map(([k, v]) => [v.shortcut, k]) :
-                []
+            new Map(
+                data.def.flags
+                    ? Object.entries(data.def.flags)
+                          .filter(function (
+                              a
+                          ): a is [
+                              string,
+                              FlagDefinition & { shortcut: Char }
+                          ] {
+                              return a[1].shortcut !== undefined;
+                          })
+                          .map(([k, v]) => [v.shortcut, k])
+                    : []
             ),
             data.executor,
             data.def.canUse,
@@ -100,28 +134,40 @@ export class Command {
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
-            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false),
+            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false)
         );
 
         for (const subName in data.subs)
-            subs.add(Command._build(
-                null,
-                commandSet,
-                data.subs[subName],
-                cmd,
-                (data.def.useHelpOnSubs ?? false) || (!data.def.help && !!parentHelp) ? cmd._help : undefined,
-            ));
+            subs.add(
+                Command._build(
+                    null,
+                    commandSet,
+                    data.subs[subName],
+                    cmd,
+                    (data.def.useHelpOnSubs ?? false) ||
+                        (!data.def.help && !!parentHelp)
+                        ? cmd._help
+                        : undefined
+                )
+            );
         return cmd;
     }
 
     // === Getter =====================================================
 
-    get clientPermissions() { return this._clientPermissions as readonly PermissionString[]; }
+    get clientPermissions(): readonly PermissionString[] {
+        return this._clientPermissions;
+    }
+
+    get userPermissions(): readonly PermissionString[] | undefined {
+        return this._userPermissions;
+    }
 
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
-        if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
+        if (this.parent && this.parent._useThrottlerOnSubs)
+            return this.parent.throttler;
         return undefined;
     }
 
@@ -141,6 +187,15 @@ export class Command {
         return guild.me && guild.me.hasPermission(this._clientPermissions);
     }
 
+    /** Return true if the member has required permissions to execute this command. */
+    hasPermissions(member: GuildMember): boolean {
+        if (!this._userPermissions) {
+            if (this.parent) return this.parent.hasPermissions(member);
+            else return true;
+        }
+        return member.hasPermission(this._userPermissions);
+    }
+
     // =====================================================
 
     canUse(user: User, message: Message): boolean | string {
@@ -148,38 +203,63 @@ export class Command {
             const res = this.parent.canUse(user, message);
             if (res !== true) return res;
         }
-        if (this._canUse)
-            return this._canUse(user, message);
+        if (this._canUse) return this._canUse(user, message);
         return true;
+    }
+
+    /** Return true if the author of the message pass the `canUse` and the `hasPermissions`. */
+    checkPermissions(message: Message): boolean {
+        return (
+            this.canUse(message.author, message) === true &&
+            (!message.member || this.hasPermissions(message.member))
+        );
     }
 
     /**
      * Call the help handler of this command and return true.
      * Return false if handler is undefined.
-     * @param message 
-     * @param options 
+     * @param message
+     * @param options
      */
     async help(message: Message, options: ParseOptions): Promise<boolean> {
         if (!this._help) return false;
-        await this._help(this, { message, options, commandSet: this.commandSet });
+        await this._help(this, {
+            message,
+            options,
+            commandSet: this.commandSet,
+        });
         return true;
     }
 
     /** @internal */
-    async execute(message: Message, inputArguments: string[], options: ParseOptions, commandSet: CommandSet) {
+    async execute(
+        message: Message,
+        inputArguments: string[],
+        options: ParseOptions,
+        commandSet: CommandSet
+    ) {
+        if (message.guild && !this.hasClientPermissions(message.guild))
+            throw new CommandResultError(
+                CommandResultUtils.clientPermissions(this)
+            );
 
-        if (message.guild && !this.hasClientPermissions(message.guild)) throw new CommandResultError(CommandResultUtils.clientPermissions(this));
+        if (this.throttler?.throttled)
+            throw new CommandResultError(CommandResultUtils.throttling(this));
 
-        if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (!this._executor)
+            throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
-
-        const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
+        const flags = parseFlags(
+            message,
+            inputArguments,
+            this.flags,
+            this._flagsShortcuts
+        );
         const args = parseArgs(message, flags.args, this.args);
 
         const rest: ParsableType[] = [];
         if (this.rest) {
-            for (let e of args.rest) {
+            for (const e of args.rest) {
                 const parsed = parseValue(this.rest, message, e);
                 if (parsed.value !== undefined) rest.push(parsed.value);
             }
@@ -188,7 +268,11 @@ export class Command {
         if (
             this.throttler &&
             !options.devIDs.includes(message.author.id) &&
-            !(!this._throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
+            !(
+                !this._throttlingIncludeAdmins &&
+                message.member &&
+                message.member.permissions.has("ADMINISTRATOR")
+            )
         )
             this.throttler.add();
 
@@ -200,6 +284,7 @@ export class Command {
                 message,
                 guild: message.guild,
                 member: message.member,
+                channel: message.channel,
                 options,
                 commandSet,
                 command: this,
