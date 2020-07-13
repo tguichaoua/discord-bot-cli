@@ -18,6 +18,9 @@ import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
+import PathUtils from "../utils/PathUtils";
+import chalk from "chalk";
+import { CommandLoadError } from "./errors/CommandLoadError";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -31,15 +34,29 @@ export class CommandSet {
     }
 
     private _loadFile(path: string) {
+        const debugPath = chalk.underline(
+            PathUtils.relativeFromEntryPoint(path)
+        );
+        Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
-            if (command.ignored) Logger.warn(`Command ignored (${path})`);
+            if (command.ignored) Logger.log(`Command ignored ${debugPath}`);
             else {
                 if (!this._commands.add(command))
-                    Logger.warn(`Command name already taken (${path})`);
+                    Logger.warn(
+                        `Command not loaded, the name is already taken. (${debugPath})`
+                    );
             }
         } catch (e) {
-            Logger.error(`Fail to load command at ${path} :`, e);
+            let error;
+            if (e instanceof CommandLoadError) error = e.message;
+            else error = e;
+            Logger.error(
+                `Fail to load command from ${debugPath}\n${chalk.red(
+                    "Error:"
+                )}`,
+                error
+            );
         }
     }
 
@@ -51,11 +68,7 @@ export class CommandSet {
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
-            if (require.main)
-                commandDirPath = path.resolve(
-                    path.dirname(require.main.filename),
-                    commandDirPath
-                );
+            commandDirPath = PathUtils.resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
                 .filter(

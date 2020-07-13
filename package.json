@@ -12,6 +12,7 @@
         "test": "npm run lint",
         "test:build": "tsc",
         "start": "ts-node test/index.ts",
+        "start:log": "ts-node test/log.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
         "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
@@ -38,6 +39,7 @@
     },
     "homepage": "https://github.com/baanloh/discord-bot-cli#readme",
     "devDependencies": {
+        "@types/chalk": "^2.2.0",
         "@types/node": "^13.13.14",
         "@types/ws": "^7.2.6",
         "@typescript-eslint/eslint-plugin": "^3.6.0",
@@ -53,6 +55,7 @@
         "typescript": "^3.9.3"
     },
     "dependencies": {
+        "chalk": "^4.1.0",
         "meow": "^6.1.1"
     },
     "peerDependencies": {
