@@ -13,7 +13,6 @@ export abstract class Logger {
     public static enableDebug = false;
 
     private static _log(level: keyof typeof levels, ...args: any[]) {
-        if (level === "debug" && !this.enableDebug) return;
         const log =
             level === "error"
                 ? console.error
@@ -27,6 +26,7 @@ export abstract class Logger {
     }
 
     static debug(...args: any[]) {
+        if (!this.enableDebug) return;
         this._log("debug", ...args);
     }
 
