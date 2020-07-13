@@ -9,7 +9,7 @@
     },
     "scripts": {
         "v": "npm --no-git-tag-version version",
-        "test": "npm run lint",
+        "test": "npm run lint && npm run test:build",
         "test:build": "tsc",
         "start": "ts-node test/index.ts",
         "start:log": "ts-node test/log.ts",
