@@ -48,12 +48,14 @@ export class CommandSet {
                     );
             }
         } catch (e) {
-            if (e instanceof CommandLoadError) e = e.message;
+            let error;
+            if (e instanceof CommandLoadError) error = e.message;
+            else error = e;
             Logger.error(
                 `Fail to load command from ${debugPath}\n${chalk.red(
                     "Error:"
                 )}`,
-                e
+                error
             );
         }
     }
