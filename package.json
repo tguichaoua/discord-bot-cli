@@ -17,8 +17,8 @@
         "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
         "docs": "typedoc ./src/",
         "build": "tsc && npm run copy:assets",
-        "clean": "rm -rf ./dist",
-        "rebuild": "npm run clean && npm run build",
+        "build:clean": "shx rm -rf ./dist",
+        "rebuild": "npm run build:clean && npm run build",
         "prepublishOnly": "npm run rebuild",
         "copy:assets": "shx mkdir -p ./dist/assets && shx cp -r ./src/assets ./dist"
     },
