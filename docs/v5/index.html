@@ -67,15 +67,18 @@
 							<h3>Namespaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-namespace"><a href="modules/helputils.html" class="tsd-kind-icon">Help<wbr>Utils</a></li>
-								<li class="tsd-kind-namespace"><a href="modules/listutils.html" class="tsd-kind-icon">List<wbr>Utils</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-class"><a href="classes/arg.html" class="tsd-kind-icon">Arg</a></li>
 								<li class="tsd-kind-class"><a href="classes/command.html" class="tsd-kind-icon">Command</a></li>
 								<li class="tsd-kind-class"><a href="classes/commandcollection.html" class="tsd-kind-icon">Command<wbr>Collection</a></li>
+								<li class="tsd-kind-class"><a href="classes/commandloaderror.html" class="tsd-kind-icon">Command<wbr>Load<wbr>Error</a></li>
 								<li class="tsd-kind-class"><a href="classes/commandset.html" class="tsd-kind-icon">Command<wbr>Set</a></li>
+								<li class="tsd-kind-class"><a href="classes/flag.html" class="tsd-kind-icon">Flag</a></li>
+								<li class="tsd-kind-class"><a href="classes/listutils.html" class="tsd-kind-icon">List<wbr>Utils</a></li>
 								<li class="tsd-kind-class"><a href="classes/readonlycommandcollection.html" class="tsd-kind-icon">Readonly<wbr>Command<wbr>Collection</a></li>
 								<li class="tsd-kind-class"><a href="classes/throttler.html" class="tsd-kind-icon">Throttler</a></li>
 							</ul>
@@ -112,6 +115,7 @@
 								<li class="tsd-kind-type-alias"><a href="index.html#helpcb" class="tsd-kind-icon">Help<wbr>Cb</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#inherit" class="tsd-kind-icon">Inherit</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#isguildonly" class="tsd-kind-icon">Is<wbr>Guild<wbr>Only</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#messageextension" class="tsd-kind-icon">Message<wbr>Extension</a></li>
 								<li class="tsd-kind-type-alias"><a href="index.html#parsabledefinition" class="tsd-kind-icon">Parsable<wbr>Definition</a></li>
 								<li class="tsd-kind-type-alias"><a href="index.html#parsabletype" class="tsd-kind-icon">Parsable<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias"><a href="index.html#parsabletypename" class="tsd-kind-icon">Parsable<wbr>Type<wbr>Name</a></li>
@@ -124,8 +128,17 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable"><a href="index.html#cmd" class="tsd-kind-icon">cmd</a></li>
+								<li class="tsd-kind-variable"><a href="index.html#helpstring" class="tsd-kind-icon">help<wbr>String</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="index.html#default" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-function"><a href="index.html#getcommandraw" class="tsd-kind-icon">get<wbr>Command<wbr>Raw</a></li>
 								<li class="tsd-kind-function tsd-has-type-parameter"><a href="index.html#makecommand" class="tsd-kind-icon">make<wbr>Command</a></li>
 								<li class="tsd-kind-function"><a href="index.html#parse" class="tsd-kind-icon">parse</a></li>
 							</ul>
@@ -141,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">Arg<wbr>Definition<span class="tsd-signature-symbol">:</span> <a href="index.html#parsabledefinition" class="tsd-signature-type">ParsableDefinition</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>optional<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/ArgDefinition.ts#L3">src/models/definition/ArgDefinition.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/ArgDefinition.ts#L3">src/models/definition/ArgDefinition.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">Build<wbr>InCommand<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"help"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"list"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"cmd"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/CommandSet.ts#L19">src/models/CommandSet.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L25">src/models/CommandSet.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">Can<wbr>Use<wbr>Command<wbr>Cb<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>user<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">User</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/callbacks/CanUseCommandCb.ts#L3">src/models/callbacks/CanUseCommandCb.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/callbacks/CanUseCommandCb.ts#L3">src/models/callbacks/CanUseCommandCb.ts:3</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -192,20 +205,20 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="commanddefinition" class="tsd-anchor"></a>
 					<h3>Command<wbr>Definition</h3>
-					<div class="tsd-signature tsd-kind-icon">Command<wbr>Definition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>aliases<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>canUse<span class="tsd-signature-symbol">?: </span><a href="index.html#canusecommandcb" class="tsd-signature-type">CanUseCommandCb</a><span class="tsd-signature-symbol">; </span>clientPermissions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PermissionString</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>description<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>examples<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>flags<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>help<span class="tsd-signature-symbol">?: </span><a href="index.html#helpcb" class="tsd-signature-type">HelpCb</a><span class="tsd-signature-symbol">; </span>inherit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">?: </span><a href="index.html#restdefinition" class="tsd-signature-type">RestDefinition</a><span class="tsd-signature-symbol">; </span>subs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>throttling<span class="tsd-signature-symbol">?: </span><a href="interfaces/throttlingdefinition.html" class="tsd-signature-type">ThrottlingDefinition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">; </span>useHelpOnSubs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>useThrottlerForSubs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#commandsettings" class="tsd-signature-type">CommandSettings</a></div>
+					<div class="tsd-signature tsd-kind-icon">Command<wbr>Definition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>aliases<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>canUse<span class="tsd-signature-symbol">?: </span><a href="index.html#canusecommandcb" class="tsd-signature-type">CanUseCommandCb</a><span class="tsd-signature-symbol">; </span>clientPermissions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PermissionString</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>description<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>examples<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>flags<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>help<span class="tsd-signature-symbol">?: </span><a href="index.html#helpcb" class="tsd-signature-type">HelpCb</a><span class="tsd-signature-symbol">; </span>inherit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">?: </span><a href="index.html#restdefinition" class="tsd-signature-type">RestDefinition</a><span class="tsd-signature-symbol">; </span>subs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>throttling<span class="tsd-signature-symbol">?: </span><a href="interfaces/throttlingdefinition.html" class="tsd-signature-type">ThrottlingDefinition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">; </span>useHelpOnSubs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>useThrottlerForSubs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>userPermissions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PermissionString</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#commandsettings" class="tsd-signature-type">CommandSettings</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/CommandDefinition.ts#L9">src/models/definition/CommandDefinition.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/CommandDefinition.ts#L9">src/models/definition/CommandDefinition.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="commandexecutor" class="tsd-anchor"></a>
 					<h3>Command<wbr>Executor</h3>
-					<div class="tsd-signature tsd-kind-icon">Command<wbr>Executor&lt;T, S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, flags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, others<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Command<wbr>Executor&lt;T, S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, flags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, others<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/callbacks/CommandExecutor.ts#L11">src/models/callbacks/CommandExecutor.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/callbacks/CommandExecutor.ts#L36">src/models/callbacks/CommandExecutor.ts:36</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -222,7 +235,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, flags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, others<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, flags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span>, others<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -239,30 +252,7 @@
 												</ul>
 											</li>
 											<li>
-												<h5>others: <span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h5>
-												<ul class="tsd-parameters">
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> command<wbr>Set<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>guild<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Guild</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span><span class="tsd-signature-symbol"> | </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a></h5>
-													</li>
-													<li class="tsd-parameter">
-														<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
-													</li>
-												</ul>
+												<h5>others: <span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">; </span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">ParsableTypeOf</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"rest"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="index.html#messageextension" class="tsd-signature-type">MessageExtension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -278,7 +268,7 @@
 					<div class="tsd-signature tsd-kind-icon">Command<wbr>Result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"ok"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"error"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">; </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"no executor"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"guild only"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dev only"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"unauthorized user"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"throttling"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"client permissions"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"not prefixed"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"command not found"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">{ </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"parsing error"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="index.html#argdefinition" class="tsd-signature-type">ArgDefinition</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"arg"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>got<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>reason<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"invalid value"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">{ </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"parsing error"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="index.html#argdefinition" class="tsd-signature-type">ArgDefinition</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"arg"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>reason<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"missing argument"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">{ </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"parsing error"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"flag"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>reason<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"unknown flag"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">{ </span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"parsing error"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"flag"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>flag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="index.html#flagdefinition" class="tsd-signature-type">FlagDefinition</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>got<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>reason<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"invalid value"</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/CommandResult.ts#L5">src/models/CommandResult.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandResult.ts#L5">src/models/CommandResult.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -288,7 +278,7 @@
 					<div class="tsd-signature tsd-kind-icon">Command<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>deleteMessage<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>devOnly<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>guildOnly<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>ignore<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/CommandDefinition.ts#L52">src/models/definition/CommandDefinition.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/CommandDefinition.ts#L56">src/models/definition/CommandDefinition.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -335,7 +325,7 @@
 					<div class="tsd-signature tsd-kind-icon">Flag<wbr>Definition<span class="tsd-signature-symbol">:</span> <a href="index.html#parsabledefinition" class="tsd-signature-type">ParsableDefinition</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>shortcut<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Char</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/FlagDefinition.ts#L4">src/models/definition/FlagDefinition.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/FlagDefinition.ts#L4">src/models/definition/FlagDefinition.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -345,7 +335,7 @@
 					<div class="tsd-signature tsd-kind-icon">Help<wbr>Cb<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>commandSet<span class="tsd-signature-symbol">: </span><a href="classes/commandset.html" class="tsd-signature-type">CommandSet</a><span class="tsd-signature-symbol">; </span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">: </span><a href="interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/callbacks/HelpCb.ts#L6">src/models/callbacks/HelpCb.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/callbacks/HelpCb.ts#L6">src/models/callbacks/HelpCb.ts:6</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -390,7 +380,7 @@
 					<div class="tsd-signature tsd-kind-icon">Inherit&lt;T, S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"inherit"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/CommandData.ts#L17">src/models/CommandData.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandData.ts#L28">src/models/CommandData.ts:28</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -406,10 +396,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="isguildonly" class="tsd-anchor"></a>
 					<h3>Is<wbr>Guild<wbr>Only</h3>
-					<div class="tsd-signature tsd-kind-icon">Is<wbr>Guild<wbr>Only&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guildOnly"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">null</span></div>
+					<div class="tsd-signature tsd-kind-icon">Is<wbr>Guild<wbr>Only&lt;S, True, False&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guildOnly"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">True</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">False</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/callbacks/CommandExecutor.ts#L9">src/models/callbacks/CommandExecutor.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/callbacks/CommandExecutor.ts#L12">src/models/callbacks/CommandExecutor.ts:12</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -417,7 +407,43 @@
 						<li>
 							<h4>S<span class="tsd-signature-symbol">: </span><a href="index.html#commandsettings" class="tsd-signature-type">CommandSettings</a></h4>
 						</li>
+						<li>
+							<h4>True</h4>
+						</li>
+						<li>
+							<h4>False</h4>
+						</li>
 					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="messageextension" class="tsd-anchor"></a>
+					<h3>Message<wbr>Extension</h3>
+					<div class="tsd-signature tsd-kind-icon">Message<wbr>Extension&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>channel<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">DMChannel</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>guild<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guild"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guild"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>member<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"member"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"member"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/callbacks/CommandExecutor.ts#L18">src/models/callbacks/CommandExecutor.ts:18</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>S</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> channel<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">DMChannel</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> guild<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guild"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"guild"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagReadonly">Readonly</span> member<span class="tsd-signature-symbol">: </span><a href="index.html#isguildonly" class="tsd-signature-type">IsGuildOnly</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">NonNullable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"member"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"member"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="parsabledefinition" class="tsd-anchor"></a>
@@ -425,7 +451,7 @@
 					<div class="tsd-signature tsd-kind-icon">Parsable<wbr>Definition<span class="tsd-signature-symbol">:</span> <a href="index.html#wrapparsable" class="tsd-signature-type">WrapParsable</a><span class="tsd-signature-symbol">&lt;</span><a href="index.html#parsabletypename" class="tsd-signature-type">ParsableTypeName</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="interfaces/parsable.html" class="tsd-signature-type">Parsable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">keyof </span><a href="index.html#parsabletypename" class="tsd-signature-type">ParsableTypeName</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/ParsableDefinition.ts#L17">src/models/definition/ParsableDefinition.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/ParsableDefinition.ts#L21">src/models/definition/ParsableDefinition.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -435,7 +461,7 @@
 					<div class="tsd-signature tsd-kind-icon">Parsable<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">User</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Role</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Channel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">GuildChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">DMChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TextChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">VoiceChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">CategoryChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">NewsChannel</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">StoreChannel</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/ParsableType.ts#L7">src/models/ParsableType.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/ParsableType.ts#L30">src/models/ParsableType.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -445,7 +471,7 @@
 					<div class="tsd-signature tsd-kind-icon">Parsable<wbr>Type<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"string"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"boolean"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"user"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"role"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"guild channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dm channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"text channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"voice channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"category channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"news channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"store channel"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/ParsableType.ts#L3">src/models/ParsableType.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/ParsableType.ts#L14">src/models/ParsableType.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -455,7 +481,7 @@
 					<div class="tsd-signature tsd-kind-icon">Parsable<wbr>Type<wbr>Of&lt;Names&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Names</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">ParsableTypeName</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">TypeName2Type</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Names</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">TypeName2Type</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Names</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ParsableTypeName</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/ParsableType.ts#L11">src/models/ParsableType.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/ParsableType.ts#L45">src/models/ParsableType.ts:45</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -471,7 +497,7 @@
 					<div class="tsd-signature tsd-kind-icon">Partial<wbr>Parse<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DeepPartial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ParseOptions</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/index.ts#L11">src/index.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/index.ts#L11">src/index.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -481,7 +507,7 @@
 					<div class="tsd-signature tsd-kind-icon">Rest<wbr>Definition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>description<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><a href="index.html#parsabletypename" class="tsd-signature-type">ParsableTypeName</a><span class="tsd-signature-symbol"> | </span><a href="index.html#parsabletypename" class="tsd-signature-type">ParsableTypeName</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/RestDefinition.ts#L3">src/models/definition/RestDefinition.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/RestDefinition.ts#L3">src/models/definition/RestDefinition.ts:3</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -505,7 +531,7 @@
 					<div class="tsd-signature tsd-kind-icon">Type<wbr>Name2<wbr>Type&lt;Name&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"string"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"boolean"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"user"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">User</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"role"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Role</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Channel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"guild channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">GuildChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"dm channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">DMChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"text channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">TextChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"voice channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">VoiceChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"category channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">CategoryChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"news channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">NewsChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Name</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">"store channel"</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">StoreChannel</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/ParsableType.ts#L14">src/models/ParsableType.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/ParsableType.ts#L51">src/models/ParsableType.ts:51</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -521,7 +547,7 @@
 					<div class="tsd-signature tsd-kind-icon">Type<wbr>Name<wbr>Localization<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/localization/TypeNameLocalization.ts#L3">src/models/localization/TypeNameLocalization.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/localization/TypeNameLocalization.ts#L3">src/models/localization/TypeNameLocalization.ts:3</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -536,7 +562,7 @@
 					<div class="tsd-signature tsd-kind-icon">Wrap<wbr>Parsable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Parsable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/models/definition/ParsableDefinition.ts#L15">src/models/definition/ParsableDefinition.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/definition/ParsableDefinition.ts#L17">src/models/definition/ParsableDefinition.ts:17</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -548,7 +574,75 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="cmd" class="tsd-anchor"></a>
+					<h3>cmd</h3>
+					<div class="tsd-signature tsd-kind-icon">cmd<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/bin/cli.ts#L14">src/bin/cli.ts:14</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="helpstring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> help<wbr>String</h3>
+					<div class="tsd-signature tsd-kind-icon">help<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Usagedbc &lt;command&gt; [options] [--help]Commandscmd, c      Create a new command fileloc, l      Create a new localization file"</span><span class="tsd-signature-symbol"> = &#x60;Usagedbc &lt;command&gt; [options] [--help]Commandscmd, c      Create a new command fileloc, l      Create a new localization file&#x60;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/bin/new-command.ts#L5">src/bin/new-command.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/bin/localization.ts#L5">src/bin/localization.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/bin/cli.ts#L3">src/bin/cli.ts:3</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="default" class="tsd-anchor"></a>
+					<h3>default</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/bin/new-command.ts#L11">src/bin/new-command.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="getcommandraw" class="tsd-anchor"></a>
+					<h3>get<wbr>Command<wbr>Raw</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Command<wbr>Raw<span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="classes/command.html" class="tsd-signature-type">Command</a>, localization<span class="tsd-signature-symbol">: </span><a href="interfaces/localization.html" class="tsd-signature-type">Localization</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/commandrawlist.html" class="tsd-signature-type">CommandRawList</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/other/ListUtils.ts#L24">src/other/ListUtils.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>command: <a href="classes/command.html" class="tsd-signature-type">Command</a></h5>
+								</li>
+								<li>
+									<h5>localization: <a href="interfaces/localization.html" class="tsd-signature-type">Localization</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="interfaces/commandrawlist.html" class="tsd-signature-type">CommandRawList</a></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
 					<a name="makecommand" class="tsd-anchor"></a>
 					<h3>make<wbr>Command</h3>
@@ -559,7 +653,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/other/makeCommand.ts#L6">src/other/makeCommand.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/other/makeCommand.ts#L6">src/other/makeCommand.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -591,7 +685,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/1be9df9/src/other/parsing/parseValue.ts#L31">src/other/parsing/parseValue.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/other/parsing/parseValue.ts#L39">src/other/parsing/parseValue.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -624,13 +718,13 @@
 					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 						<a href="modules/helputils.command.html">Help<wbr>Utils.<wbr>Command</a>
 					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/listutils.html">List<wbr>Utils</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/arg.html" class="tsd-kind-icon">Arg</a>
+					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/command.html" class="tsd-kind-icon">Command</a>
 					</li>
@@ -638,7 +732,16 @@
 						<a href="classes/commandcollection.html" class="tsd-kind-icon">Command<wbr>Collection</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/commandloaderror.html" class="tsd-kind-icon">Command<wbr>Load<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/commandset.html" class="tsd-kind-icon">Command<wbr>Set</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/flag.html" class="tsd-kind-icon">Flag</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/listutils.html" class="tsd-kind-icon">List<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/readonlycommandcollection.html" class="tsd-kind-icon">Readonly<wbr>Command<wbr>Collection</a>
@@ -718,6 +821,9 @@
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="index.html#isguildonly" class="tsd-kind-icon">Is<wbr>Guild<wbr>Only</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="index.html#messageextension" class="tsd-kind-icon">Message<wbr>Extension</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="index.html#parsabledefinition" class="tsd-kind-icon">Parsable<wbr>Definition</a>
 					</li>
@@ -745,6 +851,18 @@
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="index.html#wrapparsable" class="tsd-kind-icon">Wrap<wbr>Parsable</a>
 					</li>
+					<li class=" tsd-kind-variable">
+						<a href="index.html#cmd" class="tsd-kind-icon">cmd</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="index.html#helpstring" class="tsd-kind-icon">help<wbr>String</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="index.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="index.html#getcommandraw" class="tsd-kind-icon">get<wbr>Command<wbr>Raw</a>
+					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="index.html#makecommand" class="tsd-kind-icon">make<wbr>Command</a>
 					</li>
@@ -766,10 +884,15 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
