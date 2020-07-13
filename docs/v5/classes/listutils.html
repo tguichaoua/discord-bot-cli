@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CommandData | discord-bot-cli</title>
+	<title>ListUtils | discord-bot-cli</title>
 	<meta name="description" content="Documentation for discord-bot-cli">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,32 +52,21 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="commanddata.html">CommandData</a>
+					<a href="listutils.html">ListUtils</a>
 				</li>
 			</ul>
-			<h1>Interface CommandData&lt;T, S&gt;</h1>
+			<h1>Class ListUtils</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T<span class="tsd-signature-symbol">: </span><a href="../index.html#commanddefinition" class="tsd-signature-type">CommandDefinition</a></h4>
-					</li>
-					<li>
-						<h4>S<span class="tsd-signature-symbol">: </span><a href="../index.html#commandsettings" class="tsd-signature-type">CommandSettings</a></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CommandData</span>
+						<span class="target">ListUtils</span>
 					</li>
 				</ul>
 			</section>
@@ -86,51 +75,41 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddata.html#executor" class="tsd-kind-icon">executor</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="commanddata.html#subs" class="tsd-kind-icon">subs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="listutils.html#getrawlistdata" class="tsd-kind-icon">get<wbr>Raw<wbr>List<wbr>Data</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="executor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> executor</h3>
-					<div class="tsd-signature tsd-kind-icon">executor<span class="tsd-signature-symbol">:</span> <a href="../index.html#commandexecutor" class="tsd-signature-type">CommandExecutor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><a href="../index.html#inherit" class="tsd-signature-type">Inherit</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandData.ts#L17">src/models/CommandData.ts:17</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Called when the command is executed.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="subs" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> subs</h3>
-					<div class="tsd-signature tsd-kind-icon">subs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandData.ts#L20">src/models/CommandData.ts:20</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Sub-commands data.</p>
-						</div>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-						</ul>
-					</div>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="getrawlistdata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Raw<wbr>List<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Raw<wbr>List<wbr>Data<span class="tsd-signature-symbol">(</span>commandSet<span class="tsd-signature-symbol">: </span><a href="commandset.html" class="tsd-signature-type">CommandSet</a>, localization<span class="tsd-signature-symbol">: </span><a href="../interfaces/localization.html" class="tsd-signature-type">Localization</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/listrawdata.html" class="tsd-signature-type">ListRawData</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/other/ListUtils.ts#L8">src/other/ListUtils.ts:8</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>commandSet: <a href="commandset.html" class="tsd-signature-type">CommandSet</a></h5>
+								</li>
+								<li>
+									<h5>localization: <a href="../interfaces/localization.html" class="tsd-signature-type">Localization</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/listrawdata.html" class="tsd-signature-type">ListRawData</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -146,14 +125,11 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="commanddata.html" class="tsd-kind-icon">Command<wbr>Data</a>
+					<li class="current tsd-kind-class">
+						<a href="listutils.html" class="tsd-kind-icon">List<wbr>Utils</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="commanddata.html#executor" class="tsd-kind-icon">executor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="commanddata.html#subs" class="tsd-kind-icon">subs</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="listutils.html#getrawlistdata" class="tsd-kind-icon">get<wbr>Raw<wbr>List<wbr>Data</a>
 							</li>
 						</ul>
 					</li>
