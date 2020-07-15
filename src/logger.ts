@@ -26,19 +26,19 @@ export abstract class Logger {
     }
 
     static debug(...args: any[]) {
-        if (!this.enableDebug) return;
-        this._log("debug", ...args);
+        if (!Logger.enableDebug) return;
+        Logger._log("debug", ...args);
     }
 
     static log(...args: any[]) {
-        this._log("log", ...args);
+        Logger._log("log", ...args);
     }
 
     static warn(...args: any[]) {
-        this._log("warn", ...args);
+        Logger._log("warn", ...args);
     }
 
     static error(...args: any[]) {
-        this._log("error", ...args);
+        Logger._log("error", ...args);
     }
 }
