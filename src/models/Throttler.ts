@@ -14,12 +14,12 @@ export class Throttler {
         return this._current;
     }
 
-    /** Return true if this throttler has reached the limit, false otherwise. */
+    /** Returns `true` if this throttler has reached the limit, `false` otherwise. */
     get throttled() {
         return this._current >= this.count;
     }
 
-    /** Return the time in seconds until the throttler is reset. */
+    /** Returns the time in seconds until the throttler is reset. */
     get cooldown() {
         return this._timeout
             ? Math.ceil(
@@ -31,7 +31,7 @@ export class Throttler {
             : 0;
     }
 
-    /** Reset this throttler. */
+    /** Resets this throttler. */
     reset(): void {
         if (this._timeout) clearTimeout(this._timeout);
         this._timeout = undefined;
@@ -39,7 +39,7 @@ export class Throttler {
     }
 
     /** Increment this throttler.
-     * Return true if the limit has not been reached, false otherwise.
+     * Returns `true` if the limit has not been reached, `false` otherwise.
      */
     add(): boolean {
         const reachedLimit = this.throttled;
