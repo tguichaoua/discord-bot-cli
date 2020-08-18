@@ -116,21 +116,24 @@ export namespace HelpUtils {
                               rawHelp.tags.map((t) => `\`${t}\``).join(" "))
                 );
 
-            const usageString =
-                prefix +
-                rawHelp.fullName +
-                (rawHelp.args.length === 0
-                    ? ""
-                    : " " + rawHelp.args.map((a) => a.usageString).join(" ")) +
-                (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField(
-                localization.help.usage,
-                `**\`${usageString}\`**` +
-                    (rawHelp.args.length !== 0
-                        ? `\n\n${localization.help.argUsageHint}`
-                        : ""),
-                false
-            );
+            if (command.hasExecutor) {
+                const usageString =
+                    prefix +
+                    rawHelp.fullName +
+                    (rawHelp.args.length === 0
+                        ? ""
+                        : " " +
+                          rawHelp.args.map((a) => a.usageString).join(" ")) +
+                    (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
+                embed.addField(
+                    localization.help.usage,
+                    `**\`${usageString}\`**` +
+                        (rawHelp.args.length !== 0
+                            ? `\n\n${localization.help.argUsageHint}`
+                            : ""),
+                    false
+                );
+            }
 
             const args =
                 rawHelp.args
