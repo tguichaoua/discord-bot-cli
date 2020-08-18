@@ -61,10 +61,10 @@ export class CommandSet {
     }
 
     /**
-     * Load command from the given folder path.<br>
-     * Command file must have the extension `.cmd.js`
-     * @param commandDirPath - path to the folder where the commands are (relative to node entry point).
-     * @param includeTS - if set to true, file with `.cmd.ts` extension are also loaded. Usefull if you use `ts-node` (default is false)
+     * Loads commands from the given folder path.
+     * Command files must have the extension `.cmd.js`.
+     * @param commandDirPath - The path to the folder where the commands are (relative to node entry point).
+     * @param includeTS - If set to `true`, files with `.cmd.ts` extension are also loaded. Usefull if you use `ts-node` (default is `false`)
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
@@ -87,9 +87,9 @@ export class CommandSet {
         }
     }
 
-    /** Load all build-in commands */
+    /** Loads all build-in commands */
     buildin(buildinCommandNames: "all"): void;
-    /** Load build-in commands. */
+    /** Loads build-in commands. */
     buildin(...buildinCommandNames: BuildInCommand[]): void;
     buildin(...buildinCommandNames: string[]) {
         if (buildinCommandNames.includes("all")) {
@@ -108,7 +108,10 @@ export class CommandSet {
         }
     }
 
-    /** Reload a command. */
+    /**
+     * Reloads a command.
+     * @param command - The command to reload.
+     */
     reload(command: Command) {
         if (!command.filepath) throw Error("Cannot reload sub command.");
         this._commands.delete(command);
@@ -116,6 +119,9 @@ export class CommandSet {
         this._loadFile(command.filepath);
     }
 
+    /**
+     * @deprecated Use `CommandSet#commands.get` instead. (Will be removed in 6.0.0)
+     */
     get(commandName: string) {
         return this._commands.get(commandName);
     }
@@ -140,10 +146,9 @@ export class CommandSet {
     }
 
     /**
-     * Check if there is a command in the given message and execute it.
-     * @param message
-     * @param context - a context object that is send to command when executed. (can store database or other data)
-     * @param options - option de define the behaviour of the command parser.
+     *  Parses the message's content and executes the command.
+     * @param message - The message to parse.
+     * @param options - Options to define the parsing behaviour.
      */
     async parse(
         message: Message,
