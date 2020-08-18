@@ -60,6 +60,6 @@ export type CommandSettings = {
     readonly devOnly?: boolean;
     /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
-    /** If set to true, the command message will be deleted after command execution. */
+    /** If set to true, the command message will be deleted after command execution. (default is false). [inheritable] */
     readonly deleteMessage?: boolean;
 };
