@@ -115,7 +115,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#_alias">_alias</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L5">src/models/CommandCollection.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L5">src/models/CommandCollection.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -126,7 +126,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#_commands">_commands</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L4">src/models/CommandCollection.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L4">src/models/CommandCollection.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -144,7 +144,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#_symbol_iterator_">[Symbol.iterator]</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L7">src/models/CommandCollection.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L7">src/models/CommandCollection.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><a href="command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -161,13 +161,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L30">src/models/CommandCollection.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L40">src/models/CommandCollection.ts:40</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a command to the collection and returns <code>true</code> if successfully added, <code>false</code> otherwise.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>command: <a href="command.html" class="tsd-signature-type">Command</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The command to add.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -184,7 +192,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L46">src/models/CommandCollection.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L56">src/models/CommandCollection.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -208,13 +216,21 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L11">src/models/CommandCollection.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L15">src/models/CommandCollection.ts:15</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a command by its name of its alias. Returns <code>undefined</code> if not found.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The command&#39;s name of alias.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
@@ -232,9 +248,14 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#hasalias">hasAlias</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L24">src/models/CommandCollection.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L30">src/models/CommandCollection.ts:30</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns <code>true</code> if the collection contains the alias.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -256,9 +277,14 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="readonlycommandcollection.html">ReadonlyCommandCollection</a>.<a href="readonlycommandcollection.html#values">values</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandCollection.ts#L20">src/models/CommandCollection.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandCollection.ts#L25">src/models/CommandCollection.ts:25</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an iterable of commands in the collection.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
