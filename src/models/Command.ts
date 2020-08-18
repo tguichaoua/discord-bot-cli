@@ -171,7 +171,12 @@ export class Command {
         return undefined;
     }
 
-    /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
+    /** Returns `true` if this command have an executor, `false` otherwise. */
+    get hasExecutor(): boolean {
+        return this._executor !== undefined;
+    }
+
+    /** Returns an array containing all parent of this command, ordered from top-most command to this command (included). */
     getParents() {
         const parents: Command[] = [];
         parents.unshift(this);
@@ -182,12 +187,12 @@ export class Command {
         return parents;
     }
 
-    /** Return true if the client have required permission for this guild. */
+    /** Returns `true` if the client have required permissions for this guild, `false` otherwise. */
     hasClientPermissions(guild: Guild) {
         return guild.me && guild.me.hasPermission(this._clientPermissions);
     }
 
-    /** Return true if the member has required permissions to execute this command. */
+    /** Returns `true` if the member has required permissions to execute this command, `false` otherwise. */
     hasPermissions(member: GuildMember): boolean {
         if (!this._userPermissions) {
             if (this.parent) return this.parent.hasPermissions(member);
@@ -207,7 +212,7 @@ export class Command {
         return true;
     }
 
-    /** Return true if the author of the message pass the `canUse` and the `hasPermissions`. */
+    /** Returns `true` if the author of the message pass the `canUse` and the `hasPermissions` checks, `false` otherwise. */
     checkPermissions(message: Message): boolean {
         return (
             this.canUse(message.author, message) === true &&
@@ -216,8 +221,8 @@ export class Command {
     }
 
     /**
-     * Call the help handler of this command and return true.
-     * Return false if handler is undefined.
+     * Calls the help handler of this command and returns `true`.
+     * Returns `false` if the help handler is undefined.
      * @param message
      * @param options
      */

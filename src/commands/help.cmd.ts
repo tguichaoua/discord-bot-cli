@@ -48,7 +48,8 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
             const embed = HelpUtils.Command.embedHelp(
                 command,
                 options.prefix,
-                options.localization
+                options.localization,
+                message
             );
             await reply(message, { embed });
         }

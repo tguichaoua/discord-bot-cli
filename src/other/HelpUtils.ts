@@ -1,6 +1,6 @@
 import { Command } from "../models/Command"; /* eslint-disable-line @typescript-eslint/no-unused-vars */ // due to namespace Command: will be remove in future
 import { Localization } from "../models/localization/Localization";
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
 import { FlagDefinition } from "../models/definition/FlagDefinition";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
@@ -102,7 +102,8 @@ export namespace HelpUtils {
         export function embedHelp(
             command: Command,
             prefix: string,
-            localization: Localization
+            localization: Localization,
+            message?: Message
         ) {
             const rawHelp = getRawHelp(command, localization);
 
@@ -116,21 +117,24 @@ export namespace HelpUtils {
                               rawHelp.tags.map((t) => `\`${t}\``).join(" "))
                 );
 
-            const usageString =
-                prefix +
-                rawHelp.fullName +
-                (rawHelp.args.length === 0
-                    ? ""
-                    : " " + rawHelp.args.map((a) => a.usageString).join(" ")) +
-                (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
-            embed.addField(
-                localization.help.usage,
-                `**\`${usageString}\`**` +
-                    (rawHelp.args.length !== 0
-                        ? `\n\n${localization.help.argUsageHint}`
-                        : ""),
-                false
-            );
+            if (command.hasExecutor) {
+                const usageString =
+                    prefix +
+                    rawHelp.fullName +
+                    (rawHelp.args.length === 0
+                        ? ""
+                        : " " +
+                          rawHelp.args.map((a) => a.usageString).join(" ")) +
+                    (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
+                embed.addField(
+                    localization.help.usage,
+                    `**\`${usageString}\`**` +
+                        (rawHelp.args.length !== 0
+                            ? `\n\n${localization.help.argUsageHint}`
+                            : ""),
+                    false
+                );
+            }
 
             const args =
                 rawHelp.args
@@ -166,7 +170,12 @@ export namespace HelpUtils {
             if (flags !== "")
                 embed.addField(localization.help.flags, flags, true);
 
-            const subs = rawHelp.subs
+            const subs = (message
+                ? rawHelp.subs.filter((s) =>
+                      s.command.checkPermissions(message)
+                  )
+                : rawHelp.subs
+            )
                 .map(
                     (s) =>
                         `\`${s.command.name}\`` +
