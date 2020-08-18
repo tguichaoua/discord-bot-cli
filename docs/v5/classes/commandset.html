@@ -111,7 +111,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L28">src/models/CommandSet.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L28">src/models/CommandSet.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -137,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L32">src/models/CommandSet.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L32">src/models/CommandSet.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="readonlycommandcollection.html" class="tsd-signature-type">ReadonlyCommandCollection</a></h4>
@@ -158,12 +158,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L91">src/models/CommandSet.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L91">src/models/CommandSet.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Load all build-in commands</p>
+									<p>Loads all build-in commands</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -177,12 +177,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L93">src/models/CommandSet.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L93">src/models/CommandSet.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Load build-in commands.</p>
+									<p>Loads build-in commands.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -205,9 +205,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L119">src/models/CommandSet.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L125">src/models/CommandSet.ts:125</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use <code>CommandSet#commands.get</code> instead. (Will be removed in 6.0.0)</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -228,13 +235,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L69">src/models/CommandSet.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L69">src/models/CommandSet.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Load command from the given folder path.<br>
-									Command file must have the extension <code>.cmd.js</code></p>
+									<p>Loads commands from the given folder path.
+									Command files must have the extension <code>.cmd.js</code>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -242,13 +249,13 @@
 								<li>
 									<h5>commandDirPath: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>path to the folder where the commands are (relative to node entry point).</p>
+										<p>The path to the folder where the commands are (relative to node entry point).</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> includeTS: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>if set to true, file with <code>.cmd.ts</code> extension are also loaded. Usefull if you use <code>ts-node</code> (default is false)</p>
+										<p>If set to <code>true</code>, files with <code>.cmd.ts</code> extension are also loaded. Usefull if you use <code>ts-node</code> (default is <code>false</code>)</p>
 									</div>
 								</li>
 							</ul>
@@ -266,23 +273,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L148">src/models/CommandSet.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L153">src/models/CommandSet.ts:153</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Check if there is a command in the given message and execute it.</p>
+									<p> Parses the message&#39;s content and executes the command.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>message: <span class="tsd-signature-type">Message</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The message to parse.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">DeepPartial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/parseoptions.html" class="tsd-signature-type">ParseOptions</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>option de define the behaviour of the command parser.</p>
+										<p>Options to define the parsing behaviour.</p>
 									</div>
 								</li>
 							</ul>
@@ -300,18 +310,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/85d1383/src/models/CommandSet.ts#L112">src/models/CommandSet.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/baanloh/discord-bot-cli/blob/627ab9f/src/models/CommandSet.ts#L115">src/models/CommandSet.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Reload a command.</p>
+									<p>Reloads a command.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>command: <a href="command.html" class="tsd-signature-type">Command</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The command to reload.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
