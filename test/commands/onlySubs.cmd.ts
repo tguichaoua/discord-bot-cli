@@ -4,6 +4,7 @@ const cmd = makeCommand("onlySubs", {
     subs: {
         a: {},
         b: {},
+        c: { canUse: () => false },
     },
 });
 
