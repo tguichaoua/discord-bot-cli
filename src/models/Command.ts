@@ -171,6 +171,11 @@ export class Command {
         return undefined;
     }
 
+    /** Return true if this command have an executor, false otherwise. */
+    get hasExecutor(): boolean {
+        return this._executor !== undefined;
+    }
+
     /** Create and return an array containing all parent of this command, ordered from top-most command to this command (included). */
     getParents() {
         const parents: Command[] = [];
