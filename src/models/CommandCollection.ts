@@ -8,6 +8,10 @@ export class ReadonlyCommandCollection implements Iterable<Command> {
         return this._commands.values();
     }
 
+    /**
+     * Returns a command by its name of its alias. Returns `undefined` if not found.
+     * @param name - The command's name of alias.
+     */
     public get(name: string): Command | undefined {
         const cmd = this._commands.get(name);
         if (cmd) return cmd;
@@ -17,16 +21,22 @@ export class ReadonlyCommandCollection implements Iterable<Command> {
         return undefined;
     }
 
+    /** Returns an iterable of commands in the collection. */
     public values() {
         return this._commands.values();
     }
 
+    /** Returns `true` if the collection contains the alias. */
     public hasAlias(alias: string): boolean {
         return !!this._alias.get(alias);
     }
 }
 
 export class CommandCollection extends ReadonlyCommandCollection {
+    /**
+     * Adds a command to the collection and returns `true` if successfully added, `false` otherwise.
+     * @param command - The command to add.
+     */
     public add(command: Command): boolean {
         if (this._commands.has(command.name)) {
             return false;
