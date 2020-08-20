@@ -11,6 +11,8 @@ import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { ArrayUtils } from "../utils/array";
 import { template } from "../utils/template";
+import { reply } from "../utils/reply";
+import { ParseOptions } from "../models/ParseOptions";
 
 // TODO: remove namespace for HelpUtils and Command
 // replace by a single class CommandHelp
@@ -18,6 +20,19 @@ import { template } from "../utils/template";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace HelpUtils {
+    export async function DefaultHelp(
+        command: Command,
+        { message, options }: { message: Message; options: ParseOptions }
+    ) {
+        const embed = HelpUtils.Command.embedHelp(
+            command,
+            options.prefix,
+            options.localization,
+            message
+        );
+        await reply(message, { embed });
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-namespace
     export namespace Command {
         export function getFullName(command: Command) {
