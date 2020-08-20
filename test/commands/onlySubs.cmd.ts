@@ -6,6 +6,10 @@ const cmd = makeCommand("onlySubs", {
         b: {},
         c: { canUse: () => false },
     },
+    useHelpOnSubs: true,
+    help: async (c, { message }) => {
+        await message.reply(`[HELP] onlySubs ${c.name}`);
+    },
 });
 
 cmd.subs.a.executor = async (_a, _f, { message }) => {

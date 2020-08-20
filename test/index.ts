@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { CommandSet } from "../src/index";
+import { CommandSet, HelpUtils } from "../src/index";
 import { Logger } from "../src/logger";
 import env from "./env.json";
 
@@ -10,6 +10,16 @@ const commands = new CommandSet({
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
 });
+
+commands.helpHandler = async (command, { message, options }) => {
+    const help = HelpUtils.Command.getRawHelp(command, options.localization);
+    const text = `
+**Command name**: ${command.name}
+**Full name**: ${help.fullName}
+`;
+    await message.reply(text);
+};
+
 commands.loadCommands("commands", true);
 
 // manually load build-in commands
