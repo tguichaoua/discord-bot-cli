@@ -8,6 +8,7 @@
         "dbc": "./dist/bin/cli.js"
     },
     "scripts": {
+        "release": "ts-node chores/release.ts",
         "v": "npm --no-git-tag-version version",
         "test": "npm run lint && npm run test:build",
         "test:build": "tsc",
