@@ -29,6 +29,7 @@ import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { Throttler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
+import { HelpUtils } from "../other/HelpUtils";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
@@ -226,14 +227,20 @@ export class Command {
      * @param message
      * @param options
      */
-    async help(message: Message, options: ParseOptions): Promise<boolean> {
-        if (!this._help) return false;
-        await this._help(this, {
+    async help(message: Message, options: ParseOptions) {
+        const context = {
             message,
             options,
             commandSet: this.commandSet,
-        });
-        return true;
+        };
+
+        if (this._help) {
+            await this._help(this, context);
+        } else if (this.commandSet.helpHandler) {
+            await this.commandSet.helpHandler(this, context);
+        } else {
+            await HelpUtils.DefaultHelp(this, context);
+        }
     }
 
     /** @internal */

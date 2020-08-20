@@ -1,4 +1,3 @@
-import { HelpUtils } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
 import { reply } from "../utils/reply";
@@ -44,14 +43,7 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
             )
                 return;
 
-            if (await command.help(message, options)) return;
-            const embed = HelpUtils.Command.embedHelp(
-                command,
-                options.prefix,
-                options.localization,
-                message
-            );
-            await reply(message, { embed });
+            await command.help(message, options);
         }
     }
 };
