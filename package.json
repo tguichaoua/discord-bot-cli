@@ -1,7 +1,7 @@
 {
     "name": "discord-bot-cli",
     "version": "5.3.0",
-    "description": "An easy way to build a command-based discord bot.",
+    "description": "An easy way to build a command-based discord bot with discord.js.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "bin": {
@@ -33,7 +33,11 @@
         "bot",
         "cli"
     ],
-    "author": "Tristan Guichaoua",
+    "author": {
+        "name": "Tristan Guichaoua",
+        "email": "baanlohdev@gmail.com",
+        "url": "https://tguichaoua.github.io/"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/tguichaoua/discord-bot-cli/issues"
