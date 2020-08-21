@@ -33,7 +33,11 @@
         "bot",
         "cli"
     ],
-    "author": "Tristan Guichaoua",
+    "author": {
+        "name": "Tristan Guichaoua",
+        "email": "baanlohdev@gmail.com",
+        "url": "https://tguichaoua.github.io/"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/tguichaoua/discord-bot-cli/issues"
