@@ -1,7 +1,7 @@
 {
     "name": "discord-bot-cli",
     "version": "5.3.0",
-    "description": "An easy way to build a command-based discord bot.",
+    "description": "An easy way to build a command-based discord bot with discord.js.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "bin": {

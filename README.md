@@ -14,7 +14,7 @@
   </a>
 </p>
 
-> An easy way to build a command-based discord bot.
+> An easy way to build a command-based discord bot with discord.js.
 
 ## Install
 
