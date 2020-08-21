@@ -16,24 +16,10 @@
 
 > An easy way to build a command-based discord bot.
 
-### 🏠 [Homepage](https://github.com/tguichaoua/discord-bot-cli)
-
 ## Install
 
 ```sh
-npm install
-```
-
-## Usage
-
-```sh
-npm start
-```
-
-## Run tests
-
-```sh
-npm test
+npm i discord-bot-cli
 ```
 
 ## Author
