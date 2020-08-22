@@ -3,7 +3,7 @@ import { ParsableType } from "../../models/ParsableType";
 import { parseValue } from "./parseValue";
 import { ArgDefinition } from "../../models/definition/ArgDefinition";
 import { CommandResultUtils } from "../../models/CommandResult";
-import { CommandResultError } from "../../models/CommandResultError";
+import { CommandResultError } from "../../models/errors/CommandResultError";
 
 /** @internal */
 export function parseArgs(

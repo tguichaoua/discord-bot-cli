@@ -11,23 +11,26 @@ import { ParseOptions } from "./ParseOptions";
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
-import { HelpUtils } from "../other/HelpUtils";
+import { commandFullName } from "../other/HelpUtils";
 import { template } from "../utils/template";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
-import PathUtils from "../utils/PathUtils";
+import {
+    relativeFromEntryPoint,
+    resolveFromEntryPoint,
+} from "../utils/PathUtils";
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
-import { HelpCb } from "./callbacks/HelpCb";
+import { HelpHandler } from "./callbacks/HelpHandler";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
 export class CommandSet {
     private _commands = new CommandCollection();
-    public helpHandler: HelpCb | undefined = undefined;
+    public helpHandler: HelpHandler | undefined = undefined;
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) {}
 
@@ -36,9 +39,7 @@ export class CommandSet {
     }
 
     private _loadFile(path: string) {
-        const debugPath = chalk.underline(
-            PathUtils.relativeFromEntryPoint(path)
-        );
+        const debugPath = chalk.underline(relativeFromEntryPoint(path));
         Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
@@ -70,7 +71,7 @@ export class CommandSet {
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
-            commandDirPath = PathUtils.resolveFromEntryPoint(commandDirPath);
+            commandDirPath = resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
                 .filter(
@@ -198,7 +199,7 @@ export class CommandSet {
         if (command.guildOnly && !message.guild) {
             await message.reply(
                 template(opts.localization.misc.guildOnlyWarning, {
-                    command: HelpUtils.Command.getFullName(command),
+                    command: commandFullName(command),
                 })
             );
             return CommandResultUtils.guildOnly(command);

@@ -17,19 +17,19 @@ import { parseFlags } from "../other/parsing/parseFlags";
 import { parseArgs } from "../other/parsing/parseArgs";
 import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     ReadonlyCommandCollection,
     CommandCollection,
 } from "./CommandCollection";
-import { CanUseCommandCb } from "./callbacks/CanUseCommandCb";
-import { HelpCb } from "./callbacks/HelpCb";
+import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
+import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { Throttler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
-import { HelpUtils } from "../other/HelpUtils";
+import { defaultHelp } from "../other/HelpUtils";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
@@ -51,8 +51,8 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
-        private readonly _canUse: CanUseCommandCb | undefined,
-        private readonly _help: HelpCb | undefined,
+        private readonly _canUse: CanUseCommandHandler | undefined,
+        private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
@@ -87,7 +87,7 @@ export class Command {
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
-        parentHelp: HelpCb | undefined
+        parentHelp: HelpHandler | undefined
     ): Command {
         function resolveInheritance<K extends keyof Command>(
             prop: K,
@@ -239,7 +239,7 @@ export class Command {
         } else if (this.commandSet.helpHandler) {
             await this.commandSet.helpHandler(this, context);
         } else {
-            await HelpUtils.DefaultHelp(this, context);
+            await defaultHelp(this, context);
         }
     }
 

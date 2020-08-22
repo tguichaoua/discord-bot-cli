@@ -1,3 +1,4 @@
+/** @internal */
 export function template(
     str: string,
     replaceValues: { [key: string]: string }

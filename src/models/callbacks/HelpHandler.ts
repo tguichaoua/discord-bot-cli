@@ -3,7 +3,7 @@ import { Command } from "../Command";
 import { ParseOptions } from "../ParseOptions";
 import { CommandSet } from "../CommandSet";
 
-export type HelpCb = (
+export type HelpHandler = (
     command: Command,
     context: {
         message: Message;
