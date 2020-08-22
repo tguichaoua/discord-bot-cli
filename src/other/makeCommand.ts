@@ -1,7 +1,7 @@
 import { CommandDefinition } from "../models/definition/CommandDefinition";
 import { CommandData } from "../models/CommandData";
 import { ParsableTypeName } from "../models/ParsableType";
-import { ArrayUtils } from "../utils/array";
+import { distinct } from "../utils/array";
 
 export function makeCommand<T extends CommandDefinition>(
     name: string,
@@ -26,7 +26,7 @@ export function makeCommand<T extends CommandDefinition>(
         definition.rest.type.sort(sortParsableType);
 
     if (definition.clientPermissions)
-        (definition.clientPermissions as any) = ArrayUtils.distinct(
+        (definition.clientPermissions as any) = distinct(
             definition.clientPermissions
         );
 

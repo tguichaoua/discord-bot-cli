@@ -10,7 +10,7 @@ import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { ParseOptions } from "../models/ParseOptions";
-import { ArrayUtils } from "../utils/array";
+import { isArray } from "../utils/array";
 import { template } from "../utils/template";
 import { reply } from "../utils/reply";
 
@@ -65,7 +65,7 @@ export function commandRawHelp(
             command.rest.description ??
             "";
         const usageString = `[...${name}]`;
-        const typeNames = ArrayUtils.isArray(command.rest.type)
+        const typeNames = isArray(command.rest.type)
             ? command.rest.type.map((t) => localization.typeNames[t])
             : [localization.typeNames[command.rest.type]];
         rest = { name, description, usageString, typeNames };
@@ -95,7 +95,7 @@ function argRawHelp(
     typeNamesLocalization: TypeNameLocalization
 ): ArgumentRawHelp {
     const argLocalization = (localization.args ?? {})[name] ?? {};
-    const typeNames = ArrayUtils.isArray(arg.type)
+    const typeNames = isArray(arg.type)
         ? arg.type.map((t) => typeNamesLocalization[t])
         : [typeNamesLocalization[arg.type]];
     const localizedName = argLocalization.name ?? name;
@@ -125,7 +125,7 @@ function flagRawHelp(
     typeNamesLocalization: TypeNameLocalization
 ): FlagRawHelp {
     const flagLocalization = (localization.flags ?? {})[name] ?? {};
-    const typeNames = ArrayUtils.isArray(flag.type)
+    const typeNames = isArray(flag.type)
         ? flag.type.map((t) => typeNamesLocalization[t])
         : [typeNamesLocalization[flag.type]];
     const localizedName = flagLocalization.name ?? name;
