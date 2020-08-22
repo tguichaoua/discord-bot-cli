@@ -2,7 +2,7 @@ import { PermissionString } from "discord.js";
 import { ArgDefinition } from "./ArgDefinition";
 import { FlagDefinition } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
-import { CanUseCommandCb } from "../callbacks/CanUseCommandCb";
+import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
 
@@ -34,7 +34,7 @@ export type CommandDefinition = {
      * If the result is true, the command is executed.
      * If the result is a string, the command is not executed and a reply message with the string is returned.
      */
-    readonly canUse?: CanUseCommandCb;
+    readonly canUse?: CanUseCommandHandler;
 
     /**
      * If defined, this callback is called when help is needed for this command instead of default help.

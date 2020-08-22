@@ -22,7 +22,7 @@ import {
     ReadonlyCommandCollection,
     CommandCollection,
 } from "./CommandCollection";
-import { CanUseCommandCb } from "./callbacks/CanUseCommandCb";
+import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
 import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
@@ -51,7 +51,7 @@ export class Command {
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
-        private readonly _canUse: CanUseCommandCb | undefined,
+        private readonly _canUse: CanUseCommandHandler | undefined,
         private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
