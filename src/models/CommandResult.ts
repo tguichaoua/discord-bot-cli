@@ -56,59 +56,38 @@ export type CommandResult =
       ));
 
 /** @internal */
-export abstract class CommandResultUtils {
-    /** @internal */
-    static ok(command: Command, result: any): CommandResult {
+export const CommandResultUtils = Object.freeze({
+    ok(command: Command, result: any): CommandResult {
         return { status: "ok", command, result };
-    }
-
-    /** @internal */
-    static error(error: any): CommandResult {
+    },
+    error(error: any): CommandResult {
         return { status: "error", error };
-    }
-
-    /** @internal */
-    static noExecutor(command: Command): CommandResult {
+    },
+    noExecutor(command: Command): CommandResult {
         return { status: "no executor", command };
-    }
-
-    /** @internal */
-    static devOnly(command: Command): CommandResult {
+    },
+    devOnly(command: Command): CommandResult {
         return { status: "dev only", command };
-    }
-
-    /** @internal */
-    static guildOnly(command: Command): CommandResult {
+    },
+    guildOnly(command: Command): CommandResult {
         return { status: "guild only", command };
-    }
-
-    /** @internal */
-    static unauthorizedUser(command: Command): CommandResult {
+    },
+    unauthorizedUser(command: Command): CommandResult {
         return { status: "unauthorized user", command };
-    }
-
-    /** @internal */
-    static throttling(command: Command): CommandResult {
+    },
+    throttling(command: Command): CommandResult {
         return { status: "throttling", command };
-    }
-
-    /** @internal */
-    static clientPermissions(command: Command): CommandResult {
+    },
+    clientPermissions(command: Command): CommandResult {
         return { status: "client permissions", command };
-    }
-
-    /** @internal */
-    static notPrefixed(): CommandResult {
+    },
+    notPrefixed(): CommandResult {
         return { status: "not prefixed" };
-    }
-
-    /** @internal */
-    static commandNotFound(): CommandResult {
+    },
+    commandNotFound(): CommandResult {
         return { status: "command not found" };
-    }
-
-    /** @internal */
-    static failParseArgInvalid(
+    },
+    failParseArgInvalid(
         arg: Readonly<ArgDefinition>,
         got: string
     ): CommandResult {
@@ -119,30 +98,24 @@ export abstract class CommandResultUtils {
             reason: "invalid value",
             got,
         };
-    }
-
-    /** @internal */
-    static failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult {
+    },
+    failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult {
         return {
             status: "parsing error",
             type: "arg",
             arg,
             reason: "missing argument",
         };
-    }
-
-    /** @internal */
-    static failParseFlagUnknown(name: string): CommandResult {
+    },
+    failParseFlagUnknown(name: string): CommandResult {
         return {
             status: "parsing error",
             type: "flag",
             reason: "unknown flag",
             name,
         };
-    }
-
-    /** @internal */
-    static failParseFlagInvalid(
+    },
+    failParseFlagInvalid(
         flag: Readonly<FlagDefinition>,
         got: string
     ): CommandResult {
@@ -153,5 +126,5 @@ export abstract class CommandResultUtils {
             reason: "invalid value",
             got,
         };
-    }
-}
+    },
+});
