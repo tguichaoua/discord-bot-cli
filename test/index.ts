@@ -12,7 +12,7 @@ const commands = new CommandSet({
 });
 
 commands.helpHandler = async (command, { message, options }) => {
-    const help = HelpUtils.Command.getRawHelp(command, options.localization);
+    const help = HelpUtils.commandRawHelp(command, options.localization);
     const text = `
 **Command name**: ${command.name}
 **Full name**: ${help.fullName}

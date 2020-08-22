@@ -29,7 +29,7 @@ import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { Throttler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
-import { HelpUtils } from "../other/HelpUtils";
+import { defaultHelp } from "../other/HelpUtils";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
@@ -239,7 +239,7 @@ export class Command {
         } else if (this.commandSet.helpHandler) {
             await this.commandSet.helpHandler(this, context);
         } else {
-            await HelpUtils.DefaultHelp(this, context);
+            await defaultHelp(this, context);
         }
     }
 

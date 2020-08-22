@@ -11,7 +11,7 @@ import { ParseOptions } from "./ParseOptions";
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
-import { HelpUtils } from "../other/HelpUtils";
+import { commandFullName } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { CommandResultError } from "./CommandResultError";
 import {
@@ -198,7 +198,7 @@ export class CommandSet {
         if (command.guildOnly && !message.guild) {
             await message.reply(
                 template(opts.localization.misc.guildOnlyWarning, {
-                    command: HelpUtils.Command.getFullName(command),
+                    command: commandFullName(command),
                 })
             );
             return CommandResultUtils.guildOnly(command);
