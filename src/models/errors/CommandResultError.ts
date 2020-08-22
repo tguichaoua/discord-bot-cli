@@ -1,4 +1,4 @@
-import { CommandResult } from "./CommandResult";
+import { CommandResult } from "../CommandResult";
 
 /** @internal */
 export class CommandResultError extends Error {

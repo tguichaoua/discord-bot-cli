@@ -13,7 +13,7 @@ import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 import { commandFullName } from "../other/HelpUtils";
 import { template } from "../utils/template";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     CommandCollection,
     ReadonlyCommandCollection,

@@ -17,7 +17,7 @@ import { parseFlags } from "../other/parsing/parseFlags";
 import { parseArgs } from "../other/parsing/parseArgs";
 import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     ReadonlyCommandCollection,
     CommandCollection,
