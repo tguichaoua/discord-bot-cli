@@ -9,36 +9,40 @@ const levels = {
 };
 
 /** @internal */
-export abstract class Logger {
-    public static enableDebug = false;
+let enableDebug = false;
 
-    private static _log(level: keyof typeof levels, ...args: any[]) {
-        const log =
-            level === "error"
-                ? console.error
-                : level === "warn"
-                ? console.warn
-                : console.log;
-        log(
-            chalk.bold(chalk.blue("[discord-bot-cli]"), levels[level]),
-            ...args
-        );
-    }
-
-    static debug(...args: any[]) {
-        if (!Logger.enableDebug) return;
-        Logger._log("debug", ...args);
-    }
-
-    static log(...args: any[]) {
-        Logger._log("log", ...args);
-    }
-
-    static warn(...args: any[]) {
-        Logger._log("warn", ...args);
-    }
-
-    static error(...args: any[]) {
-        Logger._log("error", ...args);
-    }
+/** @internal */
+function print(level: keyof typeof levels, ...args: any[]) {
+    const log =
+        level === "error"
+            ? console.error
+            : level === "warn"
+            ? console.warn
+            : console.log;
+    log(chalk.bold(chalk.blue("[discord-bot-cli]"), levels[level]), ...args);
 }
+
+/**
+ * Enable or disable logs with `debug` level.
+ * @param enable - Default is `true`
+ */
+export function enableDebugLogs(enable = true) {
+    enableDebug = enable;
+}
+
+/** @internal */
+export const Logger = Object.freeze({
+    debug(...args: any[]) {
+        if (!enableDebug) return;
+        print("debug", ...args);
+    },
+    log(...args: any[]) {
+        print("log", ...args);
+    },
+    warn(...args: any[]) {
+        print("warn", ...args);
+    },
+    error(...args: any[]) {
+        print("error", ...args);
+    },
+});

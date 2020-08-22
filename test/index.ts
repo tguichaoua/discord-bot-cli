@@ -1,9 +1,8 @@
 import { Client } from "discord.js";
-import { CommandSet, HelpUtils } from "../src/index";
-import { Logger } from "../src/logger";
+import { CommandSet, HelpUtils, enableDebugLogs } from "../src/index";
 import env from "./env.json";
 
-Logger.enableDebug = true;
+enableDebugLogs();
 
 const commands = new CommandSet({
     prefix: env.prefix,

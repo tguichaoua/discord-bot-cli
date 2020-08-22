@@ -12,3 +12,5 @@ export type PartialParseOptions = DeepPartial<ParseOptions>;
 
 export * as HelpUtils from "./other/HelpUtils";
 export * as ListUtils from "./other/ListUtils";
+
+export { enableDebugLogs } from "./logger";
