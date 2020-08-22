@@ -11,4 +11,4 @@ export { Localization } from "./models/localization/Localization";
 export type PartialParseOptions = DeepPartial<ParseOptions>;
 
 export * as HelpUtils from "./other/HelpUtils";
-export { ListUtils } from "./other/ListUtils";
+export * as ListUtils from "./other/ListUtils";

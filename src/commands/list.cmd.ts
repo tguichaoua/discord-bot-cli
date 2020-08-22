@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { makeCommand } from "../other/makeCommand";
-import { ListUtils } from "../other/ListUtils";
+import { getListRawData } from "../other/ListUtils";
 import { reply } from "../utils/reply";
 
 const cmd = makeCommand("list", {
@@ -16,7 +16,7 @@ const cmd = makeCommand("list", {
 });
 
 cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
-    const raw = ListUtils.getRawListData(commandSet, options.localization);
+    const raw = getListRawData(commandSet, options.localization);
     let commands = options.devIDs.includes(message.author.id)
         ? raw.commands
         : raw.commands.filter((c) => !c.command.devOnly);
