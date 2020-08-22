@@ -18,7 +18,10 @@ import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
-import PathUtils from "../utils/PathUtils";
+import {
+    relativeFromEntryPoint,
+    resolveFromEntryPoint,
+} from "../utils/PathUtils";
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { HelpCb } from "./callbacks/HelpCb";
@@ -36,9 +39,7 @@ export class CommandSet {
     }
 
     private _loadFile(path: string) {
-        const debugPath = chalk.underline(
-            PathUtils.relativeFromEntryPoint(path)
-        );
+        const debugPath = chalk.underline(relativeFromEntryPoint(path));
         Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
@@ -70,7 +71,7 @@ export class CommandSet {
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
-            commandDirPath = PathUtils.resolveFromEntryPoint(commandDirPath);
+            commandDirPath = resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
                 .filter(
