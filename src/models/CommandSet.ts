@@ -24,13 +24,13 @@ import {
 } from "../utils/PathUtils";
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
-import { HelpCb } from "./callbacks/HelpCb";
+import { HelpHandler } from "./callbacks/HelpHandler";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
 export class CommandSet {
     private _commands = new CommandCollection();
-    public helpHandler: HelpCb | undefined = undefined;
+    public helpHandler: HelpHandler | undefined = undefined;
 
     constructor(private _defaultOptions?: DeepPartial<ParseOptions>) {}
 

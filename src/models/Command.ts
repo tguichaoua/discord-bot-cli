@@ -23,7 +23,7 @@ import {
     CommandCollection,
 } from "./CommandCollection";
 import { CanUseCommandCb } from "./callbacks/CanUseCommandCb";
-import { HelpCb } from "./callbacks/HelpCb";
+import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
@@ -52,7 +52,7 @@ export class Command {
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined,
         private readonly _canUse: CanUseCommandCb | undefined,
-        private readonly _help: HelpCb | undefined,
+        private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
@@ -87,7 +87,7 @@ export class Command {
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
-        parentHelp: HelpCb | undefined
+        parentHelp: HelpHandler | undefined
     ): Command {
         function resolveInheritance<K extends keyof Command>(
             prop: K,
