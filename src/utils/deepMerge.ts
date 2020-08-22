@@ -1,20 +1,24 @@
-/** @ignore */
+/** @internal */
 function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
+/** @internal */
 export function deepMerge<T, U>(target: T, source: U): T & U;
+/** @internal */
 export function deepMerge<T, U, V>(
     target: T,
     source1: U,
     source2: V
 ): T & U & V;
+/** @internal */
 export function deepMerge<T, U, V, W>(
     target: T,
     source1: U,
     source2: V,
     source3: W
 ): T & U & V & W;
+/** @internal */
 export function deepMerge(target: any, ...sources: any[]): any;
 /** @ignore */
 export function deepMerge(target: any, ...sources: any[]) {
