@@ -6,11 +6,11 @@ export type CommandResult =
     | {
           readonly status: "ok";
           readonly command: Command;
-          readonly result: any;
+          readonly result: any; // eslint-disable-line @typescript-eslint/no-explicit-any
       }
     | {
           readonly status: "error";
-          readonly error: any;
+          readonly error: any; // eslint-disable-line @typescript-eslint/no-explicit-any
       }
     | {
           readonly status:
@@ -57,9 +57,11 @@ export type CommandResult =
 
 /** @internal */
 export const CommandResultUtils = Object.freeze({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ok(command: Command, result: any): CommandResult {
         return { status: "ok", command, result };
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error(error: any): CommandResult {
         return { status: "error", error };
     },
