@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 import { Command } from "./Command";
 import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
-import { CommandSetOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./CommandSetOptions";
 
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";

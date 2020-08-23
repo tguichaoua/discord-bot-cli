@@ -6,7 +6,7 @@ import {
     GuildMember,
 } from "discord.js";
 import { CommandSet } from "./CommandSet";
-import { CommandSetOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";

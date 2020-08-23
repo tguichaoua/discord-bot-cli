@@ -6,7 +6,7 @@ import {
     CommandSettings,
 } from "../definition/CommandDefinition";
 import { ParsableTypeOf } from "../ParsableType";
-import { CommandSetOptions } from "../ParseOptions";
+import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 
 type IsGuildOnly<

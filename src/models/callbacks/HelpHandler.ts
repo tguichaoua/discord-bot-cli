@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { Command } from "../Command";
-import { CommandSetOptions } from "../ParseOptions";
+import { CommandSetOptions } from "../CommandSetOptions";
 import { CommandSet } from "../CommandSet";
 
 export type HelpHandler = (
