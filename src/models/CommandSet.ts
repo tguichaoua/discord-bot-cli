@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 import { Command } from "./Command";
 import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
-import { ParseOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./CommandSetOptions";
 
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
@@ -32,7 +32,7 @@ export class CommandSet {
     private _commands = new CommandCollection();
     public helpHandler: HelpHandler | undefined = undefined;
 
-    constructor(private _defaultOptions?: DeepPartial<ParseOptions>) {}
+    constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {}
 
     get commands() {
         return this._commands as ReadonlyCommandCollection;
@@ -155,7 +155,7 @@ export class CommandSet {
      */
     async parse(
         message: Message,
-        options?: DeepPartial<ParseOptions>
+        options?: DeepPartial<CommandSetOptions>
     ): Promise<CommandResult> {
         // function OptionsError(paramName: string) {
         //     return new Error(
@@ -237,7 +237,7 @@ export class CommandSet {
 }
 
 /** @internal */
-const defaultOptions: ParseOptions = {
+const defaultOptions: CommandSetOptions = {
     prefix: "",
     devIDs: [],
     localization: defaultLocalization,

@@ -1,6 +1,6 @@
 import { Localization } from "./localization/Localization";
 
-export interface ParseOptions {
+export interface CommandSetOptions {
     /** The command prefix. */
     prefix: string;
     /** A list of dev's discord ID.  */
