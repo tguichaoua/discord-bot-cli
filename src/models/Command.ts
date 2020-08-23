@@ -39,8 +39,10 @@ export class Command {
         public readonly filepath: string | null,
         public readonly name: string,
         public readonly aliases: readonly string[],
-        private readonly _clientPermissions: PermissionString[],
-        private readonly _userPermissions: PermissionString[] | undefined,
+        public readonly clientPermissions: readonly PermissionString[],
+        public readonly userPermissions:
+            | readonly PermissionString[]
+            | undefined,
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -156,14 +158,6 @@ export class Command {
 
     // === Getter =====================================================
 
-    get clientPermissions(): readonly PermissionString[] {
-        return this._clientPermissions;
-    }
-
-    get userPermissions(): readonly PermissionString[] | undefined {
-        return this._userPermissions;
-    }
-
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
@@ -190,16 +184,16 @@ export class Command {
 
     /** Returns `true` if the client have required permissions for this guild, `false` otherwise. */
     hasClientPermissions(guild: Guild) {
-        return guild.me && guild.me.hasPermission(this._clientPermissions);
+        return guild.me && guild.me.hasPermission(this.clientPermissions);
     }
 
     /** Returns `true` if the member has required permissions to execute this command, `false` otherwise. */
     hasPermissions(member: GuildMember): boolean {
-        if (!this._userPermissions) {
+        if (!this.userPermissions) {
             if (this.parent) return this.parent.hasPermissions(member);
             else return true;
         }
-        return member.hasPermission(this._userPermissions);
+        return member.hasPermission(this.userPermissions);
     }
 
     // =====================================================
