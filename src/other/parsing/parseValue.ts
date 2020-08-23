@@ -26,7 +26,7 @@ export function parseValue(
 
     if (value === undefined) return { value: undefined };
     const validation = parseData.validator
-        ? (parseData.validator as (o: any) => boolean | string)(value)
+        ? (parseData.validator as (o: unknown) => boolean | string)(value)
         : undefined;
 
     if (validation === true || validation === undefined) return { value };

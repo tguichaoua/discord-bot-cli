@@ -7,7 +7,7 @@ export function makeCommand<T extends CommandDefinition>(
     name: string,
     definition: T
 ): CommandData<T> {
-    const subs = {} as any;
+    const subs = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     for (const key in definition.subs) {
         subs[key] = makeCommand(key, definition.subs[key]);
     }
@@ -26,7 +26,7 @@ export function makeCommand<T extends CommandDefinition>(
         definition.rest.type.sort(sortParsableType);
 
     if (definition.clientPermissions)
-        (definition.clientPermissions as any) = distinct(
+        (definition.clientPermissions as unknown) = distinct(
             definition.clientPermissions
         );
 

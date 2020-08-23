@@ -29,7 +29,7 @@ commands.loadCommands("../src/commands", true);
 const client = new Client();
 
 client.on("ready", () => {
-    console.log(`Logged as ${client.user!.username}`);
+    console.log(`Logged as ${client.user?.username}`);
 });
 
 client.on("message", async (message) => {

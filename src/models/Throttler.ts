@@ -1,3 +1,5 @@
+import { getTimeLeft } from "../utils/timeout";
+
 export class Throttler {
     private _current = 0;
     private _timeout: NodeJS.Timeout | undefined = undefined;
@@ -21,14 +23,7 @@ export class Throttler {
 
     /** Returns the time in seconds until the throttler is reset. */
     get cooldown() {
-        return this._timeout
-            ? Math.ceil(
-                  ((this._timeout as any)._idleStart +
-                      (this._timeout as any)._idleTimeout) /
-                      1000 -
-                      process.uptime()
-              )
-            : 0;
+        return this._timeout ? Math.ceil(getTimeLeft(this._timeout)) : 0;
     }
 
     /** Resets this throttler. */

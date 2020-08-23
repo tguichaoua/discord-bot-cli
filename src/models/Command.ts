@@ -52,7 +52,7 @@ export class Command {
         public readonly rest: Readonly<RestDefinition> | undefined,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
-        private readonly _executor: CommandExecutor<any> | undefined,
+        private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
         private readonly _canUse: CanUseCommandHandler | undefined,
         private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
@@ -286,7 +286,7 @@ export class Command {
             Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
-                rest: rest as any,
+                rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
                 message,
                 guild: message.guild,
                 member: message.member,

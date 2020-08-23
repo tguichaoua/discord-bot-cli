@@ -41,6 +41,7 @@ export async function reply(
     content: StringResolvable,
     options?: MessageOptions & { split: true | SplitOptions }
 ): Promise<Message[]>;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function reply(
     message: Message,
     a: any,
@@ -52,3 +53,4 @@ export async function reply(
         return await message.author.send(a, b);
     }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */

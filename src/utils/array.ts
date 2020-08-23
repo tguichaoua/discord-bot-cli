@@ -1,5 +1,5 @@
 /** @internal */
-export function isArray(o: any): o is any[] | readonly any[] {
+export function isArray(o: unknown): o is unknown[] | readonly unknown[] {
     return Array.isArray(o);
 }
 
