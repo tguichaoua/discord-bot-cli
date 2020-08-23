@@ -1,5 +1,5 @@
 import { DeepPartial } from "./utils/DeepPartial";
-import { ParseOptions } from "querystring";
+import { ParseOptions } from "./models/ParseOptions";
 
 export { makeCommand } from "./other/makeCommand";
 export { Command } from "./models/Command";
