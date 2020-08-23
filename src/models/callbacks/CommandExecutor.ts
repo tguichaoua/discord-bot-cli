@@ -64,4 +64,4 @@ export type CommandExecutor<
         readonly commandSet: CommandSet;
         readonly command: Command;
     } & MessageExtension<S>
-) => any | Promise<any>;
+) => any | Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
