@@ -6,7 +6,7 @@ import {
     GuildMember,
 } from "discord.js";
 import { CommandSet } from "./CommandSet";
-import { ParseOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./ParseOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
@@ -227,7 +227,7 @@ export class Command {
      * @param message
      * @param options
      */
-    async help(message: Message, options: ParseOptions) {
+    async help(message: Message, options: CommandSetOptions) {
         const context = {
             message,
             options,
@@ -247,7 +247,7 @@ export class Command {
     async execute(
         message: Message,
         inputArguments: string[],
-        options: ParseOptions,
+        options: CommandSetOptions,
         commandSet: CommandSet
     ) {
         if (message.guild && !this.hasClientPermissions(message.guild))

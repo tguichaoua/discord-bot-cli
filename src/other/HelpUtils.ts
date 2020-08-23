@@ -9,14 +9,14 @@ import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
-import { ParseOptions } from "../models/ParseOptions";
+import { CommandSetOptions } from "../models/ParseOptions";
 import { isArray } from "../utils/array";
 import { template } from "../utils/template";
 import { reply } from "../utils/reply";
 
 export async function defaultHelp(
     command: Command,
-    { message, options }: { message: Message; options: ParseOptions }
+    { message, options }: { message: Message; options: CommandSetOptions }
 ) {
     const embed = embedHelp(
         command,
