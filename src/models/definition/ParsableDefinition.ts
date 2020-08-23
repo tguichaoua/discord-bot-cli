@@ -14,7 +14,7 @@ interface Parsable<
 }
 
 // I have not found a better solution.
-type WrapParsable<T extends ParsableTypeName> = T extends any
+type WrapParsable<T extends ParsableTypeName> = T extends any // eslint-disable-line @typescript-eslint/no-explicit-any
     ? Parsable<T>
     : never;
 
