@@ -1,5 +1,5 @@
 /** @internal */
-function isObject(item: any) {
+function isObject(item: unknown) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
@@ -19,8 +19,10 @@ export function deepMerge<T, U, V, W>(
     source3: W
 ): T & U & V & W;
 /** @internal */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function deepMerge(target: any, ...sources: any[]): any;
 /** @ignore */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function deepMerge(target: any, ...sources: any[]) {
     if (sources.length === 0) return target;
     const source = sources.shift();
