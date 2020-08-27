@@ -16,7 +16,7 @@
         "start:log": "ts-node test/log.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
-        "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+        "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",
         "docs": "typedoc ./src/",
         "build": "tsc && npm run copy:assets",
         "build:clean": "shx rm -rf ./dist",
