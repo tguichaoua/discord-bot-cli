@@ -125,7 +125,7 @@ export class CommandSet {
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
-        let cmd = this.get(_args[0]);
+        let cmd = this._commands.get(_args[0]);
 
         if (cmd) {
             let sub: Command | undefined = cmd;
