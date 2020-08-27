@@ -1,7 +1,7 @@
 import { Message, MessageMentions } from "discord.js";
 import { ParsableType } from "../../models/ParsableType";
 import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
-import { ArrayUtils } from "../../utils/array";
+import { isArray } from "../../utils/array";
 
 /** @internal */
 const ID_PATTERN = /^\d{17,21}$/;
@@ -15,7 +15,7 @@ export function parseValue(
     argument: string
 ): { value: ParsableType | undefined; message?: string } {
     let value: ParsableType | undefined;
-    if (ArrayUtils.isArray(parseData.type)) {
+    if (isArray(parseData.type)) {
         for (const t of parseData.type) {
             value = parse(t, argument, message);
             if (value !== undefined) break;
@@ -26,7 +26,7 @@ export function parseValue(
 
     if (value === undefined) return { value: undefined };
     const validation = parseData.validator
-        ? (parseData.validator as (o: any) => boolean | string)(value)
+        ? (parseData.validator as (o: unknown) => boolean | string)(value)
         : undefined;
 
     if (validation === true || validation === undefined) return { value };

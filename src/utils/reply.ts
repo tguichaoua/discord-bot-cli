@@ -7,6 +7,7 @@ import {
     SplitOptions,
 } from "discord.js";
 
+/** @internal */
 export async function reply(
     message: Message,
     options:
@@ -15,6 +16,7 @@ export async function reply(
         | MessageAdditions
         | APIMessage
 ): Promise<Message>;
+/** @internal */
 export async function reply(
     message: Message,
     options:
@@ -24,6 +26,7 @@ export async function reply(
           })
         | APIMessage
 ): Promise<Message[]>;
+/** @internal */
 export async function reply(
     message: Message,
     content: StringResolvable,
@@ -32,11 +35,13 @@ export async function reply(
         | (MessageOptions & { split?: false })
         | MessageAdditions
 ): Promise<Message>;
+/** @internal */
 export async function reply(
     message: Message,
     content: StringResolvable,
     options?: MessageOptions & { split: true | SplitOptions }
 ): Promise<Message[]>;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function reply(
     message: Message,
     a: any,
@@ -48,3 +53,4 @@ export async function reply(
         return await message.author.send(a, b);
     }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */

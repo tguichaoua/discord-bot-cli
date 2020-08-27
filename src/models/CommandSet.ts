@@ -6,37 +6,40 @@ import { Message } from "discord.js";
 import { Command } from "./Command";
 import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
-import { ParseOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./CommandSetOptions";
 
 import defaultLocalization from "../data/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
-import { HelpUtils } from "../other/HelpUtils";
+import { commandFullName } from "../other/HelpUtils";
 import { template } from "../utils/template";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     CommandCollection,
     ReadonlyCommandCollection,
 } from "./CommandCollection";
-import PathUtils from "../utils/PathUtils";
+import {
+    relativeFromEntryPoint,
+    resolveFromEntryPoint,
+} from "../utils/PathUtils";
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
+import { HelpHandler } from "./callbacks/HelpHandler";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
 export class CommandSet {
     private _commands = new CommandCollection();
+    public helpHandler: HelpHandler | undefined = undefined;
 
-    constructor(private _defaultOptions?: DeepPartial<ParseOptions>) {}
+    constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {}
 
     get commands() {
         return this._commands as ReadonlyCommandCollection;
     }
 
     private _loadFile(path: string) {
-        const debugPath = chalk.underline(
-            PathUtils.relativeFromEntryPoint(path)
-        );
+        const debugPath = chalk.underline(relativeFromEntryPoint(path));
         Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
@@ -68,7 +71,7 @@ export class CommandSet {
      */
     loadCommands(commandDirPath: string, includeTS = false) {
         try {
-            commandDirPath = PathUtils.resolveFromEntryPoint(commandDirPath);
+            commandDirPath = resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
                 .filter(
@@ -119,17 +122,10 @@ export class CommandSet {
         this._loadFile(command.filepath);
     }
 
-    /**
-     * @deprecated Use `CommandSet#commands.get` instead. (Will be removed in 6.0.0)
-     */
-    get(commandName: string) {
-        return this._commands.get(commandName);
-    }
-
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
-        let cmd = this.get(_args[0]);
+        let cmd = this._commands.get(_args[0]);
 
         if (cmd) {
             let sub: Command | undefined = cmd;
@@ -152,7 +148,7 @@ export class CommandSet {
      */
     async parse(
         message: Message,
-        options?: DeepPartial<ParseOptions>
+        options?: DeepPartial<CommandSetOptions>
     ): Promise<CommandResult> {
         // function OptionsError(paramName: string) {
         //     return new Error(
@@ -196,7 +192,7 @@ export class CommandSet {
         if (command.guildOnly && !message.guild) {
             await message.reply(
                 template(opts.localization.misc.guildOnlyWarning, {
-                    command: HelpUtils.Command.getFullName(command),
+                    command: commandFullName(command),
                 })
             );
             return CommandResultUtils.guildOnly(command);
@@ -234,7 +230,7 @@ export class CommandSet {
 }
 
 /** @internal */
-const defaultOptions: ParseOptions = {
+const defaultOptions: CommandSetOptions = {
     prefix: "",
     devIDs: [],
     localization: defaultLocalization,

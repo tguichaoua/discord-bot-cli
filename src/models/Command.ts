@@ -6,7 +6,7 @@ import {
     GuildMember,
 } from "discord.js";
 import { CommandSet } from "./CommandSet";
-import { ParseOptions } from "./ParseOptions";
+import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
@@ -17,18 +17,19 @@ import { parseFlags } from "../other/parsing/parseFlags";
 import { parseArgs } from "../other/parsing/parseArgs";
 import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
-import { CommandResultError } from "./CommandResultError";
+import { CommandResultError } from "./errors/CommandResultError";
 import {
     ReadonlyCommandCollection,
     CommandCollection,
 } from "./CommandCollection";
-import { CanUseCommandCb } from "./callbacks/CanUseCommandCb";
-import { HelpCb } from "./callbacks/HelpCb";
+import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
+import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { Throttler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
+import { defaultHelp } from "../other/HelpUtils";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
@@ -38,8 +39,10 @@ export class Command {
         public readonly filepath: string | null,
         public readonly name: string,
         public readonly aliases: readonly string[],
-        private readonly _clientPermissions: PermissionString[],
-        private readonly _userPermissions: PermissionString[] | undefined,
+        public readonly clientPermissions: readonly PermissionString[],
+        public readonly userPermissions:
+            | readonly PermissionString[]
+            | undefined,
         public readonly examples: readonly string[],
         public readonly description: string,
         public readonly parent: Command | null,
@@ -49,9 +52,9 @@ export class Command {
         public readonly rest: Readonly<RestDefinition> | undefined,
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
-        private readonly _executor: CommandExecutor<any> | undefined,
-        private readonly _canUse: CanUseCommandCb | undefined,
-        private readonly _help: HelpCb | undefined,
+        private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
+        private readonly _canUse: CanUseCommandHandler | undefined,
+        private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
         public readonly ignored: boolean,
@@ -86,7 +89,7 @@ export class Command {
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
-        parentHelp: HelpCb | undefined
+        parentHelp: HelpHandler | undefined
     ): Command {
         function resolveInheritance<K extends keyof Command>(
             prop: K,
@@ -155,14 +158,6 @@ export class Command {
 
     // === Getter =====================================================
 
-    get clientPermissions(): readonly PermissionString[] {
-        return this._clientPermissions;
-    }
-
-    get userPermissions(): readonly PermissionString[] | undefined {
-        return this._userPermissions;
-    }
-
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
@@ -189,16 +184,16 @@ export class Command {
 
     /** Returns `true` if the client have required permissions for this guild, `false` otherwise. */
     hasClientPermissions(guild: Guild) {
-        return guild.me && guild.me.hasPermission(this._clientPermissions);
+        return guild.me && guild.me.hasPermission(this.clientPermissions);
     }
 
     /** Returns `true` if the member has required permissions to execute this command, `false` otherwise. */
     hasPermissions(member: GuildMember): boolean {
-        if (!this._userPermissions) {
+        if (!this.userPermissions) {
             if (this.parent) return this.parent.hasPermissions(member);
             else return true;
         }
-        return member.hasPermission(this._userPermissions);
+        return member.hasPermission(this.userPermissions);
     }
 
     // =====================================================
@@ -226,21 +221,27 @@ export class Command {
      * @param message
      * @param options
      */
-    async help(message: Message, options: ParseOptions): Promise<boolean> {
-        if (!this._help) return false;
-        await this._help(this, {
+    async help(message: Message, options: CommandSetOptions) {
+        const context = {
             message,
             options,
             commandSet: this.commandSet,
-        });
-        return true;
+        };
+
+        if (this._help) {
+            await this._help(this, context);
+        } else if (this.commandSet.helpHandler) {
+            await this.commandSet.helpHandler(this, context);
+        } else {
+            await defaultHelp(this, context);
+        }
     }
 
     /** @internal */
     async execute(
         message: Message,
         inputArguments: string[],
-        options: ParseOptions,
+        options: CommandSetOptions,
         commandSet: CommandSet
     ) {
         if (message.guild && !this.hasClientPermissions(message.guild))
@@ -285,7 +286,7 @@ export class Command {
             Object.fromEntries(args.argValues),
             Object.fromEntries(flags.flagValues),
             {
-                rest: rest as any,
+                rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
                 message,
                 guild: message.guild,
                 member: message.member,

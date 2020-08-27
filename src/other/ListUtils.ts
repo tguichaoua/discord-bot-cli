@@ -4,21 +4,19 @@ import { Command } from "../models/Command";
 import { CommandRawList } from "../models/data/list/CommandRawList";
 import { Localization } from "../models/localization/Localization";
 
-export abstract class ListUtils {
-    static getRawListData(
-        commandSet: CommandSet,
-        localization: Localization
-    ): ListRawData {
-        const commands = Array.from(commandSet.commands)
-            .sort((a, b) => {
-                if (a.name < b.name) return -1;
-                if (a.name > b.name) return 1;
-                return 0;
-            })
-            .map((c) => getCommandRaw(c, localization));
+export function getListRawData(
+    commandSet: CommandSet,
+    localization: Localization
+): ListRawData {
+    const commands = Array.from(commandSet.commands)
+        .sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            return 0;
+        })
+        .map((c) => getCommandRaw(c, localization));
 
-        return { commands };
-    }
+    return { commands };
 }
 
 function getCommandRaw(

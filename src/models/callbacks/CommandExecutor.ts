@@ -6,7 +6,7 @@ import {
     CommandSettings,
 } from "../definition/CommandDefinition";
 import { ParsableTypeOf } from "../ParsableType";
-import { ParseOptions } from "../ParseOptions";
+import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 
 type IsGuildOnly<
@@ -60,8 +60,8 @@ export type CommandExecutor<
             ? void
             : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
         readonly message: Message & MessageExtension<S>;
-        readonly options: ParseOptions;
+        readonly options: CommandSetOptions;
         readonly commandSet: CommandSet;
         readonly command: Command;
     } & MessageExtension<S>
-) => any | Promise<any>;
+) => any | Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any

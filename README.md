@@ -1,55 +1,49 @@
-# discord-bot-cli
+<h1 align="center">Welcome to discord-bot-cli 👋</h1>
+<p>
+  <a href="https://www.npmjs.com/package/discord-bot-cli" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/discord-bot-cli.svg">
+  </a>
+  <a href="https://github.com/tguichaoua/discord-bot-cli/wiki" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/tguichaoua/discord-bot-cli/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+  <a href="https://github.com/tguichaoua/discord-bot-cli/blob/master/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/tguichaoua/discord-bot-cli" />
+  </a>
+</p>
 
-`discord-bot-cli` is a npm package based on [`discord.js`](https://www.npmjs.com/package/discord.js) to provide tools to make easy to create a command based bot for Discord.
-
-<a href="https://www.npmjs.com/package/discord-bot-cli" target="_blank"><img src="https://img.shields.io/npm/v/discord-bot-cli"/></a>
-<img src="https://img.shields.io/github/last-commit/baanloh/discord-bot-cli"/>
+> An easy way to build a command-based discord bot with [discord.js](https://www.npmjs.com/package/discord.js).
 
 ## Install
 
-`npm i discord-bot-cli`  
-Check the [wiki](https://github.com/baanloh/discord-bot-cli/wiki/Installation-and-Setup) for more details.
-
-### Build settings
-If you use this package in a typescript project, you must enable `strict` flag to properly resolve types in commands in `tsconfig.json`:
-```jsonc
-{
-    "compilerOptions": {
-        "strict": true
-    }
-}
+```sh
+npm i discord-bot-cli
 ```
 
-## Documentation
+Check out [the wiki](https://github.com/tguichaoua/discord-bot-cli/wiki/Installation-and-Setup) for more details.
 
-<a href="https://baanloh.github.io/discord-bot-cli/v3/index.html">Docs</a><br>
-<a href="https://github.com/baanloh/discord-bot-cli/wiki">Wiki</a>
+## Author
 
-## Usage
+👤 **Tristan Guichaoua**
 
-```typescript
-// === include dependencies =================================================
-import Discord from "discord.js";
-import { CommandSet } from "discord-bot-cli";
+-   Website: https://tguichaoua.github.io/
+-   Github: [@tguichaoua](https://github.com/tguichaoua)
 
-// === setup objects ========================================================
-const client = new Discord.Client();
-const commands = new CommandSet({ prefix: "." });
+## 🤝 Contributing
 
-commands.loadCommands("./commands/");
-commands.buildin("all");
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/tguichaoua/discord-bot-cli/issues). You can also take a look at the [contributing guide](https://github.com/tguichaoua/discord-bot-cli/blob/master/CONTRIBUTING.md).
 
-// === Discord events ==========================================
+## Show your support
 
-client.on("ready", () => {
-    console.log("Discord bot is ready !");
-});
+Give a ⭐️ if this project helped you!
 
-client.on("message", async (msg) => {
-    if (msg.author.bot) return; // ignore message from bots
+## 📝 License
 
-    await commands.parse(msg);
-});
+Copyright © 2020 [Tristan Guichaoua](https://github.com/tguichaoua).<br />
+This project is [MIT](https://github.com/tguichaoua/discord-bot-cli/blob/master/LICENSE) licensed.
 
-client.login(process.env.DISCORD_TOKEN);
-```
+---
+
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

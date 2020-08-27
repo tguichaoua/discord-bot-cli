@@ -40,7 +40,7 @@ const cmd = makeCommand("cmd", {
 });
 
 cmd.subs.reload.executor = async ({ command }, _f, { commandSet, message }) => {
-    const cmd = commandSet.get(command);
+    const cmd = commandSet.commands.get(command);
     if (!cmd) {
         await message.channel.send(":x: Command not found").catch(Logger.error);
         return;

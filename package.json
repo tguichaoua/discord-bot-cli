@@ -1,13 +1,14 @@
 {
     "name": "discord-bot-cli",
-    "version": "5.3.1",
-    "description": "An easy way to build a command-based discord bot.",
+    "version": "6.0.0",
+    "description": "An easy way to build a command-based discord bot with discord.js.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "bin": {
         "dbc": "./dist/bin/cli.js"
     },
     "scripts": {
+        "release": "ts-node chores/release.ts",
         "v": "npm --no-git-tag-version version",
         "test": "npm run lint && npm run test:build",
         "test:build": "tsc",
@@ -15,7 +16,7 @@
         "start:log": "ts-node test/log.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
-        "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+        "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",
         "docs": "typedoc ./src/",
         "build": "tsc && npm run copy:assets",
         "build:clean": "shx rm -rf ./dist",
@@ -32,7 +33,11 @@
         "bot",
         "cli"
     ],
-    "author": "Tristan Guichaoua",
+    "author": {
+        "name": "Tristan Guichaoua",
+        "email": "baanlohdev@gmail.com",
+        "url": "https://tguichaoua.github.io/"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/tguichaoua/discord-bot-cli/issues"
@@ -40,25 +45,30 @@
     "homepage": "https://github.com/tguichaoua/discord-bot-cli",
     "devDependencies": {
         "@types/chalk": "^2.2.0",
-        "@types/node": "^13.13.14",
+        "@types/node": "^12.12.54",
+        "@types/shelljs": "^0.8.8",
         "@types/ws": "^7.2.6",
-        "@typescript-eslint/eslint-plugin": "^3.6.0",
-        "@typescript-eslint/parser": "^3.6.0",
-        "discord.js": "^12.2.0",
-        "eslint": "^7.4.0",
+        "@typescript-eslint/eslint-plugin": "^3.9.1",
+        "@typescript-eslint/parser": "^3.9.1",
+        "discord.js": "^12.3.1",
+        "eslint": "^7.7.0",
         "eslint-config-prettier": "^6.11.0",
         "eslint-plugin-prettier": "^3.1.4",
         "prettier": "^2.0.5",
+        "shelljs": "^0.8.4",
         "shx": "^0.3.2",
         "ts-node": "^8.10.2",
-        "typedoc": "^0.17.7",
-        "typescript": "^3.9.3"
+        "typedoc": "^0.18.0",
+        "typescript": "^3.9.7"
     },
     "dependencies": {
         "chalk": "^4.1.0",
-        "meow": "^6.1.1"
+        "meow": "^7.1.0"
     },
     "peerDependencies": {
-        "discord.js": "^12.2.0"
+        "discord.js": "^12.3.0"
+    },
+    "engines": {
+        "node": ">=12"
     }
 }
