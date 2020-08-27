@@ -122,13 +122,6 @@ export class CommandSet {
         this._loadFile(command.filepath);
     }
 
-    /**
-     * @deprecated Use `CommandSet#commands.get` instead. (Will be removed in 6.0.0)
-     */
-    get(commandName: string) {
-        return this._commands.get(commandName);
-    }
-
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
