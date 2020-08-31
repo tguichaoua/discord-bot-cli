@@ -4,7 +4,7 @@
     "excludeNotExported": true,
     "excludePrivate": true,
     "stripInternal": true,
-    "out": "./docs/v5/",
+    "out": "./docs/v6/",
     "readme": "none",
     "mode": "file",
     "exclude": [
