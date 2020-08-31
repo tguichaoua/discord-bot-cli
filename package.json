@@ -30,8 +30,15 @@
     },
     "keywords": [
         "discord",
+        "discordjs",
+        "discord.js",
         "bot",
-        "cli"
+        "commands",
+        "command-handler",
+        "parser",
+        "cli",
+        "typescript",
+        "tsc"
     ],
     "author": {
         "name": "Tristan Guichaoua",
