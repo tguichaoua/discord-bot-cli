@@ -18,6 +18,7 @@
         "lint:fix": "eslint . --ext .ts --fix",
         "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",
         "docs": "typedoc ./src/",
+        "docs:test": "typedoc ./src/ --out ./docs/test/",
         "build": "tsc && npm run copy:assets",
         "build:clean": "shx rm -rf ./dist",
         "rebuild": "npm run build:clean && npm run build",
