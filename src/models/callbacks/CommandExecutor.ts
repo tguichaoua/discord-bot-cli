@@ -9,12 +9,14 @@ import { ParsableTypeOf } from "../ParsableType";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 
+/** @internal */
 type IsGuildOnly<
     S extends CommandSettings,
     True,
     False
 > = S["guildOnly"] extends true ? True : False;
 
+/** @internal */
 type MessageExtension<S> = {
     readonly guild: IsGuildOnly<
         S,
@@ -33,6 +35,9 @@ type MessageExtension<S> = {
     >;
 };
 
+/**
+ * Command's executor handler.
+ */
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
     S extends CommandSettings = Record<string, unknown>
