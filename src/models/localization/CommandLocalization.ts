@@ -1,5 +1,8 @@
 import { ParsableLocalization } from "./ParsableLocalization";
 
+/**
+ * @category Localization
+ */
 export interface CommandLocalization {
     description?: string;
     rest?: { name: string; description: string };
