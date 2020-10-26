@@ -37,6 +37,7 @@ type MessageExtension<S> = {
 
 /**
  * Command's executor handler.
+ * @category Handler
  */
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
