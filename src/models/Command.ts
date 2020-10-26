@@ -33,23 +33,37 @@ import { defaultHelp } from "../other/HelpUtils";
 
 export class Command {
     private readonly _throttler: Throttler | null | undefined;
+    /** Either or not this command's throttler also includes users with administrator permission. */
     public readonly _throttlingIncludeAdmins: boolean;
 
     private constructor(
+        /** Path to the file that contains the command if it's a top-most command, `null` otherwise. */
         public readonly filepath: string | null,
+        /** Name of this command. */
         public readonly name: string,
+        /** Aliases of this command. */
         public readonly aliases: readonly string[],
+        /** The list of permissions the bot's user require to execute this command. */
         public readonly clientPermissions: readonly PermissionString[],
+        /** The list of permissions the user require to execute this command. */
         public readonly userPermissions:
             | readonly PermissionString[]
             | undefined,
+        /** The list of exemples for this command. */
         public readonly examples: readonly string[],
+        /** The description of the command. */
         public readonly description: string,
+        /** This command's parent or `null` if it's a top-most command. */
         public readonly parent: Command | null,
+        /** The [[CommandSet]] that contains this command. */
         public readonly commandSet: CommandSet,
+        /** A [[ReadonlyCommandCollection]] of this command's sub-commands. */
         public readonly subs: ReadonlyCommandCollection,
+        /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
         public readonly args: ReadonlyMap<string, ArgDefinition>,
+        /** A [[RestDefinition]] if this command use the rest argument, `undefined` otherwise. */
         public readonly rest: Readonly<RestDefinition> | undefined,
+        /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
         public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -57,9 +71,13 @@ export class Command {
         private readonly _help: HelpHandler | undefined,
         throttling: ThrottlingDefinition | null | undefined,
         private readonly _useThrottlerOnSubs: boolean,
+        /** Either or not this command is ignored. */
         public readonly ignored: boolean,
+        /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). */
         public readonly devOnly: boolean,
+        /** Either or not this command can only be used from a guild. */
         public readonly guildOnly: boolean,
+        /** Either or not the message that executed this command is deleted after the command execution. */
         public readonly deleteMessage: boolean
     ) {
         this._throttler = throttling
@@ -158,6 +176,9 @@ export class Command {
 
     // === Getter =====================================================
 
+    /**
+     * The [[Throttler]] used by this command.
+     */
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
@@ -166,13 +187,18 @@ export class Command {
         return undefined;
     }
 
-    /** Returns `true` if this command have an executor, `false` otherwise. */
+    /**
+     * Either or not this command has an executor.
+     */
     get hasExecutor(): boolean {
         return this._executor !== undefined;
     }
 
-    /** Returns an array containing all parent of this command, ordered from top-most command to this command (included). */
-    getParents() {
+    /**
+     * Returns an array containing all parents of this command, ordered from top-most command to this command (included).
+     * @returns An array of this command's parent [[Command]].
+     */
+    getParents(): Command[] {
         const parents: Command[] = [];
         parents.unshift(this);
 
@@ -182,12 +208,22 @@ export class Command {
         return parents;
     }
 
-    /** Returns `true` if the client have required permissions for this guild, `false` otherwise. */
-    hasClientPermissions(guild: Guild) {
-        return guild.me && guild.me.hasPermission(this.clientPermissions);
+    /**
+     * Determines if the bot's user have required permissions to execute this command from the guild.
+     * @param guild The guild from which check permissions.
+     * @returns Either or not the bot's user have required permissions to execute this command from the guild.
+     */
+    hasClientPermissions(guild: Guild): boolean {
+        return guild.me
+            ? guild.me.hasPermission(this.clientPermissions)
+            : false;
     }
 
-    /** Returns `true` if the member has required permissions to execute this command, `false` otherwise. */
+    /**
+     * Determines if a member have required permissions to execute this command.
+     * @param member
+     * @returns Either or not the member have required permissions to execute this command.
+     */
     hasPermissions(member: GuildMember): boolean {
         if (!this.userPermissions) {
             if (this.parent) return this.parent.hasPermissions(member);
@@ -198,6 +234,13 @@ export class Command {
 
     // =====================================================
 
+    /**
+     * Call the `canUse` handler of this command and its parents (see [[CommandDefinition.canUse]])
+     * and return the first negative result (`false` or a `string`) or `true`.
+     * @param user
+     * @param message
+     * @returns Result of `canUse` handlers.
+     */
     canUse(user: User, message: Message): boolean | string {
         if (this.parent) {
             const res = this.parent.canUse(user, message);
@@ -207,7 +250,11 @@ export class Command {
         return true;
     }
 
-    /** Returns `true` if the author of the message pass the `canUse` and the `hasPermissions` checks, `false` otherwise. */
+    /**
+     * Determines of the message author pass the [[canUse]] and the [[hasPermissions]] checks.
+     * @param message
+     * @returns Either or not the message author pass the [[canUse]] and the [[hasPermissions]] checks.
+     */
     checkPermissions(message: Message): boolean {
         return (
             this.canUse(message.author, message) === true &&
@@ -216,12 +263,11 @@ export class Command {
     }
 
     /**
-     * Calls the help handler of this command and returns `true`.
-     * Returns `false` if the help handler is undefined.
+     * Call the suitable help handler for this command.
      * @param message
      * @param options
      */
-    async help(message: Message, options: CommandSetOptions) {
+    async help(message: Message, options: CommandSetOptions): Promise<void> {
         const context = {
             message,
             options,
