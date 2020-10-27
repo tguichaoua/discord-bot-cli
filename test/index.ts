@@ -32,7 +32,7 @@ client.on("ready", () => {
     console.log(`Logged as ${client.user?.username}`);
 });
 
-client.on("message", async (message) => {
+client.on("message", async message => {
     if (message.system || message.author.bot) return;
     try {
         const result = await commands.parse(message);
@@ -52,6 +52,6 @@ client.on("message", async (message) => {
     }
 });
 
-client.login(env.token).catch((e) => {
+client.login(env.token).catch(e => {
     throw e;
 });

@@ -48,21 +48,13 @@ cmd.subs.reload.executor = async ({ command }, _f, { commandSet, message }) => {
 
     try {
         commandSet.reload(cmd);
-        await message.channel
-            .send(":white_check_mark: Command reloaded")
-            .catch(Logger.error);
+        await message.channel.send(":white_check_mark: Command reloaded").catch(Logger.error);
     } catch (e) {
-        await message.channel
-            .send(`:x: Fail to reload command \`\`\`\n${e}\n\`\`\``)
-            .catch(Logger.error);
+        await message.channel.send(`:x: Fail to reload command \`\`\`\n${e}\n\`\`\``).catch(Logger.error);
     }
 };
 
-cmd.subs.throttling.executor = async (
-    _,
-    { reset, "reset-all": resetAll },
-    { commandSet, message, rest }
-) => {
+cmd.subs.throttling.executor = async (_, { reset, "reset-all": resetAll }, { commandSet, message, rest }) => {
     function resetAllThrottling(cmd: Command) {
         for (const sub of cmd.subs) resetAllThrottling(sub);
         cmd.throttler?.reset();
@@ -70,9 +62,7 @@ cmd.subs.throttling.executor = async (
 
     if (resetAll && rest.length === 0) {
         for (const c of commandSet.commands) resetAllThrottling(c);
-        await message.channel.send(
-            ":white_check_mark: All throttlers has been reset."
-        );
+        await message.channel.send(":white_check_mark: All throttlers has been reset.");
         return;
     }
 
@@ -85,25 +75,19 @@ cmd.subs.throttling.executor = async (
 
     if (resetAll) {
         resetAllThrottling(command);
-        await message.channel.send(
-            `:white_check_mark: All throttlers of ${commandName} has been reset.`
-        );
+        await message.channel.send(`:white_check_mark: All throttlers of ${commandName} has been reset.`);
         return;
     }
 
     const throttler = command.throttler;
     if (!throttler) {
-        await message.channel.send(
-            `:x: Throttling is not enabled on ${commandName}.`
-        );
+        await message.channel.send(`:x: Throttling is not enabled on ${commandName}.`);
         return;
     }
 
     if (reset) {
         throttler.reset();
-        await message.channel.send(
-            `:white_check_mark: Throttling has been reset for ${commandName}.`
-        );
+        await message.channel.send(`:white_check_mark: Throttling has been reset for ${commandName}.`);
     } else {
         await message.channel.send(`
 **Command**: ${commandName}

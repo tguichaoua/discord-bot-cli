@@ -9,13 +9,7 @@ const cmd = makeCommand("help", {
         name: "command",
         description: "The name of the command.",
     },
-    examples: [
-        "help",
-        "help list",
-        "help help",
-        "help command subCommand",
-        "help command subCommand1 subCommand2",
-    ],
+    examples: ["help", "help list", "help help", "help command subCommand", "help command subCommand1 subCommand2"],
 });
 
 cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
@@ -24,7 +18,7 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
             message,
             template(options.localization.help.default, {
                 prefix: options.prefix,
-            })
+            }),
         );
     else {
         const { command, args } = commandSet.resolve(rest);
@@ -33,12 +27,11 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
                 message,
                 template(options.localization.help.commandNotFound, {
                     command: rest.join(" "),
-                })
+                }),
             );
         else {
             if (
-                (!options.devIDs.includes(message.author.id) ||
-                    !options.skipDevsPermissionsChecking) &&
+                (!options.devIDs.includes(message.author.id) || !options.skipDevsPermissionsChecking) &&
                 !command.checkPermissions(message)
             )
                 return;

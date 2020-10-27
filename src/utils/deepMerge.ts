@@ -6,18 +6,9 @@ function isObject(item: unknown) {
 /** @internal */
 export function deepMerge<T, U>(target: T, source: U): T & U;
 /** @internal */
-export function deepMerge<T, U, V>(
-    target: T,
-    source1: U,
-    source2: V
-): T & U & V;
+export function deepMerge<T, U, V>(target: T, source1: U, source2: V): T & U & V;
 /** @internal */
-export function deepMerge<T, U, V, W>(
-    target: T,
-    source1: U,
-    source2: V,
-    source3: W
-): T & U & V & W;
+export function deepMerge<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function deepMerge(target: any, ...sources: any[]): any;

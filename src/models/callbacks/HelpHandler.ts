@@ -13,5 +13,5 @@ export type HelpHandler = (
         message: Message;
         options: CommandSetOptions;
         commandSet: CommandSet;
-    }
+    },
 ) => void | Promise<void>;

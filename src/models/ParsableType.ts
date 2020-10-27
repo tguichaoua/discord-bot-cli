@@ -47,9 +47,7 @@ export type ParsableType =
 /** @ignore */
 export type ParsableTypeOf<
     Names extends ParsableTypeName | readonly ParsableTypeName[]
-> = Names extends ParsableTypeName
-    ? TypeName2Type<Names>
-    : TypeName2Type<Exclude<Names, ParsableTypeName>[number]>;
+> = Names extends ParsableTypeName ? TypeName2Type<Names> : TypeName2Type<Exclude<Names, ParsableTypeName>[number]>;
 
 /** @ignore */
 type TypeName2Type<Name extends ParsableTypeName> = Name extends "string"

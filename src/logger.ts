@@ -13,12 +13,7 @@ let enableDebug = false;
 
 /** @internal */
 function print(level: keyof typeof levels, ...args: any[]) {
-    const log =
-        level === "error"
-            ? console.error
-            : level === "warn"
-            ? console.warn
-            : console.log;
+    const log = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
     log(chalk.bold(chalk.blue("[discord-bot-cli]"), levels[level]), ...args);
 }
 

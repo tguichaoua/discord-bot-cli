@@ -1,13 +1,7 @@
-import {
-    CommandDefinition,
-    CommandSettings,
-} from "./definition/CommandDefinition";
+import { CommandDefinition, CommandSettings } from "./definition/CommandDefinition";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
 
-export interface CommandData<
-    T extends CommandDefinition,
-    S extends CommandSettings = Record<string, unknown>
-> {
+export interface CommandData<T extends CommandDefinition, S extends CommandSettings = Record<string, unknown>> {
     /** @internal */
     readonly def: T;
     /** @internal */
@@ -18,17 +12,11 @@ export interface CommandData<
 
     /** Sub-commands data. */
     readonly subs: {
-        readonly [name in keyof T["subs"]]: CommandData<
-            T["subs"][name],
-            Inherit<T, S>
-        >;
+        readonly [name in keyof T["subs"]]: CommandData<T["subs"][name], Inherit<T, S>>;
     };
 }
 
 /** @ignore */
-type Inherit<
-    T extends CommandDefinition,
-    S extends CommandSettings
-> = T["inherit"] extends false
+type Inherit<T extends CommandDefinition, S extends CommandSettings> = T["inherit"] extends false
     ? T
     : { [k in keyof CommandSettings]-?: undefined extends T[k] ? S[k] : T[k] };
