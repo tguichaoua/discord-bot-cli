@@ -1,5 +1,6 @@
 import { ParsableTypeName, ParsableTypeOf } from "../ParsableType";
 
+/** @category Definition */
 interface Parsable<
     TypeNames extends ParsableTypeName | readonly ParsableTypeName[]
 > {
@@ -18,6 +19,7 @@ type WrapParsable<T extends ParsableTypeName> = T extends any // eslint-disable-
     ? Parsable<T>
     : never;
 
+/** @category Definition */
 export type ParsableDefinition =
     | WrapParsable<ParsableTypeName>
     | Parsable<readonly ParsableTypeName[]>;

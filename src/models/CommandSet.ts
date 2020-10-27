@@ -30,10 +30,12 @@ type BuildInCommand = "help" | "list" | "cmd";
 
 export class CommandSet {
     private _commands = new CommandCollection();
+    /** If defined, called when [[Command.help]] is called and if the command didn't define its own help handler. */
     public helpHandler: HelpHandler | undefined = undefined;
 
     constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {}
 
+    /** A readonly collection of commands. */
     get commands() {
         return this._commands as ReadonlyCommandCollection;
     }
@@ -69,7 +71,7 @@ export class CommandSet {
      * @param commandDirPath - The path to the folder where the commands are (relative to node entry point).
      * @param includeTS - If set to `true`, files with `.cmd.ts` extension are also loaded. Usefull if you use `ts-node` (default is `false`)
      */
-    loadCommands(commandDirPath: string, includeTS = false) {
+    loadCommands(commandDirPath: string, includeTS = false): void {
         try {
             commandDirPath = resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
@@ -92,9 +94,12 @@ export class CommandSet {
 
     /** Loads all build-in commands */
     buildin(buildinCommandNames: "all"): void;
-    /** Loads build-in commands. */
+    /**
+     * Loads build-in commands.
+     * @param buildinCommandNames A list of build-in commands.
+     */
     buildin(...buildinCommandNames: BuildInCommand[]): void;
-    buildin(...buildinCommandNames: string[]) {
+    buildin(...buildinCommandNames: string[]): void {
         if (buildinCommandNames.includes("all")) {
             this.loadCommands(__dirname + "/../commands");
         } else {
@@ -115,7 +120,7 @@ export class CommandSet {
      * Reloads a command.
      * @param command - The command to reload.
      */
-    reload(command: Command) {
+    reload(command: Command): void {
         if (!command.filepath) throw Error("Cannot reload sub command.");
         this._commands.delete(command);
         delete require.cache[command.filepath];
@@ -142,9 +147,10 @@ export class CommandSet {
     }
 
     /**
-     *  Parses the message's content and executes the command.
+     * Parses the message's content and executes the command.
      * @param message - The message to parse.
      * @param options - Options to define the parsing behaviour.
+     * @returns The result of the parsing.
      */
     async parse(
         message: Message,

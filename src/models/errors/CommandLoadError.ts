@@ -1,3 +1,4 @@
+/** @category Error */
 export class CommandLoadError extends Error {
     constructor(message?: string) {
         super(message);

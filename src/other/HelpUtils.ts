@@ -14,6 +14,7 @@ import { isArray } from "../utils/array";
 import { template } from "../utils/template";
 import { reply } from "../utils/reply";
 
+/** @internal */
 export async function defaultHelp(
     command: Command,
     { message, options }: { message: Message; options: CommandSetOptions }
@@ -27,6 +28,12 @@ export async function defaultHelp(
     await reply(message, { embed });
 }
 
+/**
+ * Get the command full name.
+ * @category Utils
+ * @param command
+ * @returns The command's full name.
+ */
 export function commandFullName(command: Command) {
     return command
         .getParents()
@@ -34,6 +41,13 @@ export function commandFullName(command: Command) {
         .join(" ");
 }
 
+/**
+ * Extracts raw data for command help.
+ * @category Utils
+ * @param command
+ * @param localization
+ * @returns Raw help datas.
+ */
 export function commandRawHelp(
     command: Command,
     localization: Localization
@@ -88,6 +102,7 @@ export function commandRawHelp(
     };
 }
 
+/** @internal */
 function argRawHelp(
     arg: ArgDefinition,
     name: string,
@@ -118,6 +133,7 @@ function argRawHelp(
     };
 }
 
+/** @internal */
 function flagRawHelp(
     flag: FlagDefinition,
     name: string,
@@ -144,6 +160,7 @@ function flagRawHelp(
     };
 }
 
+/** @internal */
 function embedHelp(
     command: Command,
     prefix: string,

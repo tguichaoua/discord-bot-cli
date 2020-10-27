@@ -3,6 +3,11 @@ import { CommandData } from "../models/CommandData";
 import { ParsableTypeName } from "../models/ParsableType";
 import { distinct } from "../utils/array";
 
+/**
+ * Generate command data.
+ * @param name Name of the command.
+ * @param definition Definition of the command.
+ */
 export function makeCommand<T extends CommandDefinition>(
     name: string,
     definition: T

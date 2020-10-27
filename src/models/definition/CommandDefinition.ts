@@ -6,12 +6,14 @@ import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
 
-export type CommandDefinition = {
-    /** alias names for this command. */
+/** @category Definition */
+type CommandDefinitionBase = {
+    /** Aliases for this command. */
     readonly aliases?: string[];
-    /** Define which permissions the client need to perform the command. */
+    /** Define which permissions the bot's user require to perform the command. */
     readonly clientPermissions?: PermissionString[];
-    /** If the command come from a guild, the user must have these permissions to execute this command.
+    /**
+     * If the command is used from a guild, the user require these permissions to execute this command.
      * Inherited from parent command if not defined.
      */
     readonly userPermissions?: PermissionString[];
@@ -20,14 +22,14 @@ export type CommandDefinition = {
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
-    readonly args?: { readonly [name: string]: ArgDefinition };
+    readonly args?: Readonly<Record<string, ArgDefinition>>;
     /** Flags that can be used with this command. */
-    readonly flags?: { readonly [name: string]: FlagDefinition };
+    readonly flags?: Readonly<Record<string, FlagDefinition>>;
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
 
     readonly throttling?: ThrottlingDefinition | null;
-    /** If set to true, sub-commands while use this command's throttler. (default is true) */
+    /** Either or not sub-commands will use the same throttler as this command. (default is true) */
     readonly useThrottlerForSubs?: boolean;
 
     /** Determine if a user can use this commands.
@@ -47,19 +49,23 @@ export type CommandDefinition = {
     readonly useHelpOnSubs?: boolean;
 
     /** Sub-commands of this command. */
-    readonly subs?: { readonly [name: string]: CommandDefinition };
+    readonly subs?: Readonly<Record<string, CommandDefinition>>;
 
-    /** If set to true, undefined inheritable properties are inherited from parent command. (default is true). */
+    /** Either or not undefined inheritable properties are inherited from parent command. (default is true). */
     readonly inherit?: boolean;
-} & CommandSettings;
+};
 
+/** @category Definition */
 export type CommandSettings = {
-    /** If set to true, this command is not loaded. (default is false). [inheritable] */
+    /** Either or not this command will be ignored. (default is false). [inheritable] */
     readonly ignore?: boolean;
-    /** If set to true, only user registred as dev via `ParseCommand.devIDs` can execute, get help or list this command. (default is false). [inheritable] */
+    /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). (default is false). [inheritable] */
     readonly devOnly?: boolean;
-    /** If set to true, this command can only be executed from a server. (default is false). [inheritable] */
+    /** Either or not this command can only be used from a guild. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
-    /** If set to true, the command message will be deleted after command execution. (default is false). [inheritable] */
+    /** Either or not the message that executed this command is deleted after the command execution. (default is false). [inheritable] */
     readonly deleteMessage?: boolean;
 };
+
+/** @category Definition */
+export type CommandDefinition = CommandDefinitionBase & CommandSettings;

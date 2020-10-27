@@ -8,8 +8,9 @@
     "readme": "none",
     "mode": "file",
     "exclude": [
-        "src/com.ts",
-        "src/utils/*",
-        "src/commands/*.ts"
+        "src/assets/*",
+        "src/bin/*",
+        "src/commands/*",
+        "src/data/*"
     ]
 }

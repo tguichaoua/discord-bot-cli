@@ -3,6 +3,10 @@ import { Command } from "../Command";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { CommandSet } from "../CommandSet";
 
+/**
+ * Function called to generate help for a command.
+ * @category Handler
+ */
 export type HelpHandler = (
     command: Command,
     context: {
