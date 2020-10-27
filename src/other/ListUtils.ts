@@ -4,6 +4,13 @@ import { Command } from "../models/Command";
 import { CommandRawList } from "../models/data/list/CommandRawList";
 import { Localization } from "../models/localization/Localization";
 
+/**
+ * Extracts raw data for list command.
+ * @category Utils
+ * @param commandSet
+ * @param localization
+ * @returns List command raw datas.
+ */
 export function getListRawData(
     commandSet: CommandSet,
     localization: Localization
@@ -19,6 +26,7 @@ export function getListRawData(
     return { commands };
 }
 
+/** @internal */
 function getCommandRaw(
     command: Command,
     localization: Localization
