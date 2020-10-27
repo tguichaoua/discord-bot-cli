@@ -4,10 +4,12 @@ export class Throttler {
     private _current = 0;
     private _timeout: NodeJS.Timeout | undefined = undefined;
 
+    /**
+     * @param count How many time the throttler can be triggered.
+     * @param duration Time in seconds since the first trigger before the throttler is reset.
+     */
     constructor(
-        /** How many time the throttler can be triggered. */
         public readonly count: number,
-        /** Time in seconds since the first trigger before the throttler is reset. */
         public readonly duration: number
     ) {}
 
@@ -16,12 +18,12 @@ export class Throttler {
         return this._current;
     }
 
-    /** Returns `true` if this throttler has reached the limit, `false` otherwise. */
+    /** Either or not this throttler has reached the limit. */
     get throttled() {
         return this._current >= this.count;
     }
 
-    /** Returns the time in seconds until the throttler is reset. */
+    /** The time in seconds until the throttler is reset. */
     get cooldown() {
         return this._timeout ? Math.ceil(getTimeLeft(this._timeout)) : 0;
     }
@@ -33,8 +35,9 @@ export class Throttler {
         this._current = 0;
     }
 
-    /** Increment this throttler.
-     * Returns `true` if the limit has not been reached, `false` otherwise.
+    /**
+     * Increment the counter.
+     * @returns Either or not the limit has been reached.
      */
     add(): boolean {
         const reachedLimit = this.throttled;
