@@ -8,10 +8,7 @@ import { distinct } from "../utils/array";
  * @param name Name of the command.
  * @param definition Definition of the command.
  */
-export function makeCommand<T extends CommandDefinition>(
-    name: string,
-    definition: T
-): CommandData<T> {
+export function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T> {
     const subs = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     for (const key in definition.subs) {
         subs[key] = makeCommand(key, definition.subs[key]);
@@ -27,13 +24,10 @@ export function makeCommand<T extends CommandDefinition>(
         if (Array.isArray(t)) t.sort(sortParsableType);
     }
 
-    if (definition.rest && Array.isArray(definition.rest.type))
-        definition.rest.type.sort(sortParsableType);
+    if (definition.rest && Array.isArray(definition.rest.type)) definition.rest.type.sort(sortParsableType);
 
     if (definition.clientPermissions)
-        (definition.clientPermissions as unknown) = distinct(
-            definition.clientPermissions
-        );
+        (definition.clientPermissions as unknown) = distinct(definition.clientPermissions);
 
     return {
         def: definition,
@@ -43,13 +37,7 @@ export function makeCommand<T extends CommandDefinition>(
 }
 
 /** @internal */
-const parsableOrderer: ParsableTypeName[] = [
-    "guild channel",
-    "channel",
-    "integer",
-    "float",
-    "string",
-];
+const parsableOrderer: ParsableTypeName[] = ["guild channel", "channel", "integer", "float", "string"];
 
 /** @internal */
 function sortParsableType(a: ParsableTypeName, b: ParsableTypeName): number {

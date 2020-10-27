@@ -26,7 +26,4 @@ exec("bump version", `npm --no-git-tag-version version ${semver}`);
 import { version } from "../package.json";
 
 exec("commit & push", `git commit -A "bump version to ${version}" && git push`);
-exec(
-    "merge master on stable & pull",
-    "git checkout stable && git pull && git merge master && git push"
-);
+exec("merge master on stable & pull", "git checkout stable && git pull && git merge master && git push");

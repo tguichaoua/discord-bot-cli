@@ -1,10 +1,4 @@
-import {
-    Message,
-    User,
-    PermissionString,
-    Guild,
-    GuildMember,
-} from "discord.js";
+import { Message, User, PermissionString, Guild, GuildMember } from "discord.js";
 import { CommandSet } from "./CommandSet";
 import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
@@ -18,10 +12,7 @@ import { parseArgs } from "../other/parsing/parseArgs";
 import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
 import { CommandResultError } from "./errors/CommandResultError";
-import {
-    ReadonlyCommandCollection,
-    CommandCollection,
-} from "./CommandCollection";
+import { ReadonlyCommandCollection, CommandCollection } from "./CommandCollection";
 import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
 import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
@@ -46,9 +37,7 @@ export class Command {
         /** The list of permissions the bot's user require to execute this command. */
         public readonly clientPermissions: readonly PermissionString[],
         /** The list of permissions the user require to execute this command. */
-        public readonly userPermissions:
-            | readonly PermissionString[]
-            | undefined,
+        public readonly userPermissions: readonly PermissionString[] | undefined,
         /** The list of exemples for this command. */
         public readonly examples: readonly string[],
         /** The description of the command. */
@@ -78,28 +67,17 @@ export class Command {
         /** Either or not this command can only be used from a guild. */
         public readonly guildOnly: boolean,
         /** Either or not the message that executed this command is deleted after the command execution. */
-        public readonly deleteMessage: boolean
+        public readonly deleteMessage: boolean,
     ) {
-        this._throttler = throttling
-            ? new Throttler(throttling.count, throttling.duration)
-            : throttling;
+        this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
         this._throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
     }
 
     /** @internal */
     static load(filepath: string, commandSet: CommandSet): Command {
         const module = require(filepath); // eslint-disable-line @typescript-eslint/no-var-requires
-        if (!module.default)
-            throw new CommandLoadError(
-                "Command data must be exported as default."
-            );
-        return Command._build(
-            filepath,
-            commandSet,
-            module.default,
-            null,
-            undefined
-        );
+        if (!module.default) throw new CommandLoadError("Command data must be exported as default.");
+        return Command._build(filepath, commandSet, module.default, null, undefined);
     }
 
     private static _build<T extends CommandDefinition>(
@@ -107,15 +85,10 @@ export class Command {
         commandSet: CommandSet,
         data: CommandData<T>,
         parent: Command | null,
-        parentHelp: HelpHandler | undefined
+        parentHelp: HelpHandler | undefined,
     ): Command {
-        function resolveInheritance<K extends keyof Command>(
-            prop: K,
-            defaultValue: Command[K]
-        ): Command[K] {
-            return (data.def.inherit ?? true) && parent
-                ? parent[prop]
-                : defaultValue;
+        function resolveInheritance<K extends keyof Command>(prop: K, defaultValue: Command[K]): Command[K] {
+            return (data.def.inherit ?? true) && parent ? parent[prop] : defaultValue;
         }
 
         const subs = new CommandCollection();
@@ -136,16 +109,11 @@ export class Command {
             new Map(
                 data.def.flags
                     ? Object.entries(data.def.flags)
-                          .filter(function (
-                              a
-                          ): a is [
-                              string,
-                              FlagDefinition & { shortcut: Char }
-                          ] {
+                          .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] {
                               return a[1].shortcut !== undefined;
                           })
                           .map(([k, v]) => [v.shortcut, k])
-                    : []
+                    : [],
             ),
             data.executor,
             data.def.canUse,
@@ -155,7 +123,7 @@ export class Command {
             data.def.ignore ?? resolveInheritance("ignored", false),
             data.def.devOnly ?? resolveInheritance("devOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
-            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false)
+            data.def.deleteMessage ?? resolveInheritance("deleteMessage", false),
         );
 
         for (const subName in data.subs)
@@ -165,11 +133,8 @@ export class Command {
                     commandSet,
                     data.subs[subName],
                     cmd,
-                    (data.def.useHelpOnSubs ?? false) ||
-                        (!data.def.help && !!parentHelp)
-                        ? cmd._help
-                        : undefined
-                )
+                    (data.def.useHelpOnSubs ?? false) || (!data.def.help && !!parentHelp) ? cmd._help : undefined,
+                ),
             );
         return cmd;
     }
@@ -182,8 +147,7 @@ export class Command {
     get throttler(): Throttler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
-        if (this.parent && this.parent._useThrottlerOnSubs)
-            return this.parent.throttler;
+        if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
         return undefined;
     }
 
@@ -202,8 +166,7 @@ export class Command {
         const parents: Command[] = [];
         parents.unshift(this);
 
-        for (let parent = this.parent; parent; parent = parent.parent)
-            parents.unshift(parent);
+        for (let parent = this.parent; parent; parent = parent.parent) parents.unshift(parent);
 
         return parents;
     }
@@ -214,9 +177,7 @@ export class Command {
      * @returns Either or not the bot's user have required permissions to execute this command from the guild.
      */
     hasClientPermissions(guild: Guild): boolean {
-        return guild.me
-            ? guild.me.hasPermission(this.clientPermissions)
-            : false;
+        return guild.me ? guild.me.hasPermission(this.clientPermissions) : false;
     }
 
     /**
@@ -257,8 +218,7 @@ export class Command {
      */
     checkPermissions(message: Message): boolean {
         return (
-            this.canUse(message.author, message) === true &&
-            (!message.member || this.hasPermissions(message.member))
+            this.canUse(message.author, message) === true && (!message.member || this.hasPermissions(message.member))
         );
     }
 
@@ -284,29 +244,15 @@ export class Command {
     }
 
     /** @internal */
-    async execute(
-        message: Message,
-        inputArguments: string[],
-        options: CommandSetOptions,
-        commandSet: CommandSet
-    ) {
+    async execute(message: Message, inputArguments: string[], options: CommandSetOptions, commandSet: CommandSet) {
         if (message.guild && !this.hasClientPermissions(message.guild))
-            throw new CommandResultError(
-                CommandResultUtils.clientPermissions(this)
-            );
+            throw new CommandResultError(CommandResultUtils.clientPermissions(this));
 
-        if (this.throttler?.throttled)
-            throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
 
-        if (!this._executor)
-            throw new CommandResultError(CommandResultUtils.noExecutor(this));
+        if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const flags = parseFlags(
-            message,
-            inputArguments,
-            this.flags,
-            this._flagsShortcuts
-        );
+        const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
         const args = parseArgs(message, flags.args, this.args);
 
         const rest: ParsableType[] = [];
@@ -320,27 +266,19 @@ export class Command {
         if (
             this.throttler &&
             !options.devIDs.includes(message.author.id) &&
-            !(
-                !this._throttlingIncludeAdmins &&
-                message.member &&
-                message.member.permissions.has("ADMINISTRATOR")
-            )
+            !(!this._throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
         )
             this.throttler.add();
 
-        return await this._executor(
-            Object.fromEntries(args.argValues),
-            Object.fromEntries(flags.flagValues),
-            {
-                rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-                message,
-                guild: message.guild,
-                member: message.member,
-                channel: message.channel,
-                options,
-                commandSet,
-                command: this,
-            }
-        );
+        return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
+            rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+            message,
+            guild: message.guild,
+            member: message.member,
+            channel: message.channel,
+            options,
+            commandSet,
+            command: this,
+        });
     }
 }

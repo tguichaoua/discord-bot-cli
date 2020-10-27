@@ -19,23 +19,16 @@ cmd.executor = async (_a, { detail }, { commandSet, options, message }) => {
     const raw = getListRawData(commandSet, options.localization);
     let commands = options.devIDs.includes(message.author.id)
         ? raw.commands
-        : raw.commands.filter((c) => !c.command.devOnly);
+        : raw.commands.filter(c => !c.command.devOnly);
 
-    if (
-        !options.devIDs.includes(message.author.id) ||
-        !options.skipDevsPermissionsChecking
-    )
-        commands = commands.filter((c) => c.command.checkPermissions(message));
+    if (!options.devIDs.includes(message.author.id) || !options.skipDevsPermissionsChecking)
+        commands = commands.filter(c => c.command.checkPermissions(message));
 
-    const embed = new MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle(options.localization.list.title);
+    const embed = new MessageEmbed().setColor("#0099ff").setTitle(options.localization.list.title);
 
     const descriptions = detail
-        ? commands
-              .map((c) => `\`${c.command.name}\` ${c.description}`)
-              .join("\n")
-        : commands.map((c) => `\`${c.command.name}\``).join(" ");
+        ? commands.map(c => `\`${c.command.name}\` ${c.description}`).join("\n")
+        : commands.map(c => `\`${c.command.name}\``).join(" ");
 
     embed.setDescription(descriptions);
 

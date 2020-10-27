@@ -38,17 +38,11 @@ export default function () {
             dir: parsedPath.dir,
             name: parsedPath.name,
             ext: ".cmd." + ext,
-        })
+        }),
     );
 
-    const templatePath = path.resolve(
-        __dirname,
-        "../assets/templates/command." + ext + ".template"
-    );
+    const templatePath = path.resolve(__dirname, "../assets/templates/command." + ext + ".template");
 
-    const template = fs
-        .readFileSync(templatePath)
-        .toString()
-        .replace("$NAME$", parsedPath.name);
+    const template = fs.readFileSync(templatePath).toString().replace("$NAME$", parsedPath.name);
     fs.writeFileSync(filePath, template, { flag: "wx" });
 }

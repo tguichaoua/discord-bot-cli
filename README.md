@@ -24,6 +24,11 @@ npm i discord-bot-cli
 
 Check out [the wiki](https://github.com/tguichaoua/discord-bot-cli/wiki/Installation-and-Setup) for more details.
 
+## Documentation
+
+- [Documentation](https://tguichaoua.github.io/discord-bot-cli/v6/)
+- [Wiki](https://github.com/tguichaoua/discord-bot-cli/wiki)
+
 ## Author
 
 👤 **Tristan Guichaoua**

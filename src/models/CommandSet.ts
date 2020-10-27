@@ -14,14 +14,8 @@ import { DeepPartial } from "../utils/DeepPartial";
 import { commandFullName } from "../other/HelpUtils";
 import { template } from "../utils/template";
 import { CommandResultError } from "./errors/CommandResultError";
-import {
-    CommandCollection,
-    ReadonlyCommandCollection,
-} from "./CommandCollection";
-import {
-    relativeFromEntryPoint,
-    resolveFromEntryPoint,
-} from "../utils/PathUtils";
+import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
+import { relativeFromEntryPoint, resolveFromEntryPoint } from "../utils/PathUtils";
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { HelpHandler } from "./callbacks/HelpHandler";
@@ -48,20 +42,13 @@ export class CommandSet {
             if (command.ignored) Logger.log(`Command ignored ${debugPath}`);
             else {
                 if (!this._commands.add(command))
-                    Logger.warn(
-                        `Command not loaded, the name is already taken. (${debugPath})`
-                    );
+                    Logger.warn(`Command not loaded, the name is already taken. (${debugPath})`);
             }
         } catch (e) {
             let error;
             if (e instanceof CommandLoadError) error = e.message;
             else error = e;
-            Logger.error(
-                `Fail to load command from ${debugPath}\n${chalk.red(
-                    "Error:"
-                )}`,
-                error
-            );
+            Logger.error(`Fail to load command from ${debugPath}\n${chalk.red("Error:")}`, error);
         }
     }
 
@@ -76,15 +63,9 @@ export class CommandSet {
             commandDirPath = resolveFromEntryPoint(commandDirPath);
             const cmdFiles = fs
                 .readdirSync(commandDirPath)
-                .filter(
-                    (file) =>
-                        file.endsWith(".cmd.js") ||
-                        (includeTS && file.endsWith(".cmd.ts"))
-                );
+                .filter(file => file.endsWith(".cmd.js") || (includeTS && file.endsWith(".cmd.ts")));
             for (const file of cmdFiles) {
-                const filePath = path.resolve(
-                    path.format({ dir: commandDirPath, base: file })
-                );
+                const filePath = path.resolve(path.format({ dir: commandDirPath, base: file }));
                 this._loadFile(filePath);
             }
         } catch (e) {
@@ -109,7 +90,7 @@ export class CommandSet {
                         dir: __dirname + "../commands",
                         name: name,
                         ext: ".cmd.js",
-                    })
+                    }),
                 );
                 if (fs.existsSync(filePath)) this._loadFile(filePath);
             }
@@ -152,10 +133,7 @@ export class CommandSet {
      * @param options - Options to define the parsing behaviour.
      * @returns The result of the parsing.
      */
-    async parse(
-        message: Message,
-        options?: DeepPartial<CommandSetOptions>
-    ): Promise<CommandResult> {
+    async parse(message: Message, options?: DeepPartial<CommandSetOptions>): Promise<CommandResult> {
         // function OptionsError(paramName: string) {
         //     return new Error(
         //         `Invalid options value: "${paramName}" is invalid.`
@@ -166,29 +144,18 @@ export class CommandSet {
             await message.reply(content).catch(Logger.error);
         }
 
-        const opts = deepMerge(
-            {},
-            defaultOptions,
-            this._defaultOptions,
-            options
-        );
+        const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
 
         let content: string;
         const botMentionStr = `<@!${message.client.user?.id}>`;
-        if (
-            opts.allowMentionAsPrefix &&
-            message.content.startsWith(botMentionStr)
-        )
+        if (opts.allowMentionAsPrefix && message.content.startsWith(botMentionStr))
             content = message.content.substring(botMentionStr.length);
-        else if (message.content.startsWith(opts.prefix))
-            content = message.content.substring(opts.prefix.length);
+        else if (message.content.startsWith(opts.prefix)) content = message.content.substring(opts.prefix.length);
         else return CommandResultUtils.notPrefixed();
 
         // extract the command & arguments from message
-        const rawArgs = (
-            content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []
-        ).map((a) =>
-            /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a
+        const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []).map(a =>
+            /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a,
         );
 
         const { command, args } = this.resolve(rawArgs);
@@ -199,22 +166,17 @@ export class CommandSet {
             await message.reply(
                 template(opts.localization.misc.guildOnlyWarning, {
                     command: commandFullName(command),
-                })
+                }),
             );
             return CommandResultUtils.guildOnly(command);
         }
 
-        if (command.devOnly && !opts.devIDs.includes(message.author.id))
-            return CommandResultUtils.devOnly(command);
+        if (command.devOnly && !opts.devIDs.includes(message.author.id)) return CommandResultUtils.devOnly(command);
 
-        if (
-            !opts.devIDs.includes(message.author.id) ||
-            !opts.skipDevsPermissionsChecking
-        ) {
+        if (!opts.devIDs.includes(message.author.id) || !opts.skipDevsPermissionsChecking) {
             const result = command.canUse(message.author, message);
             if (typeof result === "string") await Reply(result);
-            if (result !== true)
-                return CommandResultUtils.unauthorizedUser(command);
+            if (result !== true) return CommandResultUtils.unauthorizedUser(command);
         }
 
         if (message.member && !command.hasPermissions(message.member))
@@ -222,13 +184,11 @@ export class CommandSet {
 
         try {
             const result = await command.execute(message, args, opts, this);
-            if (command.deleteMessage && message.channel.type === "text")
-                await message.delete().catch(Logger.error);
+            if (command.deleteMessage && message.channel.type === "text") await message.delete().catch(Logger.error);
             return CommandResultUtils.ok(command, result);
         } catch (e) {
             if (e instanceof CommandResultError) {
-                if (e.replyMessage && e.replyMessage !== "")
-                    await Reply(e.replyMessage);
+                if (e.replyMessage && e.replyMessage !== "") await Reply(e.replyMessage);
                 return e.commandResult;
             } else return CommandResultUtils.error(e);
         }

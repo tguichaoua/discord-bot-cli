@@ -22,7 +22,7 @@ export default function () {
             dir: parsedPath.dir,
             name: parsedPath.name,
             ext: ".json",
-        })
+        }),
     );
 
     const templatePath = path.resolve(__dirname, "../data/localization.json");

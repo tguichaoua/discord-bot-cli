@@ -2,7 +2,7 @@ import shell from "shelljs";
 import chalk from "chalk";
 
 export function need(...command: string[]) {
-    const missings: string[] = command.filter((cmd) => !shell.which(cmd));
+    const missings: string[] = command.filter(cmd => !shell.which(cmd));
 
     if (missings.length !== 0) {
         shell.echo(`Sorry, this script requires ${missings.join(", ")}`);

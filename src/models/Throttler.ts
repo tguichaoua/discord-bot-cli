@@ -8,10 +8,7 @@ export class Throttler {
      * @param count How many time the throttler can be triggered.
      * @param duration Time in seconds since the first trigger before the throttler is reset.
      */
-    constructor(
-        public readonly count: number,
-        public readonly duration: number
-    ) {}
+    constructor(public readonly count: number, public readonly duration: number) {}
 
     /** The number of time this throttler has been triggered. */
     get current() {
@@ -42,11 +39,7 @@ export class Throttler {
     add(): boolean {
         const reachedLimit = this.throttled;
         this._current++;
-        if (!this._timeout)
-            this._timeout = setTimeout(
-                () => this.reset(),
-                this.duration * 1000
-            );
+        if (!this._timeout) this._timeout = setTimeout(() => this.reset(), this.duration * 1000);
         return reachedLimit;
     }
 }

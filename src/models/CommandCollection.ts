@@ -17,8 +17,7 @@ export class ReadonlyCommandCollection implements Iterable<Command> {
         const cmd = this._commands.get(name);
         if (cmd) return cmd;
         const aliasCommands = this._alias.get(name);
-        if (aliasCommands && aliasCommands.length === 1)
-            return aliasCommands[0];
+        if (aliasCommands && aliasCommands.length === 1) return aliasCommands[0];
         return undefined;
     }
 
@@ -65,9 +64,7 @@ export class CommandCollection extends ReadonlyCommandCollection {
      */
     public delete(command: Command): void {
         this._commands.delete(command.name);
-        for (const aliasCommands of command.aliases.map((a) =>
-            this._alias.get(a)
-        ))
+        for (const aliasCommands of command.aliases.map(a => this._alias.get(a)))
             if (aliasCommands) {
                 const i = aliasCommands.indexOf(command);
                 if (i !== -1) aliasCommands.splice(i, 1);

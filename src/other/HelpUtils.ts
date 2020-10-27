@@ -17,14 +17,9 @@ import { reply } from "../utils/reply";
 /** @internal */
 export async function defaultHelp(
     command: Command,
-    { message, options }: { message: Message; options: CommandSetOptions }
+    { message, options }: { message: Message; options: CommandSetOptions },
 ) {
-    const embed = embedHelp(
-        command,
-        options.prefix,
-        options.localization,
-        message
-    );
+    const embed = embedHelp(command, options.prefix, options.localization, message);
     await reply(message, { embed });
 }
 
@@ -37,7 +32,7 @@ export async function defaultHelp(
 export function commandFullName(command: Command) {
     return command
         .getParents()
-        .map((cmd) => cmd.name)
+        .map(cmd => cmd.name)
         .join(" ");
 }
 
@@ -48,39 +43,31 @@ export function commandFullName(command: Command) {
  * @param localization
  * @returns Raw help datas.
  */
-export function commandRawHelp(
-    command: Command,
-    localization: Localization
-): CommandRawHelp {
+export function commandRawHelp(command: Command, localization: Localization): CommandRawHelp {
     const commandLocalization = localization.commands[command.name] ?? {};
     const fullName = commandFullName(command);
     const description = commandLocalization.description ?? command.description;
 
     const collection = command.parent?.subs ?? command.commandSet.commands;
-    const aliases = command.aliases.filter((a) => collection.hasAlias(a));
+    const aliases = command.aliases.filter(a => collection.hasAlias(a));
 
     const args = Array.from(command.args.entries()).map(([name, arg]) =>
-        argRawHelp(arg, name, commandLocalization, localization.typeNames)
+        argRawHelp(arg, name, commandLocalization, localization.typeNames),
     );
 
     const flags = Array.from(command.flags.entries()).map(([name, flag]) =>
-        flagRawHelp(flag, name, commandLocalization, localization.typeNames)
+        flagRawHelp(flag, name, commandLocalization, localization.typeNames),
     );
 
-    const subs = Array.from(command.subs.values()).map((c) =>
-        commandRawHelp(c, localization)
-    );
+    const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localization));
 
     let rest: RestRawHelp | undefined = undefined;
     if (command.rest) {
         const name = commandLocalization?.rest?.name ?? command.rest.name;
-        const description =
-            commandLocalization?.rest?.description ??
-            command.rest.description ??
-            "";
+        const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
         const usageString = `[...${name}]`;
         const typeNames = isArray(command.rest.type)
-            ? command.rest.type.map((t) => localization.typeNames[t])
+            ? command.rest.type.map(t => localization.typeNames[t])
             : [localization.typeNames[command.rest.type]];
         rest = { name, description, usageString, typeNames };
     }
@@ -107,11 +94,11 @@ function argRawHelp(
     arg: ArgDefinition,
     name: string,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization
+    typeNamesLocalization: TypeNameLocalization,
 ): ArgumentRawHelp {
     const argLocalization = (localization.args ?? {})[name] ?? {};
     const typeNames = isArray(arg.type)
-        ? arg.type.map((t) => typeNamesLocalization[t])
+        ? arg.type.map(t => typeNamesLocalization[t])
         : [typeNamesLocalization[arg.type]];
     const localizedName = argLocalization.name ?? name;
     const description = argLocalization.description ?? arg.description ?? "";
@@ -138,11 +125,11 @@ function flagRawHelp(
     flag: FlagDefinition,
     name: string,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization
+    typeNamesLocalization: TypeNameLocalization,
 ): FlagRawHelp {
     const flagLocalization = (localization.flags ?? {})[name] ?? {};
     const typeNames = isArray(flag.type)
-        ? flag.type.map((t) => typeNamesLocalization[t])
+        ? flag.type.map(t => typeNamesLocalization[t])
         : [typeNamesLocalization[flag.type]];
     const localizedName = flagLocalization.name ?? name;
     const description = flagLocalization.description ?? flag.description ?? "";
@@ -161,112 +148,73 @@ function flagRawHelp(
 }
 
 /** @internal */
-function embedHelp(
-    command: Command,
-    prefix: string,
-    localization: Localization,
-    message?: Message
-) {
+function embedHelp(command: Command, prefix: string, localization: Localization, message?: Message) {
     const rawHelp = commandRawHelp(command, localization);
 
     const embed = new MessageEmbed()
         .setTitle(rawHelp.fullName)
         .setDescription(
             rawHelp.description +
-                (rawHelp.tags.length === 0
-                    ? ""
-                    : "\n\n" + rawHelp.tags.map((t) => `\`${t}\``).join(" "))
+                (rawHelp.tags.length === 0 ? "" : "\n\n" + rawHelp.tags.map(t => `\`${t}\``).join(" ")),
         );
 
     if (command.hasExecutor) {
         const usageString =
             prefix +
             rawHelp.fullName +
-            (rawHelp.args.length === 0
-                ? ""
-                : " " + rawHelp.args.map((a) => a.usageString).join(" ")) +
+            (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) +
             (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
         embed.addField(
             localization.help.usage,
-            `**\`${usageString}\`**` +
-                (rawHelp.args.length !== 0
-                    ? `\n\n${localization.help.argUsageHint}`
-                    : ""),
-            false
+            `**\`${usageString}\`**` + (rawHelp.args.length !== 0 ? `\n\n${localization.help.argUsageHint}` : ""),
+            false,
         );
     }
 
     const args =
         rawHelp.args
             .map(
-                (a) =>
+                a =>
                     `\`${a.name}\` *${a.typeNames.join(" | ")}*` +
-                    (a.description !== "" ? `\n⮩  ${a.description}` : "")
+                    (a.description !== "" ? `\n⮩  ${a.description}` : ""),
             )
             .join("\n") +
         (rawHelp.rest
-            ? `\n\`${rawHelp.rest.name}\` *${template(
-                  localization.help.restTypeName,
-                  { type: rawHelp.rest.typeNames.join(" | ") }
-              )}*` +
-              (rawHelp.rest.description !== ""
-                  ? `\n⮩  ${rawHelp.rest.description}`
-                  : "")
+            ? `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, {
+                  type: rawHelp.rest.typeNames.join(" | "),
+              })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
             : "");
     if (args !== "") embed.addField(localization.help.arguments, args, true);
 
     const flags = rawHelp.flags
         .map(
-            (f) =>
+            f =>
                 `\`--${f.name}\`` +
                 (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") +
                 ` *${f.typeNames.join(" | ")}*` +
-                (f.description !== "" ? `\n⮩  ${f.description}` : "")
+                (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )
         .join("\n");
     if (flags !== "") embed.addField(localization.help.flags, flags, true);
 
-    const subs = (message
-        ? rawHelp.subs.filter((s) => s.command.checkPermissions(message))
-        : rawHelp.subs
-    )
-        .map(
-            (s) =>
-                `\`${s.command.name}\`` +
-                (s.description !== "" ? ` ${s.description}` : "")
-        )
+    const subs = (message ? rawHelp.subs.filter(s => s.command.checkPermissions(message)) : rawHelp.subs)
+        .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
         .join("\n");
     if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
 
-    const aliases = rawHelp.aliases.map((a) => `\`${a}\``).join(" ");
-    if (aliases !== "")
-        embed.addField(localization.help.aliases, aliases, false);
+    const aliases = rawHelp.aliases.map(a => `\`${a}\``).join(" ");
+    if (aliases !== "") embed.addField(localization.help.aliases, aliases, false);
 
-    const clientPermissions = rawHelp.command.clientPermissions
-        .map((p) => `\`${p}\``)
-        .join(" ");
-    if (clientPermissions !== "")
-        embed.addField(
-            localization.help.bot_permissions,
-            clientPermissions,
-            false
-        );
+    const clientPermissions = rawHelp.command.clientPermissions.map(p => `\`${p}\``).join(" ");
+    if (clientPermissions !== "") embed.addField(localization.help.bot_permissions, clientPermissions, false);
 
     if (rawHelp.command.userPermissions) {
-        const userPermissions = rawHelp.command.userPermissions
-            .map((p) => `\`${p}\``)
-            .join(" ");
-        if (userPermissions !== "")
-            embed.addField(
-                localization.help.user_permissions,
-                userPermissions,
-                false
-            );
+        const userPermissions = rawHelp.command.userPermissions.map(p => `\`${p}\``).join(" ");
+        if (userPermissions !== "") embed.addField(localization.help.user_permissions, userPermissions, false);
     }
 
-    const exemples = rawHelp.command.examples.map((e) => `\`${e}\``).join("\n");
-    if (exemples !== "")
-        embed.addField(localization.help.examples, exemples, false);
+    const exemples = rawHelp.command.examples.map(e => `\`${e}\``).join("\n");
+    if (exemples !== "") embed.addField(localization.help.examples, exemples, false);
 
     return embed;
 }

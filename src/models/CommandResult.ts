@@ -89,10 +89,7 @@ export const CommandResultUtils = Object.freeze({
     commandNotFound(): CommandResult {
         return { status: "command not found" };
     },
-    failParseArgInvalid(
-        arg: Readonly<ArgDefinition>,
-        got: string
-    ): CommandResult {
+    failParseArgInvalid(arg: Readonly<ArgDefinition>, got: string): CommandResult {
         return {
             status: "parsing error",
             type: "arg",
@@ -117,10 +114,7 @@ export const CommandResultUtils = Object.freeze({
             name,
         };
     },
-    failParseFlagInvalid(
-        flag: Readonly<FlagDefinition>,
-        got: string
-    ): CommandResult {
+    failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult {
         return {
             status: "parsing error",
             type: "flag",
