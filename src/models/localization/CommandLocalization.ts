@@ -6,7 +6,7 @@ import { ParsableLocalization } from "./ParsableLocalization";
 export interface CommandLocalization {
     description?: string;
     rest?: { name: string; description: string };
-    args?: { [name: string]: ParsableLocalization };
-    flags?: { [name: string]: ParsableLocalization };
-    subs?: { [name: string]: CommandLocalization };
+    args?: Record<string, ParsableLocalization>;
+    flags?: Record<string, ParsableLocalization>;
+    subs?: Record<string, CommandLocalization>;
 }

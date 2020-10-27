@@ -22,9 +22,9 @@ type CommandDefinitionBase = {
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
-    readonly args?: { readonly [name: string]: ArgDefinition };
+    readonly args?: Readonly<Record<string, ArgDefinition>>;
     /** Flags that can be used with this command. */
-    readonly flags?: { readonly [name: string]: FlagDefinition };
+    readonly flags?: Readonly<Record<string, FlagDefinition>>;
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
 
@@ -49,7 +49,7 @@ type CommandDefinitionBase = {
     readonly useHelpOnSubs?: boolean;
 
     /** Sub-commands of this command. */
-    readonly subs?: { readonly [name: string]: CommandDefinition };
+    readonly subs?: Readonly<Record<string, CommandDefinition>>;
 
     /** Either or not undefined inheritable properties are inherited from parent command. (default is true). */
     readonly inherit?: boolean;

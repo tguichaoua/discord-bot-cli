@@ -34,7 +34,7 @@ export interface Localization {
      * Localization for user-defined commands.
      * If set, localization values will override command definition values.
      */
-    commands: { [name: string]: CommandLocalization };
+    commands: Record<string, CommandLocalization>;
     misc: {
         guildOnlyWarning: string;
     };

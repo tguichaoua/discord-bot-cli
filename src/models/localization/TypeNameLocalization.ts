@@ -3,4 +3,4 @@ import { ParsableTypeName } from "../ParsableType";
 /**
  * @category Localization
  */
-export type TypeNameLocalization = { [type in ParsableTypeName]: string };
+export type TypeNameLocalization = Record<ParsableTypeName, string>;
