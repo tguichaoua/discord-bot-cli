@@ -11,6 +11,7 @@ import {
     Role,
 } from "discord.js";
 
+/** Name of parsable types. */
 export type ParsableTypeName =
     | "string"
     | "boolean"
@@ -27,6 +28,7 @@ export type ParsableTypeName =
     | "news channel"
     | "store channel";
 
+/** Parsable types. */
 export type ParsableType =
     | string
     | boolean
@@ -42,12 +44,14 @@ export type ParsableType =
     | NewsChannel
     | StoreChannel;
 
+/** @ignore */
 export type ParsableTypeOf<
     Names extends ParsableTypeName | readonly ParsableTypeName[]
 > = Names extends ParsableTypeName
     ? TypeName2Type<Names>
     : TypeName2Type<Exclude<Names, ParsableTypeName>[number]>;
 
+/** @ignore */
 type TypeName2Type<Name extends ParsableTypeName> = Name extends "string"
     ? string
     : Name extends "boolean"
