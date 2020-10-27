@@ -1,3 +1,4 @@
+/** @category Definition */
 export interface ThrottlingDefinition {
     /** Number of times the command can be used. */
     readonly count: number;

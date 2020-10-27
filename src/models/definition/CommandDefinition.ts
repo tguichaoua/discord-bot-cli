@@ -6,6 +6,7 @@ import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
 
+/** @category Definition */
 export type CommandDefinition = {
     /** alias names for this command. */
     readonly aliases?: string[];
@@ -53,6 +54,7 @@ export type CommandDefinition = {
     readonly inherit?: boolean;
 } & CommandSettings;
 
+/** @category Definition */
 export type CommandSettings = {
     /** If set to true, this command is not loaded. (default is false). [inheritable] */
     readonly ignore?: boolean;

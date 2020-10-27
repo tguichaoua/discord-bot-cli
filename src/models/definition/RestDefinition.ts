@@ -1,5 +1,6 @@
 import { ParsableTypeName } from "../ParsableType";
 
+/** @category Definition */
 export interface RestDefinition {
     /** Type(s) of the rest. */
     type: ParsableTypeName | ParsableTypeName[];
