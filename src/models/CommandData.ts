@@ -25,6 +25,7 @@ export interface CommandData<
     };
 }
 
+/** @ignore */
 type Inherit<
     T extends CommandDefinition,
     S extends CommandSettings
