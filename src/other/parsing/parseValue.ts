@@ -1,5 +1,5 @@
 import { Message, MessageMentions } from "discord.js";
-import { ParsableType } from "../../models/ParsableType";
+import { ParsableType, ParsableTypeName } from "../../models/ParsableType";
 import { ParsableDefinition } from "../../models/definition/ParsableDefinition";
 import { isArray } from "../../utils/array";
 
@@ -37,7 +37,7 @@ export function parseValue(
 }
 
 /** @internal */
-function parse(type: ParsableType, str: string, message: Message): ParsableType | undefined {
+function parse(type: ParsableTypeName, str: string, message: Message): ParsableType | undefined {
     function resolveChannel(type: keyof typeof ChannelType) {
         const ch = message.client.channels.resolve(str);
         if (ch && ch.type === type) return ch;
