@@ -18,12 +18,12 @@ import { HelpHandler } from "./callbacks/HelpHandler";
 import { parseValue } from "../other/parsing/parseValue";
 import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
-import { Throttler } from "./Throttler";
+import { CommandThrottler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { defaultHelp } from "../other/HelpUtils";
 
 export class Command {
-    private readonly _throttler: Throttler | null | undefined;
+    private readonly _throttler: CommandThrottler | null | undefined;
     /** Either or not this command's throttler also includes users with administrator permission. */
     public readonly _throttlingIncludeAdmins: boolean;
 
@@ -69,7 +69,9 @@ export class Command {
         /** Either or not the message that executed this command is deleted after the command execution. */
         public readonly deleteMessage: boolean,
     ) {
-        this._throttler = throttling ? new Throttler(throttling.count, throttling.duration) : throttling;
+        this._throttler = throttling
+            ? new CommandThrottler("global", throttling.count, throttling.duration)
+            : throttling;
         this._throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
     }
 
@@ -144,7 +146,7 @@ export class Command {
     /**
      * The [[Throttler]] used by this command.
      */
-    get throttler(): Throttler | undefined {
+    get throttler(): CommandThrottler | undefined {
         if (this._throttler === null) return undefined;
         if (this._throttler) return this._throttler;
         if (this.parent && this.parent._useThrottlerOnSubs) return this.parent.throttler;
@@ -248,7 +250,7 @@ export class Command {
         if (message.guild && !this.hasClientPermissions(message.guild))
             throw new CommandResultError(CommandResultUtils.clientPermissions(this));
 
-        if (this.throttler?.throttled) throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (this.throttler?.getThrottled(message)) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
@@ -268,7 +270,7 @@ export class Command {
             !options.devIDs.includes(message.author.id) &&
             !(!this._throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
         )
-            this.throttler.add();
+            this.throttler.add(message);
 
         return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
             rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
