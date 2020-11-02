@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { getTimeLeft } from "../utils/timeout";
 
-type ThrottlerScope = "global" | "user" | "member" | "guild";
+export type ThrottlerScope = "global" | "user" | "member" | "guild";
 
 export interface CommandThrottler {
     /** The scope of the throttler. */

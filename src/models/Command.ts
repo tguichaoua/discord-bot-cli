@@ -70,7 +70,7 @@ export class Command {
         public readonly deleteMessage: boolean,
     ) {
         this._throttler = throttling
-            ? new CommandThrottler("global", throttling.count, throttling.duration)
+            ? new CommandThrottler(throttling.scope ?? "global", throttling.count, throttling.duration)
             : throttling;
         this._throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
     }
