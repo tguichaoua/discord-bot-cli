@@ -10,14 +10,14 @@ const commands = new CommandSet({
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
 });
 
-commands.helpHandler = async (command, { message, options }) => {
-    const help = HelpUtils.commandRawHelp(command, options.localization);
-    const text = `
-**Command name**: ${command.name}
-**Full name**: ${help.fullName}
-`;
-    await message.reply(text);
-};
+// commands.helpHandler = async (command, { message, options }) => {
+//     const help = HelpUtils.commandRawHelp(command, options.localization);
+//     const text = `
+// **Command name**: ${command.name}
+// **Full name**: ${help.fullName}
+// `;
+//     await message.reply(text);
+// };
 
 commands.loadCommands("commands", true);
 
