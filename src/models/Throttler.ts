@@ -14,20 +14,44 @@ export interface CommandThrottler {
      */
     getCurrent(message: Message): number;
     /**
+     * Gets the number of time the throttler has been triggered.
+     * @param id
+     */
+    getCurrent(id: string): number;
+    /**
      * Gets either or not the throttler has reached the limit.
      * @param message
      */
     getThrottled(message: Message): boolean;
+    /**
+     * Gets either or not the throttler has reached the limit.
+     * @param id
+     */
+    getThrottled(id: string): boolean;
     /**
      * Gets the time in seconds until the throttler is reset.
      * @param message
      */
     getCooldown(message: Message): number;
     /**
+     * Gets the time in seconds until the throttler is reset.
+     * @param id
+     */
+    getCooldown(id: string): number;
+    /**
+     * Resets all throttlers.
+     */
+    reset(): void;
+    /**
      * Resets the throttler.
      * @param message
      */
     reset(message: Message): void;
+    /**
+     * Resets the throttler.
+     * @param id
+     */
+    reset(id: string): void;
     /**
      * Increment the throttler's counter.
      * @param message
@@ -111,10 +135,10 @@ class ScopedThrottler implements CommandThrottler {
         }
     }
 
-    private get(message: Message): ThrottlerData | undefined;
-    private get(message: Message, create: true): ThrottlerData;
-    private get(message: Message, create?: true): ThrottlerData | undefined {
-        const key = this.getKey(message);
+    private get(message: Message | string): ThrottlerData | undefined;
+    private get(message: Message | string, create: true): ThrottlerData;
+    private get(message: Message | string, create?: true): ThrottlerData | undefined {
+        const key = typeof message === "string" ? message : this.getKey(message);
         let data = this.throttlers.get(key);
         if (!data && create) {
             data = {
@@ -134,21 +158,25 @@ class ScopedThrottler implements CommandThrottler {
         }
     }
 
-    getCurrent(message: Message): number {
+    getCurrent(message: Message | string): number {
         return this.get(message)?.current ?? 0;
     }
 
-    getThrottled(message: Message): boolean {
+    getThrottled(message: Message | string): boolean {
         return this.getCurrent(message) >= this.count;
     }
 
-    getCooldown(message: Message): number {
+    getCooldown(message: Message | string): number {
         const timeout = this.get(message)?.timeout;
         return timeout ? Math.ceil(getTimeLeft(timeout)) : 0;
     }
 
-    reset(message: Message): void {
-        this.clear(this.getKey(message));
+    reset(message?: Message | string): void {
+        if (message) this.clear(typeof message === "string" ? message : this.getKey(message));
+        else {
+            for (const [_, data] of this.throttlers) clearTimeout(data.timeout);
+            this.throttlers.clear();
+        }
     }
 
     add(message: Message): boolean {
