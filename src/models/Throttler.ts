@@ -4,6 +4,8 @@ import { getTimeLeft } from "../utils/timeout";
 type ThrottlerScope = "global" | "user" | "member" | "guild";
 
 export interface CommandThrottler {
+    /** The scope of the throttler. */
+    readonly scope: ThrottlerScope;
     /** How many time the throttler can be triggered. */
     readonly count: number;
     /** Time in seconds since the first trigger before the throttler is reset. */
@@ -81,6 +83,7 @@ export class CommandThrottler {
 }
 
 class Throttler implements CommandThrottler {
+    public readonly scope: "global" = "global";
     private _current = 0;
     private _timeout: NodeJS.Timeout | undefined = undefined;
 
