@@ -87,11 +87,11 @@ cmd.subs.throttling.executor = async (_, { reset, "reset-all": resetAll, scope }
             .map(s => s.trim());
 
         if (resetAll) {
-            function resetAllThrottling(cmd: Command) {
+            const resetAllThrottling = (cmd: Command) => {
                 for (const c of cmd.subs) resetAllThrottling(c);
                 const t = cmd.throttler;
                 if (t) for (const id of ids) t.reset(id);
-            }
+            };
             resetAllThrottling(command);
             await channel.send(
                 ":white_check_mark: Throttlers for the following scopes have been reset: " +
@@ -118,10 +118,10 @@ cmd.subs.throttling.executor = async (_, { reset, "reset-all": resetAll, scope }
         await channel.send(res);
     } else {
         if (resetAll) {
-            function resetAllThrottling(cmd: Command) {
+            const resetAllThrottling = (cmd: Command) => {
                 for (const c of cmd.subs) resetAllThrottling(c);
                 cmd.throttler?.reset();
-            }
+            };
             resetAllThrottling(command);
             await channel.send(":white_check_mark: Throttlers have been reset.");
             return;

@@ -148,7 +148,7 @@ class ScopedThrottler implements CommandThrottler {
                 current: 0,
                 timeout: setTimeout(() => this.clear(key), this.duration * 1000).unref(),
             };
-            this.throttlers!.set(key, data);
+            this.throttlers.set(key, data);
         }
         return data;
     }
@@ -177,7 +177,7 @@ class ScopedThrottler implements CommandThrottler {
     reset(message?: Message | string): void {
         if (message) this.clear(typeof message === "string" ? message : this.getKey(message));
         else {
-            for (const [_, data] of this.throttlers) clearTimeout(data.timeout);
+            for (const [, data] of this.throttlers) clearTimeout(data.timeout);
             this.throttlers.clear();
         }
     }

@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { CommandSet, HelpUtils, enableDebugLogs } from "../src/index";
+import { CommandSet, enableDebugLogs } from "../src/index";
 import env from "./env.json";
 
 enableDebugLogs();
