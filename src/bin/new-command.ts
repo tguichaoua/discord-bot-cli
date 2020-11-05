@@ -8,6 +8,7 @@ Usage
     dbc cmd path/to/file_without_extension [options]
 Options
     --lang, -l <js|ts>  Define the language. Javascript (js) or Typescript (ts). (Default = js)
+    --path, -p <path> Path to the location of the command.
 `;
 
 export default function () {
@@ -17,6 +18,10 @@ export default function () {
                 type: "string",
                 alias: "l",
                 default: "js",
+            },
+            path: {
+                type: "string",
+                alias: "p",
             },
         },
     });
@@ -29,20 +34,22 @@ export default function () {
     }
 
     const ext = cli.flags.lang;
-    const parsedPath = path.parse(cli.input[1]);
+    const { dir: cmdDir, base: name } = path.parse(cli.input[1]);
 
-    fs.mkdirSync(parsedPath.dir, { recursive: true });
+    const dir = cli.flags.path ? path.join(cli.flags.path, cmdDir) : cmdDir;
 
-    const filePath = path.resolve(
+    fs.mkdirSync(dir, { recursive: true });
+
+    let filePath = path.resolve(
         path.format({
-            dir: parsedPath.dir,
-            name: parsedPath.name,
+            dir,
+            name,
             ext: ".cmd." + ext,
         }),
     );
 
     const templatePath = path.resolve(__dirname, "../assets/templates/command." + ext + ".template");
 
-    const template = fs.readFileSync(templatePath).toString().replace("$NAME$", parsedPath.name);
+    const template = fs.readFileSync(templatePath).toString().replace("$NAME$", name);
     fs.writeFileSync(filePath, template, { flag: "wx" });
 }
