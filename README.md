@@ -38,7 +38,7 @@ Check out [the wiki](https://github.com/tguichaoua/discord-bot-cli/wiki/Installa
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/tguichaoua/discord-bot-cli/issues). You can also take a look at the [contributing guide](https://github.com/tguichaoua/discord-bot-cli/blob/master/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/tguichaoua/discord-bot-cli/issues).
 
 ## Show your support
 
