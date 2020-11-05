@@ -40,7 +40,7 @@ export default function () {
 
     fs.mkdirSync(dir, { recursive: true });
 
-    let filePath = path.resolve(
+    const filePath = path.resolve(
         path.format({
             dir,
             name,
