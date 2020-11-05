@@ -11,6 +11,7 @@
         "release": "ts-node chores/release.ts",
         "v": "npm --no-git-tag-version version",
         "test": "npm run lint && npm run build:test",
+        "test:cmd": "ts-node ./src/bin/cli.ts cmd -l ts -p ./test/commands",
         "build:test": "tsc",
         "start": "ts-node test/index.ts",
         "start:log": "ts-node test/log.ts",
