@@ -6,10 +6,10 @@ import { ParsableTypeOf } from "../ParsableType";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 
-/** @internal */
+/** @ignore */
 type IsGuildOnly<S extends CommandSettings, True, False> = S["guildOnly"] extends true ? True : False;
 
-/** @internal */
+/** @ignore */
 type MessageExtension<S> = {
     readonly guild: IsGuildOnly<S, NonNullable<Message["guild"]>, Message["guild"]>;
     readonly member: IsGuildOnly<S, NonNullable<Message["member"]>, Message["member"]>;
