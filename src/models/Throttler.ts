@@ -68,6 +68,20 @@ export interface CommandThrottler {
      * ```
      */
     add(message: Message): boolean;
+    /**
+     * Increment the throttler's counter.
+     * @param id
+     * @returns Either or not the limit has been reached.
+     * @example
+     * ```ts
+     * if (throttler.add(id)) {
+     *     // Do action
+     * } else {
+     *     // Cannot do action
+     * }
+     * ```
+     */
+    add(id: string): boolean;
 }
 
 export class CommandThrottler {
@@ -182,7 +196,7 @@ class ScopedThrottler implements CommandThrottler {
         }
     }
 
-    add(message: Message): boolean {
+    add(message: Message | string): boolean {
         const data = this.get(message, true);
         const reachedLimit = data.current >= this.count;
         data.current++;
