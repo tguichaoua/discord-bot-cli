@@ -250,6 +250,13 @@ export class Command {
         if (message.guild && !this.hasClientPermissions(message.guild))
             throw new CommandResultError(CommandResultUtils.clientPermissions(this));
 
+        /** This command throttler if is required and defined, undefined otherwise. */
+        const throttler =
+            !options.devIDs.includes(message.author.id) &&
+            !(!this.throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
+                ? this.throttler
+                : undefined;
+
         if (this.throttler?.getThrottled(message)) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
@@ -265,12 +272,7 @@ export class Command {
             }
         }
 
-        if (
-            this.throttler &&
-            !options.devIDs.includes(message.author.id) &&
-            !(!this.throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
-        )
-            this.throttler.add(message);
+        if (throttler) throttler.add(message);
 
         return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
             rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
