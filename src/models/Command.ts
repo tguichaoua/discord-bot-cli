@@ -25,7 +25,7 @@ import { defaultHelp } from "../other/HelpUtils";
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
     /** Either or not this command's throttler also includes users with administrator permission. */
-    public readonly _throttlingIncludeAdmins: boolean;
+    public readonly throttlingIncludeAdmins: boolean;
 
     private constructor(
         /** Path to the file that contains the command if it's a top-most command, `null` otherwise. */
@@ -72,7 +72,7 @@ export class Command {
         this._throttler = throttling
             ? new CommandThrottler(throttling.scope ?? "global", throttling.count, throttling.duration)
             : throttling;
-        this._throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
+        this.throttlingIncludeAdmins = throttling?.includeAdmins ?? false;
     }
 
     /** @internal */
@@ -268,7 +268,7 @@ export class Command {
         if (
             this.throttler &&
             !options.devIDs.includes(message.author.id) &&
-            !(!this._throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
+            !(!this.throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
         )
             this.throttler.add(message);
 
