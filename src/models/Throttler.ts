@@ -141,21 +141,22 @@ class ScopedThrottler implements CommandThrottler {
         public readonly duration: number,
     ) {}
 
-    private getKey(message: Message) {
+    private getKey(message: Message | string) {
+        if (typeof message === "string") return message;
         switch (this.scope) {
             case "user":
                 return message.author.id;
             case "member":
-                return message.member?.id ?? "GLOBAL";
+                return message.member?.id;
             case "guild":
-                return message.guild?.id ?? "GLOBAL";
+                return message.guild?.id;
         }
     }
 
-    private get(message: Message | string): ThrottlerData | undefined;
-    private get(message: Message | string, create: true): ThrottlerData;
-    private get(message: Message | string, create?: true): ThrottlerData | undefined {
-        const key = typeof message === "string" ? message : this.getKey(message);
+    private get(message: Message | string, create = false): ThrottlerData | undefined {
+        const key = this.getKey(message);
+        if (!key) return undefined;
+
         let data = this.throttlers.get(key);
         if (!data && create) {
             data = {
@@ -189,8 +190,10 @@ class ScopedThrottler implements CommandThrottler {
     }
 
     reset(message?: Message | string): void {
-        if (message) this.clear(typeof message === "string" ? message : this.getKey(message));
-        else {
+        if (message) {
+            const key = this.getKey(message);
+            if (key) this.clear(key);
+        } else {
             for (const [, data] of this.throttlers) clearTimeout(data.timeout);
             this.throttlers.clear();
         }
@@ -198,6 +201,7 @@ class ScopedThrottler implements CommandThrottler {
 
     add(message: Message | string): boolean {
         const data = this.get(message, true);
+        if (!data) return false;
         const reachedLimit = data.current >= this.count;
         data.current++;
         return reachedLimit;
