@@ -144,7 +144,7 @@ export class Command {
     // === Getter =====================================================
 
     /**
-     * The [[Throttler]] used by this command.
+     * The [[CommandThrottler]] used by this command.
      */
     get throttler(): CommandThrottler | undefined {
         if (this._throttler === null) return undefined;
