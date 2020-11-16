@@ -185,8 +185,8 @@ class ScopedThrottler implements CommandThrottler {
     }
 
     getCooldown(message: Message | string): number {
-        const timeout = this.get(message)?.timeout;
-        return timeout ? Math.ceil(getTimeLeft(timeout)) : 0;
+        const data = this.get(message);
+        return data ? Math.ceil(getTimeLeft(data.timeout)) : 0;
     }
 
     reset(message?: Message | string): void {
