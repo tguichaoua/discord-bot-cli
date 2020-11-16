@@ -12,7 +12,7 @@ export interface CommandThrottler {
     readonly duration: number;
 
     /**
-     * Gets the number of time the throttler has been triggered for this id.
+     * Gets the number of time the throttler has been incremented for this id.
      * @param id An id or a Message
      */
     getCurrent(id: Message | string): number;
@@ -41,9 +41,9 @@ export interface CommandThrottler {
     reset(id: Message | string): void;
 
     /**
-     * Increment the throttler's counter for this id.
+     * Increments the throttler's counter for this id.
      * @param id An id or a Message
-     * @returns Either or not the limit has been reached.
+     * @returns Either or not the limit has been reached
      * @example
      * ```ts
      * if (throttler.add(id)) {
