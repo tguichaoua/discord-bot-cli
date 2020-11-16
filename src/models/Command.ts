@@ -257,7 +257,7 @@ export class Command {
                 ? this.throttler
                 : undefined;
 
-        if (this.throttler?.getThrottled(message)) throw new CommandResultError(CommandResultUtils.throttling(this));
+        if (throttler && throttler.getThrottled(message)) throw new CommandResultError(CommandResultUtils.throttling(this));
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
