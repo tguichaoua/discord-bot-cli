@@ -8,69 +8,41 @@ export interface CommandThrottler {
     readonly scope: ThrottlerScope;
     /** How many time the throttler can be triggered. */
     readonly count: number;
-    /** Time in seconds since the first trigger before the throttler is reset. */
+    /** Time in seconds before the throttler is reset. */
     readonly duration: number;
+
     /**
-     * Gets the number of time the throttler has been triggered.
-     * @param message
+     * Gets the number of time the throttler has been triggered for this id.
+     * @param id An id or a Message
      */
-    getCurrent(message: Message): number;
+    getCurrent(id: Message | string): number;
+
     /**
-     * Gets the number of time the throttler has been triggered.
-     * @param id
+     * Gets either or not the throttler has reached the limit for this id.
+     * @param id An id or a Message
      */
-    getCurrent(id: string): number;
+    getThrottled(id: Message | string): boolean;
+
     /**
-     * Gets either or not the throttler has reached the limit.
-     * @param message
+     * Gets the time in seconds until the throttler is reset for this id.
+     * @param id An id or a Message
      */
-    getThrottled(message: Message): boolean;
-    /**
-     * Gets either or not the throttler has reached the limit.
-     * @param id
-     */
-    getThrottled(id: string): boolean;
-    /**
-     * Gets the time in seconds until the throttler is reset.
-     * @param message
-     */
-    getCooldown(message: Message): number;
-    /**
-     * Gets the time in seconds until the throttler is reset.
-     * @param id
-     */
-    getCooldown(id: string): number;
+    getCooldown(id: Message | string): number;
+
     /**
      * Resets all throttlers.
      */
     reset(): void;
+
     /**
-     * Resets the throttler.
-     * @param message
+     * Resets the throttler for this id.
+     * @param id An id or a Message
      */
-    reset(message: Message): void;
+    reset(id: Message | string): void;
+
     /**
-     * Resets the throttler.
-     * @param id
-     */
-    reset(id: string): void;
-    /**
-     * Increment the throttler's counter.
-     * @param message
-     * @returns Either or not the limit has been reached.
-     * @example
-     * ```ts
-     * if (throttler.add(message)) {
-     *     // Do action
-     * } else {
-     *     // Cannot do action
-     * }
-     * ```
-     */
-    increment(message: Message): boolean;
-    /**
-     * Increment the throttler's counter.
-     * @param id
+     * Increment the throttler's counter for this id.
+     * @param id An id or a Message
      * @returns Either or not the limit has been reached.
      * @example
      * ```ts
@@ -81,7 +53,7 @@ export interface CommandThrottler {
      * }
      * ```
      */
-    increment(id: string): boolean;
+    increment(id: Message | string): boolean;
 }
 
 export class CommandThrottler {
