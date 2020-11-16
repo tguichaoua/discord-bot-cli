@@ -272,7 +272,7 @@ export class Command {
             }
         }
 
-        if (throttler) throttler.add(message);
+        if (throttler) throttler.increment(message);
 
         return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
             rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any

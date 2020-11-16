@@ -67,7 +67,7 @@ export interface CommandThrottler {
      * }
      * ```
      */
-    add(message: Message): boolean;
+    increment(message: Message): boolean;
     /**
      * Increment the throttler's counter.
      * @param id
@@ -81,7 +81,7 @@ export interface CommandThrottler {
      * }
      * ```
      */
-    add(id: string): boolean;
+    increment(id: string): boolean;
 }
 
 export class CommandThrottler {
@@ -119,7 +119,7 @@ class Throttler implements CommandThrottler {
         this._current = 0;
     }
 
-    add(): boolean {
+    increment(): boolean {
         const reachedLimit = this.getThrottled();
         this._current++;
         if (!this._timeout) this._timeout = setTimeout(() => this.reset(), this.duration * 1000);
@@ -199,7 +199,7 @@ class ScopedThrottler implements CommandThrottler {
         }
     }
 
-    add(message: Message | string): boolean {
+    increment(message: Message | string): boolean {
         const data = this.get(message, true);
         if (!data) return false;
         const reachedLimit = data.current >= this.count;
