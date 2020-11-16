@@ -99,7 +99,7 @@ export class CommandThrottler {
 class Throttler implements CommandThrottler {
     public readonly scope: "global" = "global";
     private _current = 0;
-    private _timeout: NodeJS.Timeout | undefined = undefined;
+    private _timeout: NodeJS.Timeout | null = null;
 
     constructor(public readonly count: number, public readonly duration: number) {}
 
@@ -115,7 +115,7 @@ class Throttler implements CommandThrottler {
 
     reset(): void {
         if (this._timeout) clearTimeout(this._timeout);
-        this._timeout = undefined;
+        this._timeout = null;
         this._current = 0;
     }
 
