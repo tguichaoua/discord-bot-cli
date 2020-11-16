@@ -213,7 +213,9 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
         if (userPermissions !== "") embed.addField(localization.help.user_permissions, userPermissions, false);
     }
 
-    const exemples = rawHelp.command.examples.map(e => `\`${e}\``).join("\n");
+    const exemples = rawHelp.command.examples
+        .map(e => `\`${e.example}\`${e.description ? ` — ${e.description}` : ""}`)
+        .join("\n");
     if (exemples !== "") embed.addField(localization.help.examples, exemples, false);
 
     return embed;

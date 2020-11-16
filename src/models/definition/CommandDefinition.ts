@@ -5,6 +5,7 @@ import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
+import { CommandExampleDefinition } from "./CommandExampleDefinition";
 
 /** @category Definition */
 type CommandDefinitionBase = {
@@ -18,7 +19,7 @@ type CommandDefinitionBase = {
      */
     readonly userPermissions?: PermissionString[];
     /** A list of example for this command. */
-    readonly examples?: string[];
+    readonly examples?: CommandExampleDefinition[];
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
