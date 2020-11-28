@@ -46,7 +46,10 @@ export function exec(i: string, cmd_silent: string | boolean = false, silent = f
         silent = cmd_silent;
     }
 
-    return shell.exec(cmd, { fatal: true, silent });
+    // fatal option is not working yet : https://github.com/shelljs/shelljs/issues/981#issuecomment-626840798
+    const result = shell.exec(cmd, { silent });
+    if (result.code !== 0) shell.exit(1);
+    return result;
 }
 
 export function error(...text: unknown[]): never {
