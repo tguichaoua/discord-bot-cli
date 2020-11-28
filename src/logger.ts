@@ -59,7 +59,7 @@ export const Logger = Object.freeze({
     debug(...args: any[]): void {
         print(LogLevel.DEBUG, ...args);
     },
-    log(...args: any[]): void {
+    info(...args: any[]): void {
         print(LogLevel.INFO, ...args);
     },
     warn(...args: any[]): void {
