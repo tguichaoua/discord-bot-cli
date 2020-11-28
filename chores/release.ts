@@ -22,13 +22,13 @@ exec("pull master", "git pull");
 exec("create release branch", `git branch "${releaseBranchName}"`);
 exec("checkout release branch", `git checkout "${releaseBranchName}"`);
 
-exec("bump version", `npm --no-git-tag-version version ${nextVersion} && git commit -A "🔖 ${version}"`);
+exec("bump version", `npm --no-git-tag-version version ${nextVersion} && git commit -am "🔖 ${version}"`);
 
 if (semver === "major") {
     info("update doctype settings");
     editJson("doctype.json", o => (o.out = `./docs/v${major(nextVersion)}/`));
 }
 
-exec("generate docs", 'npm run docs && git commit -A "📝 generate docs"');
+exec("generate docs", 'npm run docs && git commit -am "📝 generate docs"');
 
-exec("push", "git push");
+exec("push", `git push --set-upstream origin ${releaseBranchName}`);
