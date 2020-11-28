@@ -49,7 +49,7 @@ export function exec(i: string, cmd_silent: string | boolean = false, silent = f
     return shell.exec(cmd, { fatal: true, silent });
 }
 
-export function error(...text: unknown[]) {
+export function error(...text: unknown[]): never {
     console.log(chalk.red(text));
     shell.exit(1);
 }
