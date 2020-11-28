@@ -19,11 +19,10 @@
         "lint:fix": "eslint . --ext .ts --fix",
         "docs": "typedoc ./src/",
         "docs:test": "typedoc ./src/ --out ./docs/test/",
-        "build": "tsc && npm run copy:assets",
+        "build": "tsc && ts-node ./chores/post_build.ts",
         "build:clean": "shx rm -rf ./dist",
         "rebuild": "npm run build:clean && npm run build",
-        "prepublishOnly": "npm run rebuild",
-        "copy:assets": "shx cp -r ./src/assets ./dist"
+        "prepublishOnly": "npm run rebuild"
     },
     "repository": {
         "type": "git",
