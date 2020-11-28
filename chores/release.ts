@@ -17,8 +17,8 @@ if (nextVersion === null) error("Invalid next version :", nextVersion);
 const releaseBranchName = `release/${nextVersion}`;
 
 if (getCurrentBranch() !== "master") error("The current branch must be 'master'");
-
 if (hasDiff()) error("There are not commited changes on the current branch");
+
 exec("pull master", "git pull");
 exec("create release branch", `git branch "${releaseBranchName}"`);
 exec("checkout release branch", `git checkout "${releaseBranchName}"`);
