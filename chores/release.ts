@@ -8,19 +8,22 @@
 // git merge master
 // git push
 
-import shell from "shelljs";
-import { need, exec } from "./chore";
+import { need, exec, error } from "./chore";
+import { getCurrentBranch } from "./utils/git";
 
 need("git", "npm");
 
 const [, , semver] = process.argv;
 
 if (!["major", "minor", "patch"].includes(semver)) {
-    shell.echo("Usage: npm run release <major | minor | patch>");
-    shell.exit(1);
+    error("Usage: npm run release <major | minor | patch>");
 }
 
-exec("pull master", "git checkout master && git pull");
+if (getCurrentBranch() !== "master") {
+    error("The current branch must be 'master'");
+}
+
+exec("pull master", "git pull");
 exec("bump version", `npm --no-git-tag-version version ${semver}`);
 
 import { version } from "../package.json";
