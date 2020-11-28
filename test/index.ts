@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { CommandSet, HelpUtils, enableDebugLogs } from "../src/index";
+import { CommandSet, enableDebugLogs } from "../src/index";
 import env from "./env.json";
 
 enableDebugLogs();
@@ -9,15 +9,6 @@ const commands = new CommandSet({
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
 });
-
-commands.helpHandler = async (command, { message, options }) => {
-    const help = HelpUtils.commandRawHelp(command, options.localization);
-    const text = `
-**Command name**: ${command.name}
-**Full name**: ${help.fullName}
-`;
-    await message.reply(text);
-};
 
 commands.loadCommands("commands", true);
 
@@ -42,7 +33,7 @@ client.on("message", async message => {
                 console.error("[ERROR]", result.error);
                 break;
             case "ok":
-                console.log("[OK]", result.result);
+                console.log("[OK]");
                 break;
             default:
                 console.log(result);
