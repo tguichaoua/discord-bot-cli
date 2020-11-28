@@ -1,29 +1,35 @@
-// git checkout master
-// git pull
-// npm --no-git-tag-version version [major, minor, patch]
-// git commit -A "bump version to X.X.X"
-// git push
-// git checkout stable
-// git pull
-// git merge master
-// git push
-
-import shell from "shelljs";
-import { need, exec } from "./chore";
+import { need, exec, error } from "./chore";
+import { getCurrentBranch, hasDiff } from "./utils/git";
+import { inc, major, ReleaseType } from "semver";
+import { version } from "../package.json";
+import { editJson } from "./utils/util";
+import { info } from "console";
 
 need("git", "npm");
 
 const [, , semver] = process.argv;
 
-if (!["major", "minor", "patch"].includes(semver)) {
-    shell.echo("Usage: npm run release <major | minor | patch>");
-    shell.exit(1);
+if (!["major", "minor", "patch"].includes(semver)) error("Usage: npm run release <major | minor | patch>");
+
+const nextVersion = inc(version, semver as ReleaseType);
+if (nextVersion === null) error("Invalid next version :", nextVersion);
+
+const releaseBranchName = `release/${nextVersion}`;
+
+if (getCurrentBranch() !== "master") error("The current branch must be 'master'");
+if (hasDiff()) error("There are not commited changes on the current branch");
+
+exec("pull master", "git pull");
+exec("create release branch", `git branch "${releaseBranchName}"`);
+exec("checkout release branch", `git checkout "${releaseBranchName}"`);
+
+exec("bump version", `npm --no-git-tag-version version ${nextVersion} && git commit -am "🔖 ${version}"`);
+
+if (semver === "major") {
+    info("update doctype settings");
+    editJson("doctype.json", o => (o.out = `./docs/v${major(nextVersion)}/`));
 }
 
-exec("pull master", "git checkout master && git pull");
-exec("bump version", `npm --no-git-tag-version version ${semver}`);
+exec("generate docs", 'npm run docs && git commit -am "📝 generate docs"');
 
-import { version } from "../package.json";
-
-exec("commit & push", `git commit -A "bump version to ${version}" && git push`);
-exec("merge master on stable & pull", "git checkout stable && git pull && git merge master && git push");
+exec("push", `git push --set-upstream origin ${releaseBranchName}`);
