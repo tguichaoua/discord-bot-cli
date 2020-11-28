@@ -1,5 +1,5 @@
 import { need, exec, error } from "./chore";
-import { getCurrentBranch } from "./utils/git";
+import { getCurrentBranch, hasDiff } from "./utils/git";
 import { inc, major, ReleaseType } from "semver";
 import { version } from "../package.json";
 import { editJson } from "./utils/util";
@@ -18,6 +18,7 @@ const releaseBranchName = `release/${nextVersion}`;
 
 if (getCurrentBranch() !== "master") error("The current branch must be 'master'");
 
+if (hasDiff()) error("There are not commited changes on the current branch");
 exec("pull master", "git pull");
 exec("create release branch", `git branch "${releaseBranchName}"`);
 exec("checkout release branch", `git checkout "${releaseBranchName}"`);
