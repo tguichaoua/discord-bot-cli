@@ -4,16 +4,12 @@ import { FlagDefinition } from "./definition/FlagDefinition";
 
 export type CommandResult =
     | {
-          readonly status: "ok";
-          readonly command: Command;
-          readonly result: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-      }
-    | {
           readonly status: "error";
           readonly error: any; // eslint-disable-line @typescript-eslint/no-explicit-any
       }
     | {
           readonly status:
+              | "ok"
               | "no executor"
               | "guild only"
               | "dev only"
@@ -57,9 +53,8 @@ export type CommandResult =
 
 /** @internal */
 export const CommandResultUtils = Object.freeze({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ok(command: Command, result: any): CommandResult {
-        return { status: "ok", command, result };
+    ok(command: Command): CommandResult {
+        return { status: "ok", command };
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error(error: any): CommandResult {

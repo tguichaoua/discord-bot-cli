@@ -183,9 +183,9 @@ export class CommandSet {
             return CommandResultUtils.unauthorizedUser(command);
 
         try {
-            const result = await command.execute(message, args, opts, this);
+            await command.execute(message, args, opts, this);
             if (command.deleteMessage && message.channel.type === "text") await message.delete().catch(Logger.error);
-            return CommandResultUtils.ok(command, result);
+            return CommandResultUtils.ok(command);
         } catch (e) {
             if (e instanceof CommandResultError) {
                 if (e.replyMessage && e.replyMessage !== "") await Reply(e.replyMessage);
