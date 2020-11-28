@@ -1,8 +1,8 @@
 import { Client } from "discord.js";
-import { CommandSet, enableDebugLogs } from "../src/index";
+import { CommandSet, LogLevel, Logs } from "../src/index";
 import env from "./env.json";
 
-enableDebugLogs();
+Logs.auto(true).minLevel(LogLevel.DEBUG);
 
 const commands = new CommandSet({
     prefix: env.prefix,
