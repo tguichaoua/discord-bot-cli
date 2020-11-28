@@ -19,11 +19,10 @@
         "lint:fix": "eslint . --ext .ts --fix",
         "docs": "typedoc ./src/",
         "docs:test": "typedoc ./src/ --out ./docs/test/",
-        "build": "tsc && npm run copy:assets",
+        "build": "tsc && ts-node ./chores/post_build.ts",
         "build:clean": "shx rm -rf ./dist",
         "rebuild": "npm run build:clean && npm run build",
-        "prepublishOnly": "npm run rebuild",
-        "copy:assets": "shx cp -r ./src/assets ./dist"
+        "prepublishOnly": "npm run rebuild"
     },
     "repository": {
         "type": "git",
@@ -54,6 +53,7 @@
     "devDependencies": {
         "@types/chalk": "^2.2.0",
         "@types/node": "^12.19.2",
+        "@types/semver": "^7.3.4",
         "@types/shelljs": "^0.8.8",
         "@types/ws": "^7.2.8",
         "@typescript-eslint/eslint-plugin": "^4.6.0",
@@ -63,6 +63,7 @@
         "eslint-config-prettier": "^6.15.0",
         "eslint-plugin-prettier": "^3.1.4",
         "prettier": "^2.1.2",
+        "semver": "^7.3.2",
         "shelljs": "^0.8.4",
         "shx": "^0.3.3",
         "ts-node": "^9.0.0",
