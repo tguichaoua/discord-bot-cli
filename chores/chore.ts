@@ -36,7 +36,7 @@ export function need(...command: string[]): void {
 
 export function exec(command: string, silent?: boolean): shell.ShellString;
 export function exec(info: string, command: string, silent?: boolean): shell.ShellString;
-export function exec(i: string, cmd_silent: string | boolean = false, silent: boolean = false): shell.ShellString {
+export function exec(i: string, cmd_silent: string | boolean = false, silent = false): shell.ShellString {
     let cmd: string;
     if (typeof cmd_silent === "string") {
         cmd = cmd_silent;
