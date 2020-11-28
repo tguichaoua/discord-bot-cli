@@ -10,15 +10,6 @@ const commands = new CommandSet({
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
 });
 
-commands.helpHandler = async (command, { message, options }) => {
-    const help = HelpUtils.commandRawHelp(command, options.localization);
-    const text = `
-**Command name**: ${command.name}
-**Full name**: ${help.fullName}
-`;
-    await message.reply(text);
-};
-
 commands.loadCommands("commands", true);
 
 // manually load build-in commands
@@ -42,7 +33,7 @@ client.on("message", async message => {
                 console.error("[ERROR]", result.error);
                 break;
             case "ok":
-                console.log("[OK]", result.result);
+                console.log("[OK]");
                 break;
             default:
                 console.log(result);
