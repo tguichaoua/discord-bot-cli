@@ -1,32 +1,34 @@
-// git checkout master
-// git pull
-// npm --no-git-tag-version version [major, minor, patch]
-// git commit -A "bump version to X.X.X"
-// git push
-// git checkout stable
-// git pull
-// git merge master
-// git push
-
 import { need, exec, error } from "./chore";
 import { getCurrentBranch } from "./utils/git";
+import { inc, major, ReleaseType } from "semver";
+import { version } from "../package.json";
+import { editJson } from "./utils/util";
+import { info } from "console";
 
 need("git", "npm");
 
 const [, , semver] = process.argv;
 
-if (!["major", "minor", "patch"].includes(semver)) {
-    error("Usage: npm run release <major | minor | patch>");
-}
+if (!["major", "minor", "patch"].includes(semver)) error("Usage: npm run release <major | minor | patch>");
 
-if (getCurrentBranch() !== "master") {
-    error("The current branch must be 'master'");
-}
+const nextVersion = inc(version, semver as ReleaseType);
+if (nextVersion === null) error("Invalid next version :", nextVersion);
+
+const releaseBranchName = `release/${nextVersion}`;
+
+if (getCurrentBranch() !== "master") error("The current branch must be 'master'");
 
 exec("pull master", "git pull");
-exec("bump version", `npm --no-git-tag-version version ${semver}`);
+exec("create release branch", `git branch "${releaseBranchName}"`);
+exec("checkout release branch", `git checkout "${releaseBranchName}"`);
 
-import { version } from "../package.json";
+exec("bump version", `npm --no-git-tag-version version ${nextVersion} && git commit -A "🔖 ${version}"`);
 
-exec("commit & push", `git commit -A "bump version to ${version}" && git push`);
-exec("merge master on stable & pull", "git checkout stable && git pull && git merge master && git push");
+if (semver === "major") {
+    info("update doctype settings");
+    editJson("doctype.json", o => (o.out = `./docs/v${major(nextVersion)}/`));
+}
+
+exec("generate docs", 'npm run docs && git commit -A "📝 generate docs"');
+
+exec("push", "git push");
