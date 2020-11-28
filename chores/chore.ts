@@ -53,7 +53,7 @@ export function exec(i: string, cmd_silent: string | boolean = false, silent = f
 }
 
 export function error(...text: unknown[]): never {
-    console.log(chalk.red(text));
+    console.error(chalk.red(text));
     shell.exit(1);
 }
 
