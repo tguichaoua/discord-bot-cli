@@ -21,6 +21,8 @@ import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { CommandThrottler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { defaultHelp } from "../other/HelpUtils";
+import { CommandExample } from "./CommandExample";
+import { isArray } from "../utils/array";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -39,7 +41,7 @@ export class Command {
         /** The list of permissions the user require to execute this command. */
         public readonly userPermissions: readonly PermissionString[] | undefined,
         /** The list of exemples for this command. */
-        public readonly examples: readonly string[],
+        public readonly examples: readonly Readonly<CommandExample>[],
         /** The description of the command. */
         public readonly description: string,
         /** This command's parent or `null` if it's a top-most command. */
@@ -94,13 +96,23 @@ export class Command {
         }
 
         const subs = new CommandCollection();
+
+        const examples: CommandExample[] = [];
+        if (data.def.examples) {
+            for (const e of data.def.examples) {
+                if (typeof e === "string") examples.push({ example: e });
+                else if (isArray(e)) examples.push({ example: e[0], description: e[1] });
+                else examples.push({ example: e.example, description: e.description });
+            }
+        }
+
         const cmd = new Command(
             filepath,
             data.name,
             data.def.aliases ?? [],
             data.def.clientPermissions ?? [],
             data.def.userPermissions,
-            data.def.examples ?? [],
+            examples,
             data.def.description ?? "",
             parent,
             commandSet,
