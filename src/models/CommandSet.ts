@@ -39,7 +39,7 @@ export class CommandSet {
         Logger.debug(`Load command from ${debugPath}`);
         try {
             const command = Command.load(path, this);
-            if (command.ignored) Logger.log(`Command ignored ${debugPath}`);
+            if (command.ignored) Logger.info(`Command ignored ${debugPath}`);
             else {
                 if (!this._commands.add(command))
                     Logger.warn(`Command not loaded, the name is already taken. (${debugPath})`);

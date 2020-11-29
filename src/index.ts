@@ -13,4 +13,4 @@ export type PartialCommandSetOptions = DeepPartial<CommandSetOptions>;
 export * as HelpUtils from "./other/HelpUtils";
 export * as ListUtils from "./other/ListUtils";
 
-export { enableDebugLogs } from "./logger";
+export * from "./logger";
