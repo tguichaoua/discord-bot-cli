@@ -6,6 +6,13 @@ export class StringParser extends Parser<string> {
         return provider.nextString();
     }
 
+    public length(minLength: number, _else?: string): this {
+        return this.if(
+            s => s.length >= minLength,
+            _else ?? `require at least ${minLength} character${minLength > 1 ? "s" : ""}.`,
+        );
+    }
+
     public values(...values: string[]): this {
         return this.if(s => values.includes(s));
     }
