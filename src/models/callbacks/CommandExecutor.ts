@@ -5,6 +5,7 @@ import { CommandDefinition, CommandSettings } from "../definition/CommandDefinit
 import { ParsableTypeOf } from "../ParsableType";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
+import { ParserType } from "../parsers";
 
 /** @ignore */
 type IsGuildOnly<S extends CommandSettings, True, False> = S["guildOnly"] extends true ? True : False;
@@ -26,7 +27,7 @@ export type CommandExecutor<
 > = (
     args: {
         readonly [name in keyof T["args"]]:
-            | ParsableTypeOf<NonNullable<T["args"]>[name]["type"]>
+            | ParserType<NonNullable<T["args"]>[name]["parser"]>
             | (NonNullable<T["args"]>[name]["optional"] extends true
                   ? undefined extends NonNullable<T["args"]>[name]["defaultValue"]
                       ? undefined
@@ -35,7 +36,7 @@ export type CommandExecutor<
     },
     flags: {
         readonly [name in keyof T["flags"]]:
-            | ParsableTypeOf<NonNullable<T["flags"]>[name]["type"]>
+            | ParserType<NonNullable<T["flags"]>[name]["parser"]>
             | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
                   ? undefined
                   : NonNullable<T["flags"]>[name]["defaultValue"]);
