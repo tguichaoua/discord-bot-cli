@@ -2,8 +2,8 @@ import { ArgProvider } from "../../src/models/parsers/ArgProvider";
 import { InvalidValueParseError } from "../../src/models/parsers/errors";
 import { Parser } from "../../src/models/parsers/Parser";
 
-export class ColorParser implements Parser<Color> {
-    parse(provider: ArgProvider): Color {
+export class ColorParser extends Parser<Color> {
+    protected parse(provider: ArgProvider): Color {
         const r = provider.nextInteger();
         if (r < 0 || r > 255) throw new InvalidValueParseError();
 
