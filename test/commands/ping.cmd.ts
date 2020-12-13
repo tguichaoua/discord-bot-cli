@@ -1,28 +1,23 @@
 import { makeCommand } from "../../src/index";
-import { IntegerParser, StringParser } from "../../src/models/parsers";
+import { StringParser } from "../../src/models/parsers";
 
 const cmd = makeCommand("ping", {
     description: "DESCRIPTION",
     args: {
-        a: {
-            parser: new StringParser().if(s => s.length >= 5),
-            description: "hi !",
-            optional: true,
-            defaultValue: "Hello",
+        name: {
+            parser: new StringParser().length(5, "name is too short, require at least 5 characters."),
         },
     },
     flags: {
         b: {
-            parser: new IntegerParser().range(0, 255),
-            defaultValue: "",
             description: "value",
             shortcut: "B",
         },
     },
 });
 
-cmd.executor = async ({ a }, { b }, { message }) => {
-    await message.reply(":ping_pong: Pong !");
+cmd.executor = async ({ name }, { b }, { message }) => {
+    await message.reply(":ping_pong: Pong !\n" + `name = ${name}\nb = ${b}`);
 };
 
 export default cmd;
