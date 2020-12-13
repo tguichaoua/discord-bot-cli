@@ -1,6 +1,6 @@
 import { PermissionString } from "discord.js";
-import { ArgDefinition } from "./ArgDefinition";
-import { FlagDefinition } from "./FlagDefinition";
+import { ArgDef } from "./ArgDefinition";
+import { FlagDef } from "./FlagDefinition";
 import { RestDefinition } from "./RestDefinition";
 import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
@@ -23,9 +23,9 @@ type CommandDefinitionBase = {
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
-    readonly args?: Readonly<Record<string, ArgDefinition>>;
+    readonly args?: Readonly<Record<string, ArgDef>>;
     /** Flags that can be used with this command. */
-    readonly flags?: Readonly<Record<string, FlagDefinition>>;
+    readonly flags?: Readonly<Record<string, FlagDef>>;
     /** Define a name and a description for a rest argument. Used for help purpose. */
     readonly rest?: RestDefinition;
 

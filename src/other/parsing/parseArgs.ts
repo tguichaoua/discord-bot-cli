@@ -1,33 +1,41 @@
 import { Message } from "discord.js";
-import { ParsableType } from "../../models/ParsableType";
-import { parseValue } from "./parseValue";
-import { ArgDefinition } from "../../models/definition/ArgDefinition";
+import { ArgDef } from "../../models/definition/ArgDefinition";
 import { CommandResultUtils } from "../../models/CommandResult";
 import { CommandResultError } from "../../models/errors/CommandResultError";
+import { ArgProvider, ParseError } from "../../models/parsers";
+import { Logger } from "../../logger";
 
 /** @internal */
 export function parseArgs(
     message: Message,
     inputArguments: readonly string[],
-    argDefinitions: ReadonlyMap<string, ArgDefinition>,
+    argDefinitions: ReadonlyMap<string, ArgDef>,
 ) {
-    const args = [...inputArguments];
-    const argValues = new Map<string, ParsableType | undefined>();
+    const provider = new ArgProvider(inputArguments);
+    const values = new Map<string, unknown>();
 
     for (const [name, def] of argDefinitions) {
-        let value: ParsableType | undefined;
-        if (args.length === 0) {
+        let value: unknown;
+        if (provider.remaining === 0) {
             if (!def.optional) throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
             value = def.defaultValue;
         } else {
-            const val = args.shift() as string;
-            const parsed = parseValue(def, message, val);
-            if (parsed.value === undefined)
-                throw new CommandResultError(CommandResultUtils.failParseArgInvalid(def, val), parsed.message);
-            value = parsed.value;
+            try {
+                value = def.parser._parse(provider);
+            } catch (e) {
+                if (e instanceof ParseError) {
+                    // TODO
+                    Logger.debug("TODO: catch parse error:", e);
+                    throw e;
+                } else {
+                    // TODO
+                    Logger.debug("TODO: catch error while parsing:", e);
+                    throw e;
+                }
+            }
         }
-        argValues.set(name, value);
+        values.set(name, value);
     }
 
-    return { argValues, rest: args };
+    return { argValues: values, rest: provider.rest() };
 }

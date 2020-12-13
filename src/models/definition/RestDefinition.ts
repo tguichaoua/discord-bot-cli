@@ -1,9 +1,10 @@
 import { ParsableTypeName } from "../ParsableType";
+import { Parser } from "../parsers";
 
 /** @category Definition */
 export interface RestDefinition {
-    /** Type(s) of the rest. */
-    type: ParsableTypeName | ParsableTypeName[];
+    /**  */
+    parser: Parser<any>;
     /** Name to diplay in help. */
     name: string;
     /** Description to display in help. */

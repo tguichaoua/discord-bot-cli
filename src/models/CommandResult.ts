@@ -1,6 +1,6 @@
 import { Command } from "./Command";
-import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDefinition } from "./definition/FlagDefinition";
+import { ArgDef } from "./definition/ArgDefinition";
+import { FlagDef } from "./definition/FlagDefinition";
 
 export type CommandResult =
     | {
@@ -26,7 +26,7 @@ export type CommandResult =
       } & (
           | ({
                 readonly type: "arg";
-                readonly arg: Readonly<ArgDefinition>;
+                readonly arg: Readonly<ArgDef>;
             } & (
                 | {
                       readonly reason: "invalid value";
@@ -45,7 +45,7 @@ export type CommandResult =
                   }
                 | {
                       readonly reason: "invalid value";
-                      readonly flag: Readonly<FlagDefinition>;
+                      readonly flag: Readonly<FlagDef>;
                       readonly got: string;
                   }
             ))
@@ -84,7 +84,7 @@ export const CommandResultUtils = Object.freeze({
     commandNotFound(): CommandResult {
         return { status: "command not found" };
     },
-    failParseArgInvalid(arg: Readonly<ArgDefinition>, got: string): CommandResult {
+    failParseArgInvalid(arg: Readonly<ArgDef>, got: string): CommandResult {
         return {
             status: "parsing error",
             type: "arg",
@@ -93,7 +93,7 @@ export const CommandResultUtils = Object.freeze({
             got,
         };
     },
-    failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult {
+    failParseArgMissing(arg: Readonly<ArgDef>): CommandResult {
         return {
             status: "parsing error",
             type: "arg",
@@ -109,7 +109,7 @@ export const CommandResultUtils = Object.freeze({
             name,
         };
     },
-    failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult {
+    failParseFlagInvalid(flag: Readonly<FlagDef>, got: string): CommandResult {
         return {
             status: "parsing error",
             type: "flag",

@@ -3,8 +3,8 @@ import { CommandSet } from "./CommandSet";
 import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
-import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDefinition } from "./definition/FlagDefinition";
+import { ArgDef } from "./definition/ArgDefinition";
+import { FlagDef } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
 import { parseFlags } from "../other/parsing/parseFlags";
@@ -51,11 +51,11 @@ export class Command {
         /** A [[ReadonlyCommandCollection]] of this command's sub-commands. */
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
-        public readonly args: ReadonlyMap<string, ArgDefinition>,
+        public readonly args: ReadonlyMap<string, ArgDef>,
         /** A [[RestDefinition]] if this command use the rest argument, `undefined` otherwise. */
         public readonly rest: Readonly<RestDefinition> | undefined,
         /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
-        public readonly flags: ReadonlyMap<string, FlagDefinition>,
+        public readonly flags: ReadonlyMap<string, FlagDef>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
         private readonly _canUse: CanUseCommandHandler | undefined,
@@ -123,7 +123,7 @@ export class Command {
             new Map(
                 data.def.flags
                     ? Object.entries(data.def.flags)
-                          .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] {
+                          .filter(function (a): a is [string, FlagDef & { shortcut: Char }] {
                               return a[1].shortcut !== undefined;
                           })
                           .map(([k, v]) => [v.shortcut, k])
@@ -274,28 +274,24 @@ export class Command {
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
-        const args = parseArgs(message, flags.args, this.args);
-
-        const rest: ParsableType[] = [];
-        if (this.rest) {
-            for (const e of args.rest) {
-                const parsed = parseValue(this.rest, message, e);
-                if (parsed.value !== undefined) rest.push(parsed.value);
-            }
-        }
+        const { flagValues, args } = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
+        const { argValues, rest } = parseArgs(message, args, this.args);
 
         if (throttler) throttler.increment(message);
 
-        return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
-            rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            message,
-            guild: message.guild,
-            member: message.member,
-            channel: message.channel,
-            options,
-            commandSet,
-            command: this,
-        });
+        await this._executor(
+            Object.fromEntries(argValues),
+            Object.fromEntries(flagValues) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+            {
+                rest: rest,
+                message,
+                guild: message.guild,
+                member: message.member,
+                channel: message.channel,
+                options,
+                commandSet,
+                command: this,
+            },
+        );
     }
 }

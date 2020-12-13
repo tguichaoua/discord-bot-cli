@@ -1,7 +1,18 @@
-import { ParsableDefinition } from "./ParsableDefinition";
+import { Parser } from "../parsers";
 
-/** @category Definition */
-export type ArgDefinition = ParsableDefinition & {
+// /** @category Definition */
+// export type ArgDefinition = ParsableDefinition & {
+//     /** If set to true, this argument can be omitted. In this case defaultValue is used. (default is false) */
+//     readonly optional?: boolean;
+// };
+
+export interface ArgDef {
+    /**  */
+    readonly parser: Parser<any>;
+    /** Provide a description. */
+    readonly description?: string;
+    /** The default value if there is no value to parse. */
+    readonly defaultValue?: any;
     /** If set to true, this argument can be omitted. In this case defaultValue is used. (default is false) */
     readonly optional?: boolean;
-};
+}

@@ -1,24 +1,35 @@
 import { InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
 
 export class ArgProvider {
-    private readonly args: string[];
+    private readonly args: readonly string[];
+    private readonly from: number;
+    private readonly to: number;
+    private cur: number;
 
-    public constructor(args: readonly string[]) {
-        this.args = [...args];
+    public constructor(args: readonly string[], from = 0, to?: number) {
+        this.args = args;
+        this.from = Math.max(from, 0);
+        this.to = Math.min(Math.max(to ?? args.length, from), args.length);
+        this.cur = this.from;
     }
 
     get remaining(): number {
-        return this.args.length;
+        return this.to - this.cur;
+    }
+
+    get consumed(): number {
+        return this.cur - this.from;
     }
 
     clone(): ArgProvider {
-        return new ArgProvider(this.args);
+        const provider = new ArgProvider(this.args, this.from, this.to);
+        provider.cur = this.cur;
+        return provider;
     }
 
     private next(): string {
-        const str = this.args.shift();
-        if (str === undefined) throw new NotEnoughArgParseError();
-        return str;
+        if (this.cur === this.to) throw new NotEnoughArgParseError();
+        return this.args[this.cur++];
     }
 
     nextString(): string {
@@ -52,5 +63,11 @@ export class ArgProvider {
             default:
                 throw new InvalidTypeParseError();
         }
+    }
+
+    rest(): string[] {
+        const rest = this.args.slice(this.cur, this.to);
+        this.cur = this.to;
+        return rest;
     }
 }

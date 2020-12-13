@@ -36,13 +36,15 @@ export type CommandExecutor<
     },
     flags: {
         readonly [name in keyof T["flags"]]:
-            | ParserType<NonNullable<T["flags"]>[name]["parser"]>
+            | (undefined extends NonNullable<T["flags"]>[name]["parser"]
+                  ? boolean
+                  : ParserType<NonNullable<NonNullable<T["flags"]>[name]["parser"]>>)
             | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
                   ? undefined
                   : NonNullable<T["flags"]>[name]["defaultValue"]);
     },
     others: {
-        readonly rest: undefined extends T["rest"] ? void : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
+        readonly rest: string[];
         readonly message: Message & MessageExtension<S>;
         readonly options: CommandSetOptions;
         readonly commandSet: CommandSet;
