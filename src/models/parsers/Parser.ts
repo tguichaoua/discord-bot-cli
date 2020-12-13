@@ -4,6 +4,12 @@ import { InvalidValueParseError } from "./errors";
 export abstract class Parser<T> {
     private conditions: Condition<T>[] = [];
 
+    // public abstract get typeName(): string;
+    // TODO: replace with abstract version.
+    public get typeName(): string {
+        return "$typename$";
+    }
+
     protected abstract parse(provider: ArgProvider): T;
 
     public if(predicate: (o: T) => boolean, _else?: string): this {

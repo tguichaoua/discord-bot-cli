@@ -2,8 +2,8 @@ import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
 import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
-import { FlagDefinition } from "../models/definition/FlagDefinition";
-import { ArgDefinition } from "../models/definition/ArgDefinition";
+import { FlagDef } from "../models/definition/FlagDefinition";
+import { ArgDef } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
@@ -13,6 +13,8 @@ import { CommandSetOptions } from "../models/CommandSetOptions";
 import { isArray } from "../utils/array";
 import { template } from "../utils/template";
 import { reply } from "../utils/reply";
+
+// TODO: change these functions to use correctly the parser
 
 /** @internal */
 export async function defaultHelp(
@@ -66,9 +68,10 @@ export function commandRawHelp(command: Command, localization: Localization): Co
         const name = commandLocalization?.rest?.name ?? command.rest.name;
         const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
         const usageString = `[...${name}]`;
-        const typeNames = isArray(command.rest.type)
-            ? command.rest.type.map(t => localization.typeNames[t])
-            : [localization.typeNames[command.rest.type]];
+        // const typeNames = isArray(command.rest.type)
+        //     ? command.rest.type.map(t => localization.typeNames[t])
+        //     : [localization.typeNames[command.rest.type]];
+        const typeNames = [""]; // TODO
         rest = { name, description, usageString, typeNames };
     }
 
@@ -91,15 +94,17 @@ export function commandRawHelp(command: Command, localization: Localization): Co
 
 /** @internal */
 function argRawHelp(
-    arg: ArgDefinition,
+    arg: ArgDef,
     name: string,
     localization: CommandLocalization,
     typeNamesLocalization: TypeNameLocalization,
 ): ArgumentRawHelp {
     const argLocalization = (localization.args ?? {})[name] ?? {};
-    const typeNames = isArray(arg.type)
-        ? arg.type.map(t => typeNamesLocalization[t])
-        : [typeNamesLocalization[arg.type]];
+    // const typeNames = isArray(arg.type)
+    //     ? arg.type.map(t => typeNamesLocalization[t])
+    //     : [typeNamesLocalization[arg.type]];
+    const typeNames = [""]; // TODO
+
     const localizedName = argLocalization.name ?? name;
     const description = argLocalization.description ?? arg.description ?? "";
     let usageString: string;
@@ -122,15 +127,18 @@ function argRawHelp(
 
 /** @internal */
 function flagRawHelp(
-    flag: FlagDefinition,
+    flag: FlagDef,
     name: string,
     localization: CommandLocalization,
     typeNamesLocalization: TypeNameLocalization,
 ): FlagRawHelp {
     const flagLocalization = (localization.flags ?? {})[name] ?? {};
-    const typeNames = isArray(flag.type)
-        ? flag.type.map(t => typeNamesLocalization[t])
-        : [typeNamesLocalization[flag.type]];
+
+    // const typeNames = isArray(flag.type)
+    //     ? flag.type.map(t => typeNamesLocalization[t])
+    //     : [typeNamesLocalization[flag.type]];
+    const typeNames = [""]; // TODO
+
     const localizedName = flagLocalization.name ?? name;
     const description = flagLocalization.description ?? flag.description ?? "";
     const longUsageString = `--${name}`;
