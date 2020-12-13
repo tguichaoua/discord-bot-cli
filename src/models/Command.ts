@@ -15,8 +15,6 @@ import { CommandResultError } from "./errors/CommandResultError";
 import { ReadonlyCommandCollection, CommandCollection } from "./CommandCollection";
 import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
 import { HelpHandler } from "./callbacks/HelpHandler";
-import { parseValue } from "../other/parsing/parseValue";
-import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { CommandThrottler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
