@@ -2,7 +2,10 @@ import { ParsingContext } from "./ParsingContext";
 import { InvalidValueParseError } from "./errors";
 
 export abstract class Parser<T> {
-    private conditions: Condition<T>[] = [];
+    private readonly conditions: {
+        predicate: (o: T) => boolean;
+        _else?: string;
+    }[] = [];
 
     // public abstract get typeName(): string;
     // TODO: replace with abstract version.
@@ -26,8 +29,3 @@ export abstract class Parser<T> {
 }
 
 export type ParserType<P extends Parser<any>> = P extends Parser<infer T> ? T : never;
-
-interface Condition<T> {
-    predicate: (o: T) => boolean;
-    _else?: string;
-}
