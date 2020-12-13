@@ -2,7 +2,7 @@ import { InvalidTypeParseError, ParseError } from "../errors";
 import { Parser, ParserType } from "../Parser";
 import { ParsingContext } from "../ParsingContext";
 
-export class OrParser<T extends Parser<any>[]> extends Parser<ParserType<T[number]>> {
+export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[number]>> {
     private readonly parsers: T;
 
     constructor(...parsers: T) {
