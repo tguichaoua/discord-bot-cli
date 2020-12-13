@@ -1,7 +1,7 @@
-import { ArgDefinition } from "../../definition/ArgDefinition";
+import { ArgDef } from "../../definition/ArgDefinition";
 
 export interface ArgumentRawHelp {
-    readonly arg: ArgDefinition;
+    readonly arg: ArgDef;
     readonly typeNames: string[];
     readonly name: string;
     readonly localizedName: string;
