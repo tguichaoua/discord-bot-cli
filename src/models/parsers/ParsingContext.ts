@@ -1,12 +1,15 @@
+import { Message } from "discord.js";
 import { InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
 
 export class ParsingContext {
+    public readonly message: Message;
     private readonly args: readonly string[];
     private readonly from: number;
     private readonly to: number;
     private cur: number;
 
-    public constructor(args: readonly string[], from = 0, to?: number) {
+    public constructor(message: Message, args: readonly string[], from = 0, to?: number) {
+        this.message = message;
         this.args = args;
         this.from = Math.max(from, 0);
         this.to = Math.min(Math.max(to ?? args.length, from), args.length);
@@ -22,7 +25,7 @@ export class ParsingContext {
     }
 
     clone(): ParsingContext {
-        const context = new ParsingContext(this.args, this.from, this.to);
+        const context = new ParsingContext(this.message, this.args, this.from, this.to);
         context.cur = this.cur;
         return context;
     }

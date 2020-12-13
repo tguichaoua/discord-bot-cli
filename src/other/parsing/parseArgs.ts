@@ -11,7 +11,7 @@ export function parseArgs(
     inputArguments: readonly string[],
     argDefinitions: ReadonlyMap<string, ArgDef>,
 ) {
-    const context = new ParsingContext(inputArguments);
+    const context = new ParsingContext(message, inputArguments);
     const values = new Map<string, unknown>();
 
     for (const [name, def] of argDefinitions) {
