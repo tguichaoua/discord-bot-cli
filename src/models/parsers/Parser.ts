@@ -1,4 +1,4 @@
-import { ArgProvider } from "./ArgProvider";
+import { ParsingContext } from "./ParsingContext";
 import { InvalidValueParseError } from "./errors";
 
 export abstract class Parser<T> {
@@ -10,7 +10,7 @@ export abstract class Parser<T> {
         return "$typename$";
     }
 
-    protected abstract parse(provider: ArgProvider): T;
+    protected abstract parse(context: ParsingContext): T;
 
     public if(predicate: (o: T) => boolean, _else?: string): this {
         this.conditions.push({ predicate, _else });
@@ -18,8 +18,8 @@ export abstract class Parser<T> {
     }
 
     /** @internal */
-    public _parse(provider: ArgProvider): T {
-        const value = this.parse(provider);
+    public _parse(context: ParsingContext): T {
+        const value = this.parse(context);
         for (const cond of this.conditions) if (!cond.predicate(value)) throw new InvalidValueParseError(cond._else);
         return value;
     }

@@ -4,7 +4,7 @@ import { CommandResultError } from "../../models/errors/CommandResultError";
 import { FlagDef } from "../../models/definition/FlagDefinition";
 import { Logger } from "../../logger";
 import { Char } from "../../utils/char";
-import { ArgProvider, ParseError } from "../../models/parsers";
+import { ParsingContext, ParseError } from "../../models/parsers";
 
 /** @internal */
 export function parseFlags(
@@ -73,11 +73,11 @@ export function parseFlags(
         const cur = flagPreParse[i];
         const next = i < flagPreParse.length - 1 ? flagPreParse[i + 1] : undefined;
 
-        const provider = new ArgProvider(inputArguments, cur.position, next?.position);
+        const context = new ParsingContext(inputArguments, cur.position, next?.position);
 
         let value;
         try {
-            value = cur.def.parser ? cur.def.parser._parse(provider) : true;
+            value = cur.def.parser ? cur.def.parser._parse(context) : true;
         } catch (e) {
             if (e instanceof ParseError) {
                 // TODO
@@ -91,7 +91,7 @@ export function parseFlags(
         }
 
         flagValues.set(cur.name, value);
-        args.splice(cur.position, 1 + provider.consumed);
+        args.splice(cur.position, 1 + context.consumed);
     }
 
     return { flagValues, args };
@@ -141,8 +141,8 @@ export function parseFlags(
                 throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(def, ""));
             }
             try {
-                const provider = new ArgProvider([]); // TODO
-                const value = def.parser._parse(provider);
+                const context = new ParsingContext([]); // TODO
+                const value = def.parser._parse(context);
                 flagValues.set(name, value);
             } catch (e) {
                 if (e instanceof ParseError) {

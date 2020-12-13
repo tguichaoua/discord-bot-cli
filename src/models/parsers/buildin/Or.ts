@@ -1,6 +1,6 @@
 import { InvalidTypeParseError, ParseError } from "../errors";
 import { Parser, ParserType } from "../Parser";
-import { ArgProvider } from "../ArgProvider";
+import { ParsingContext } from "../ParsingContext";
 
 export class OrParser<T extends Parser<any>[]> extends Parser<ParserType<T[number]>> {
     private readonly parsers: T;
@@ -10,10 +10,10 @@ export class OrParser<T extends Parser<any>[]> extends Parser<ParserType<T[numbe
         this.parsers = parsers;
     }
 
-    protected parse(provider: ArgProvider): ParserType<T[number]> {
+    protected parse(context: ParsingContext): ParserType<T[number]> {
         for (const parser of this.parsers) {
             try {
-                return parser._parse(provider.clone());
+                return parser._parse(context.clone());
             } catch (e) {
                 if (!(e instanceof ParseError)) throw e;
             }

@@ -1,8 +1,8 @@
-import { ArgProvider } from "../ArgProvider";
+import { ParsingContext } from "../ParsingContext";
 import { Parser } from "../Parser";
 
 export class RestParser extends Parser<string[]> {
-    protected parse(provider: ArgProvider): string[] {
-        return provider.rest();
+    protected parse(context: ParsingContext): string[] {
+        return context.rest();
     }
 }

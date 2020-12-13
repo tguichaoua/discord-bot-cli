@@ -1,9 +1,9 @@
-import { ArgProvider } from "../ArgProvider";
+import { ParsingContext } from "../ParsingContext";
 import { Parser } from "../Parser";
 
 export class StringParser extends Parser<string> {
-    protected parse(provider: ArgProvider): string {
-        return provider.nextString();
+    protected parse(context: ParsingContext): string {
+        return context.nextString();
     }
 
     public length(minLength: number, _else?: string): this {
@@ -33,19 +33,19 @@ abstract class NumberParser extends Parser<number> {
 }
 
 export class IntegerParser extends NumberParser {
-    protected parse(provider: ArgProvider): number {
-        return provider.nextInteger();
+    protected parse(context: ParsingContext): number {
+        return context.nextInteger();
     }
 }
 
 export class FloatParser extends NumberParser {
-    protected parse(provider: ArgProvider): number {
-        return provider.nextFloat();
+    protected parse(context: ParsingContext): number {
+        return context.nextFloat();
     }
 }
 
 export class BooleanParser extends Parser<boolean> {
-    protected parse(provider: ArgProvider): boolean {
-        return provider.nextBoolean();
+    protected parse(context: ParsingContext): boolean {
+        return context.nextBoolean();
     }
 }

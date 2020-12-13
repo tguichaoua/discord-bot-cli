@@ -1,5 +1,5 @@
 export * from "./Parser";
-export * from "./ArgProvider";
+export * from "./ParsingContext";
 export * from "./buildin/primitives";
 export * from "./buildin/Or";
 export * from "./errors";

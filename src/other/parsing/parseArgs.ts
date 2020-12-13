@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { ArgDef } from "../../models/definition/ArgDefinition";
 import { CommandResultUtils } from "../../models/CommandResult";
 import { CommandResultError } from "../../models/errors/CommandResultError";
-import { ArgProvider, ParseError } from "../../models/parsers";
+import { ParsingContext, ParseError } from "../../models/parsers";
 import { Logger } from "../../logger";
 
 /** @internal */
@@ -11,17 +11,17 @@ export function parseArgs(
     inputArguments: readonly string[],
     argDefinitions: ReadonlyMap<string, ArgDef>,
 ) {
-    const provider = new ArgProvider(inputArguments);
+    const context = new ParsingContext(inputArguments);
     const values = new Map<string, unknown>();
 
     for (const [name, def] of argDefinitions) {
         let value: unknown;
-        if (provider.remaining === 0) {
+        if (context.remaining === 0) {
             if (!def.optional) throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
             value = def.defaultValue;
         } else {
             try {
-                value = def.parser._parse(provider);
+                value = def.parser._parse(context);
             } catch (e) {
                 if (e instanceof ParseError) {
                     // TODO
@@ -37,5 +37,5 @@ export function parseArgs(
         values.set(name, value);
     }
 
-    return { argValues: values, rest: provider.rest() };
+    return { argValues: values, rest: context.rest() };
 }

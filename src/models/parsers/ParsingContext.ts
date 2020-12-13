@@ -1,6 +1,6 @@
 import { InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
 
-export class ArgProvider {
+export class ParsingContext {
     private readonly args: readonly string[];
     private readonly from: number;
     private readonly to: number;
@@ -21,10 +21,10 @@ export class ArgProvider {
         return this.cur - this.from;
     }
 
-    clone(): ArgProvider {
-        const provider = new ArgProvider(this.args, this.from, this.to);
-        provider.cur = this.cur;
-        return provider;
+    clone(): ParsingContext {
+        const context = new ParsingContext(this.args, this.from, this.to);
+        context.cur = this.cur;
+        return context;
     }
 
     private next(): string {
