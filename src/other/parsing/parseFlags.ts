@@ -19,7 +19,6 @@ export function parseFlags(
     );
 
     const flagPreParse: { name: string; def: FlagDef; position: number }[] = [];
-    let offset = 0;
 
     function getFlagName(shortcut: Char): string {
         const name = shortcuts.get(shortcut);

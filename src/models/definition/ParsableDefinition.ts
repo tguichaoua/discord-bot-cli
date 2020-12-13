@@ -1,4 +1,3 @@
-import { ParsableTypeName } from "../ParsableType";
 import { Parser } from "../parsers/Parser";
 
 /** @category Definition */

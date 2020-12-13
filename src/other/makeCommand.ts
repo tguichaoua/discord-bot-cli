@@ -1,6 +1,5 @@
 import { CommandDefinition } from "../models/definition/CommandDefinition";
 import { CommandData } from "../models/CommandData";
-import { ParsableTypeName } from "../models/ParsableType";
 import { distinct } from "../utils/array";
 
 /**
@@ -36,10 +35,10 @@ export function makeCommand<T extends CommandDefinition>(name: string, definitio
     };
 }
 
-/** @internal */
-const parsableOrderer: ParsableTypeName[] = ["guild channel", "channel", "integer", "float", "string"];
+// /** @internal */
+// const parsableOrderer: ParsableTypeName[] = ["guild channel", "channel", "integer", "float", "string"];
 
-/** @internal */
-function sortParsableType(a: ParsableTypeName, b: ParsableTypeName): number {
-    return parsableOrderer.indexOf(a) - parsableOrderer.indexOf(b);
-}
+// /** @internal */
+// function sortParsableType(a: ParsableTypeName, b: ParsableTypeName): number {
+//     return parsableOrderer.indexOf(a) - parsableOrderer.indexOf(b);
+// }

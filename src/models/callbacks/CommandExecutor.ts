@@ -2,7 +2,6 @@ import { Message, DMChannel } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
 import { CommandDefinition, CommandSettings } from "../definition/CommandDefinition";
-import { ParsableTypeOf } from "../ParsableType";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 import { ParserType } from "../parsers";
