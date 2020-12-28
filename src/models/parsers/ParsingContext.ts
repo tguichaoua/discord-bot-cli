@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { clamp } from "../../utils/math";
 import { InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
 
 export class ParsingContext {
@@ -12,7 +13,7 @@ export class ParsingContext {
         this.message = message;
         this.args = args;
         this.from = Math.max(from, 0);
-        this.to = Math.min(Math.max(to ?? args.length, from), args.length);
+        this.to = to ? clamp(to, from, args.length) : args.length;
         this.cur = this.from;
     }
 
