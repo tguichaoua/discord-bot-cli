@@ -281,7 +281,7 @@ export class Command {
             Object.fromEntries(argValues),
             Object.fromEntries(flagValues) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
             {
-                rest: rest,
+                rest,
                 message,
                 guild: message.guild,
                 member: message.member,
