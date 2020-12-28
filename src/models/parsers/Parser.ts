@@ -3,8 +3,8 @@ import { InvalidValueParseError } from "./errors";
 
 export abstract class Parser<T> {
     private readonly conditions: {
-        predicate: (o: T) => boolean;
-        _else?: string;
+        readonly predicate: (o: T) => boolean;
+        readonly _else?: string;
     }[] = [];
 
     // public abstract get typeName(): string;
