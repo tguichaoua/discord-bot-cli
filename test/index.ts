@@ -1,6 +1,7 @@
 import { Client } from "discord.js";
 import { CommandSet, LogLevel, Logs } from "../src/index";
 import env from "./env.json";
+import fr from "./fr.json";
 
 Logs.auto(true).minLevel(LogLevel.DEBUG);
 
@@ -8,6 +9,7 @@ const commands = new CommandSet({
     prefix: env.prefix,
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
+    localization: fr,
 });
 
 commands.loadCommands("commands", true);
