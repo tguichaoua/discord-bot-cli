@@ -10,13 +10,14 @@ const cmd = makeCommand("help", {
             parser: new RestParser(),
             name: "command",
             description: "The name of the command.",
+            optional: true,
         },
     },
     examples: ["help", "help list", "help help", "help command subCommand", "help command subCommand1 subCommand2"],
 });
 
 cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
-    if (commandName.length === 0)
+    if (commandName === undefined || commandName.length === 0)
         await reply(
             message,
             template(options.localization.help.default, {
