@@ -2,7 +2,7 @@ import { FlagDef } from "../../definition/FlagDefinition";
 
 export interface FlagRawHelp {
     readonly flag: FlagDef;
-    readonly typeNames: string[];
+    readonly typeName: string;
     readonly name: string;
     readonly localizedName: string;
     readonly description: string;

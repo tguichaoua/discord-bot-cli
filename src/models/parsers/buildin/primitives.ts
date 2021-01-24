@@ -2,6 +2,10 @@ import { ParsingContext } from "../ParsingContext";
 import { Parser } from "../Parser";
 
 export class StringParser extends Parser<string> {
+    public get typeName() {
+        return "$string$";
+    }
+
     protected parse(context: ParsingContext): string {
         return context.nextString();
     }
@@ -33,18 +37,30 @@ abstract class NumberParser extends Parser<number> {
 }
 
 export class IntegerParser extends NumberParser {
+    public get typeName() {
+        return "$integer$";
+    }
+
     protected parse(context: ParsingContext): number {
         return context.nextInteger();
     }
 }
 
 export class FloatParser extends NumberParser {
+    public get typeName() {
+        return "$float$";
+    }
+
     protected parse(context: ParsingContext): number {
         return context.nextFloat();
     }
 }
 
 export class BooleanParser extends Parser<boolean> {
+    public get typeName() {
+        return "$boolean$";
+    }
+
     protected parse(context: ParsingContext): boolean {
         return context.nextBoolean();
     }

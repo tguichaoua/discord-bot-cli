@@ -2,7 +2,6 @@
 import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
-import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
 import { FlagDef } from "../models/definition/FlagDefinition";
 import { ArgDef } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
@@ -98,14 +97,9 @@ function argRawHelp(
     arg: ArgDef,
     name: string,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization,
+    typeNamesLocalization: Record<string, string>,
 ): ArgumentRawHelp {
     const argLocalization = (localization.args ?? {})[name] ?? {};
-    // const typeNames = isArray(arg.type)
-    //     ? arg.type.map(t => typeNamesLocalization[t])
-    //     : [typeNamesLocalization[arg.type]];
-    const typeNames = [""]; // TODO
-
     const localizedName = argLocalization.name ?? name;
     const description = argLocalization.description ?? arg.description ?? "";
     let usageString: string;
@@ -118,7 +112,7 @@ function argRawHelp(
 
     return {
         arg,
-        typeNames: typeNames,
+        typeName: arg.parser._getLocalizedTypeName(typeNamesLocalization),
         name,
         localizedName,
         description,
@@ -131,15 +125,9 @@ function flagRawHelp(
     flag: FlagDef,
     name: string,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization,
+    typeNamesLocalization: Record<string, string>,
 ): FlagRawHelp {
     const flagLocalization = (localization.flags ?? {})[name] ?? {};
-
-    // const typeNames = isArray(flag.type)
-    //     ? flag.type.map(t => typeNamesLocalization[t])
-    //     : [typeNamesLocalization[flag.type]];
-    const typeNames = [""]; // TODO
-
     const localizedName = flagLocalization.name ?? name;
     const description = flagLocalization.description ?? flag.description ?? "";
     const longUsageString = `--${name}`;
@@ -147,7 +135,8 @@ function flagRawHelp(
 
     return {
         flag,
-        typeNames,
+        typeName:
+            flag.parser?._getLocalizedTypeName(typeNamesLocalization) ?? typeNamesLocalization["boolean"] ?? "boolean",
         name,
         localizedName,
         description,
@@ -182,11 +171,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
 
     const args =
         rawHelp.args
-            .map(
-                a =>
-                    `\`${a.name}\` *${a.typeNames.join(" | ")}*` +
-                    (a.description !== "" ? `\n⮩  ${a.description}` : ""),
-            )
+            .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
             .join("\n") +
         (rawHelp.rest
             ? `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, {
@@ -200,7 +185,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
             f =>
                 `\`--${f.name}\`` +
                 (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") +
-                ` *${f.typeNames.join(" | ")}*` +
+                ` *${f.typeName}*` +
                 (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )
         .join("\n");

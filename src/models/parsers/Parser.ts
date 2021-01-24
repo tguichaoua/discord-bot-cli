@@ -7,11 +7,7 @@ export abstract class Parser<T> {
         readonly _else?: string;
     }[] = [];
 
-    // public abstract get typeName(): string;
-    // TODO: replace with abstract version.
-    public get typeName(): string {
-        return "$typename$";
-    }
+    public abstract get typeName(): string;
 
     protected abstract parse(context: ParsingContext): T;
 
@@ -25,6 +21,11 @@ export abstract class Parser<T> {
         const value = this.parse(context);
         for (const cond of this.conditions) if (!cond.predicate(value)) throw new InvalidValueParseError(cond._else);
         return value;
+    }
+
+    /** @internal */
+    public _getLocalizedTypeName(localization: Record<string, string>): string {
+        return this.typeName.replace(/\$(.*?)\$/g, (_, typename) => localization[typename] ?? typename);
     }
 }
 

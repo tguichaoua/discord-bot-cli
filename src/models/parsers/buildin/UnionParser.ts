@@ -11,6 +11,10 @@ export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[nu
         this.parsers = parsers;
     }
 
+    public get typeName() {
+        return this.parsers.map(p => p.typeName).join(" | ");
+    }
+
     protected parse(context: ParsingContext): ParserType<T[number]> {
         for (const parser of this.parsers) {
             try {
