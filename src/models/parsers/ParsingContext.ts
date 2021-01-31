@@ -32,7 +32,7 @@ export class ParsingContext {
     }
 
     private next(): string {
-        if (this.current === this.to) throw new NotEnoughArgParseError();
+        if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
         return this.args[this.current++];
     }
 
@@ -40,22 +40,27 @@ export class ParsingContext {
         return this.next();
     }
 
-    nextFloat(): number {
+    private nextNumber(typename: "float" | "integer"): { arg: string; n: number } {
         const s = this.next();
-        if (s === "") throw new InvalidTypeParseError();
+        if (s === "") throw new InvalidTypeParseError(typename, s);
         const n = new Number(s);
-        if (Number.isNaN(n)) throw new InvalidTypeParseError();
-        return n.valueOf();
+        if (Number.isNaN(n)) throw new InvalidTypeParseError(typename, s);
+        return { arg: s, n: n.valueOf() };
+    }
+
+    nextFloat(): number {
+        return this.nextNumber("float").n;
     }
 
     nextInteger(): number {
-        const n = this.nextFloat();
-        if (!Number.isInteger(n)) throw new InvalidTypeParseError();
+        const { arg, n } = this.nextNumber("integer");
+        if (!Number.isInteger(n)) throw new InvalidTypeParseError("integer", arg);
         return n;
     }
 
     nextBoolean(): boolean {
-        switch (this.next().toLowerCase()) {
+        const s = this.next();
+        switch (s.toLowerCase()) {
             case "1":
             case "true":
             case "yes":
@@ -65,7 +70,7 @@ export class ParsingContext {
             case "no":
                 return false;
             default:
-                throw new InvalidTypeParseError();
+                throw new InvalidTypeParseError("boolean", s);
         }
     }
 
