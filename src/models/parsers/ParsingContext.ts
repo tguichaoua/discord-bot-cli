@@ -7,33 +7,33 @@ export class ParsingContext {
     private readonly args: readonly string[];
     private readonly from: number;
     private readonly to: number;
-    private cur: number;
+    private current: number;
 
     public constructor(message: Message, args: readonly string[], from = 0, to?: number) {
         this.message = message;
         this.args = args;
         this.from = Math.max(from, 0);
         this.to = to ? clamp(to, from, args.length) : args.length;
-        this.cur = this.from;
+        this.current = this.from;
     }
 
     get remaining(): number {
-        return this.to - this.cur;
+        return this.to - this.current;
     }
 
     get consumed(): number {
-        return this.cur - this.from;
+        return this.current - this.from;
     }
 
     clone(): ParsingContext {
         const context = new ParsingContext(this.message, this.args, this.from, this.to);
-        context.cur = this.cur;
+        context.current = this.current;
         return context;
     }
 
     private next(): string {
-        if (this.cur === this.to) throw new NotEnoughArgParseError();
-        return this.args[this.cur++];
+        if (this.current === this.to) throw new NotEnoughArgParseError();
+        return this.args[this.current++];
     }
 
     nextString(): string {
@@ -70,8 +70,8 @@ export class ParsingContext {
     }
 
     rest(): string[] {
-        const rest = this.args.slice(this.cur, this.to);
-        this.cur = this.to;
+        const rest = this.args.slice(this.current, this.to);
+        this.current = this.to;
         return rest;
     }
 }
