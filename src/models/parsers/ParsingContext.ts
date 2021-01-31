@@ -63,7 +63,7 @@ export class ParsingContext {
             case "0":
             case "false":
             case "no":
-                return true;
+                return false;
             default:
                 throw new InvalidTypeParseError();
         }
