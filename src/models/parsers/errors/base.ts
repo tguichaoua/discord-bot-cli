@@ -5,6 +5,13 @@ export class ParseError extends Error {
     }
 }
 
+export class UnhandledErrorParseError extends ParseError {
+    constructor(public readonly error: Error) {
+        super(error.message);
+        this.name = "UnhandledErrorParseError";
+    }
+}
+
 export class NotEnoughArgParseError extends ParseError {
     constructor(public readonly expected: number, public readonly got: number) {
         super(`not enough arguments: expected ${expected}, got ${got}.`);
