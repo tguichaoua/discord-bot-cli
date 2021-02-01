@@ -7,12 +7,8 @@ export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[nu
     private readonly parsers: T;
 
     constructor(...parsers: T) {
-        super();
+        super(parsers.map(p => p.typeName).join(" | "), Math.min(...parsers.map(p => p.minimalInputRequired)));
         this.parsers = parsers;
-    }
-
-    public get typeName() {
-        return this.parsers.map(p => p.typeName).join(" | ");
     }
 
     protected parse(context: ParsingContext): ParserType<T[number]> {

@@ -4,8 +4,8 @@ import { InvalidMaxValueParseError, InvalidMinValueParseError, InvalidRangeParse
 import { InvalidStringLengthParseError, InvalidStringValueParseError } from "../errors/string";
 
 export class StringParser extends Parser<string> {
-    public get typeName() {
-        return "$string$";
+    constructor() {
+        super("$string$", 1);
     }
 
     protected parse(context: ParsingContext): string {
@@ -51,8 +51,8 @@ abstract class NumberParser extends Parser<number> {
 }
 
 export class IntegerParser extends NumberParser {
-    public get typeName() {
-        return "$integer$";
+    constructor() {
+        super("$integer$", 1);
     }
 
     protected parse(context: ParsingContext): number {
@@ -61,8 +61,8 @@ export class IntegerParser extends NumberParser {
 }
 
 export class FloatParser extends NumberParser {
-    public get typeName() {
-        return "$float$";
+    constructor() {
+        super("$float$", 1);
     }
 
     protected parse(context: ParsingContext): number {
@@ -71,8 +71,8 @@ export class FloatParser extends NumberParser {
 }
 
 export class BooleanParser extends Parser<boolean> {
-    public get typeName() {
-        return "$boolean$";
+    constructor() {
+        super("$boolean$", 1);
     }
 
     protected parse(context: ParsingContext): boolean {

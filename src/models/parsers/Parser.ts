@@ -1,5 +1,5 @@
 import { ParsingContext } from "./ParsingContext";
-import { InvalidValueParseError } from "./errors";
+import { InvalidValueParseError, NotEnoughArgParseError } from "./errors";
 
 type OnFail<T> = (value: T) => InvalidValueParseError;
 
@@ -9,7 +9,7 @@ export abstract class Parser<T> {
         readonly onFail?: OnFail<T>;
     }[] = [];
 
-    public abstract get typeName(): string;
+    constructor(public readonly typeName: string, public readonly minimalInputRequired: number) {}
 
     protected abstract parse(context: ParsingContext): T;
 
@@ -20,6 +20,9 @@ export abstract class Parser<T> {
 
     /** @internal */
     public _parse(context: ParsingContext): T {
+        if (context.remaining < this.minimalInputRequired)
+            throw new NotEnoughArgParseError(this.minimalInputRequired, context.remaining);
+
         const value = this.parse(context);
         for (const cond of this.conditions)
             if (!cond.predicate(value)) throw cond.onFail ? cond.onFail(value) : new InvalidValueParseError();
