@@ -7,8 +7,6 @@ import { ArgDef } from "./definition/ArgDefinition";
 import { FlagDef } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
-import { parseFlags } from "../other/parsing/parseFlags";
-import { parseArgs } from "../other/parsing/parseArgs";
 import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
 import { CommandResultError } from "./errors/CommandResultError";
@@ -21,6 +19,9 @@ import { CommandLoadError } from "./errors/CommandLoadError";
 import { defaultHelp } from "../other/HelpUtils";
 import { CommandExample } from "./CommandExample";
 import { isArray } from "../utils/array";
+import { ParsingContext } from "./parsers/ParsingContext";
+import { ParseError } from "./parsers";
+import { Logger } from "../logger";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -272,8 +273,8 @@ export class Command {
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const { flagValues, args } = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
-        const { argValues, rest } = parseArgs(message, args, this.args);
+        const { flagValues, args } = this.parseFlags(message, inputArguments);
+        const { argValues, rest } = this.parseArgs(message, args);
 
         if (throttler) throttler.increment(message);
 
@@ -291,5 +292,127 @@ export class Command {
                 command: this,
             },
         );
+    }
+
+    /** @internal */
+    private parseFlags(
+        message: Message,
+        inputArguments: readonly string[],
+    ): { flagValues: Map<string, unknown>; args: string[] } {
+        const args = [...inputArguments];
+        const flagValues = new Map<string, unknown>(
+            Array.from(this.flags.entries()).map(([k, v]) => [k, v.parser === undefined ? false : v.defaultValue]),
+        );
+
+        const flagPreParse: { name: string; def: FlagDef; position: number }[] = [];
+
+        const getFlagName = (shortcut: Char): string => {
+            const name = this._flagsShortcuts.get(shortcut);
+            if (name) return name;
+            // TODO: raise error ?
+            Logger.debug("TODO: unknow shortcut:", shortcut);
+            throw new CommandResultError(CommandResultUtils.failParseFlagUnknown(shortcut));
+        };
+
+        const getFlagDef = (name: string): FlagDef => {
+            const def = this.flags.get(name);
+            if (def) return def;
+            // TODO: raise error ?
+            Logger.debug("TODO: unknow flag :", name);
+            throw new CommandResultError(CommandResultUtils.failParseFlagUnknown(name));
+        };
+
+        for (let i = 0; i < args.length; i++) {
+            const a = args[i];
+
+            if (a.startsWith("-")) {
+                let name: string;
+                if (a.startsWith("--")) {
+                    name = a.substr(2);
+                } else {
+                    const shortNames = a.substring(1).split("") as Char[];
+                    const lastShort = shortNames.pop() as Char;
+
+                    shortNames.forEach(sn => {
+                        const def = getFlagDef(getFlagName(sn));
+
+                        if (def.parser) {
+                            // TODO: raise error ?
+                            Logger.debug("TODO: invalid flag value:", name);
+                            throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(def, ""));
+                        }
+
+                        flagValues.set(name, true);
+                    });
+
+                    name = getFlagName(lastShort);
+                }
+
+                const def = getFlagDef(name);
+
+                flagPreParse.push({ name, def, position: i });
+            }
+        }
+
+        for (let i = 0; i < flagPreParse.length; i++) {
+            const cur = flagPreParse[i];
+            const next = i < flagPreParse.length - 1 ? flagPreParse[i + 1] : undefined;
+
+            const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
+
+            let value;
+            try {
+                value = cur.def.parser ? cur.def.parser._parse(context) : true;
+            } catch (e) {
+                if (e instanceof ParseError) {
+                    // TODO
+                    Logger.debug("TODO: catch parse error:", e);
+                    throw e;
+                } else {
+                    // TODO
+                    Logger.debug("TODO: catch error while parsing:", e);
+                    throw e;
+                }
+            }
+
+            flagValues.set(cur.name, value);
+            args.splice(cur.position, 1 + context.consumed);
+        }
+
+        return { flagValues, args };
+    }
+
+    /** @internal */
+    private parseArgs(
+        message: Message,
+        inputArguments: readonly string[],
+    ): { argValues: Map<string, unknown>; rest: string[] } {
+        const context = new ParsingContext(message, inputArguments);
+        const values = new Map<string, unknown>();
+
+        for (const [name, def] of this.args) {
+            let value: unknown;
+            if (context.remaining === 0) {
+                if (!def.optional) throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
+                value = def.defaultValue;
+            } else {
+                try {
+                    value = def.parser._parse(context);
+                } catch (e) {
+                    if (e instanceof ParseError) {
+                        // TODO
+                        Logger.debug("TODO: catch parse error:", e);
+                        throw e;
+                    } else {
+                        // TODO
+                        Logger.debug("TODO: catch error while parsing:", e);
+                        throw e;
+                    }
+                }
+            }
+            values.set(name, value);
+        }
+
+        return { argValues: values, rest: context.rest() };
     }
 }
