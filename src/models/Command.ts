@@ -20,7 +20,7 @@ import { defaultHelp } from "../other/HelpUtils";
 import { CommandExample } from "./CommandExample";
 import { isArray } from "../utils/array";
 import { ParsingContext } from "./parsers/ParsingContext";
-import { ParseError } from "./parsers";
+import { ParseError, UnhandledErrorParseError } from "./parsers";
 import { Logger } from "../logger";
 
 export class Command {
@@ -273,14 +273,13 @@ export class Command {
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const { flagValues, args } = this.parseFlags(message, inputArguments);
-        const { argValues, rest } = this.parseArgs(message, args);
+        const { flags, args, rest } = this.parse(message, inputArguments);
 
         if (throttler) throttler.increment(message);
 
         await this._executor(
-            Object.fromEntries(argValues),
-            Object.fromEntries(flagValues) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+            Object.fromEntries(args),
+            Object.fromEntries(flags) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
             {
                 rest,
                 message,
@@ -295,36 +294,37 @@ export class Command {
     }
 
     /** @internal */
-    private parseFlags(
+    private parse(
         message: Message,
         inputArguments: readonly string[],
-    ): { flagValues: Map<string, unknown>; args: string[] } {
-        const args = [...inputArguments];
-        const flagValues = new Map<string, unknown>(
+    ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
+        const flags = new Map<string, unknown>(
             Array.from(this.flags.entries()).map(([k, v]) => [k, v.parser === undefined ? false : v.defaultValue]),
         );
+        const args = new Map<string, unknown>();
+        const rest = [...inputArguments];
+        const absolutePositions = [...Array(inputArguments.length).keys()];
 
-        const flagPreParse: { name: string; def: FlagDef; position: number }[] = [];
+        const flagDatas: { name: string; def: FlagDef; position: number }[] = [];
 
-        const getFlagName = (shortcut: Char): string => {
+        const getFlagName = (shortcut: Char, position: number): string => {
             const name = this._flagsShortcuts.get(shortcut);
             if (name) return name;
             // TODO: raise error ?
             Logger.debug("TODO: unknow shortcut:", shortcut);
-            throw new CommandResultError(CommandResultUtils.failParseFlagUnknown(shortcut));
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, shortcut));
         };
 
-        const getFlagDef = (name: string): FlagDef => {
+        const getFlagDef = (name: string, position: number): FlagDef => {
             const def = this.flags.get(name);
             if (def) return def;
             // TODO: raise error ?
             Logger.debug("TODO: unknow flag :", name);
-            throw new CommandResultError(CommandResultUtils.failParseFlagUnknown(name));
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, name));
         };
 
-        for (let i = 0; i < args.length; i++) {
-            const a = args[i];
-
+        for (let i = 0; i < inputArguments.length; i++) {
+            const a = inputArguments[i];
             if (a.startsWith("-")) {
                 let name: string;
                 if (a.startsWith("--")) {
@@ -332,87 +332,186 @@ export class Command {
                 } else {
                     const shortNames = a.substring(1).split("") as Char[];
                     const lastShort = shortNames.pop() as Char;
-
                     shortNames.forEach(sn => {
-                        const def = getFlagDef(getFlagName(sn));
-
+                        const def = getFlagDef(getFlagName(sn, i), i);
                         if (def.parser) {
                             // TODO: raise error ?
                             Logger.debug("TODO: invalid flag value:", name);
-                            throw new CommandResultError(CommandResultUtils.failParseFlagInvalid(def, ""));
+                            throw new CommandResultError(CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, def));
                         }
-
-                        flagValues.set(name, true);
+                        flags.set(name, true);
                     });
-
-                    name = getFlagName(lastShort);
+                    name = getFlagName(lastShort, i);
                 }
-
-                const def = getFlagDef(name);
-
-                flagPreParse.push({ name, def, position: i });
+                flagDatas.push({ name, def: getFlagDef(name, i), position: i });
             }
         }
 
-        for (let i = 0; i < flagPreParse.length; i++) {
-            const cur = flagPreParse[i];
-            const next = i < flagPreParse.length - 1 ? flagPreParse[i + 1] : undefined;
-
+        for (let i = 0; i < flagDatas.length; i++) {
+            const cur = flagDatas[i];
+            const next = flagDatas[i + 1];
             const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
 
-            let value;
-            try {
-                value = cur.def.parser ? cur.def.parser._parse(context) : true;
-            } catch (e) {
-                if (e instanceof ParseError) {
-                    // TODO
-                    Logger.debug("TODO: catch parse error:", e);
-                    throw e;
-                } else {
-                    // TODO
-                    Logger.debug("TODO: catch error while parsing:", e);
-                    throw e;
+            let value: unknown;
+            if (cur.def.parser) {
+                try {
+                    value = cur.def.parser._parse(context);
+                } catch (e) {
+                    const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+                    throw new CommandResultError(CommandResultUtils.parseError(inputArguments, cur.position, error));
                 }
+            } else {
+                value = true;
             }
 
-            flagValues.set(cur.name, value);
-            args.splice(cur.position, 1 + context.consumed);
+            flags.set(cur.name, value);
+            rest.splice(cur.position, 1 + context.consumed);
+            absolutePositions.splice(cur.position, 1 + context.consumed);
         }
 
-        return { flagValues, args };
-    }
-
-    /** @internal */
-    private parseArgs(
-        message: Message,
-        inputArguments: readonly string[],
-    ): { argValues: Map<string, unknown>; rest: string[] } {
-        const context = new ParsingContext(message, inputArguments);
-        const values = new Map<string, unknown>();
-
+        const context = new ParsingContext(message, rest);
+        let current: number;
         for (const [name, def] of this.args) {
             let value: unknown;
-            if (context.remaining === 0) {
-                if (!def.optional) throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
+            current = context.consumed;
+
+            if (context.remaining === 0 && def.optional) {
                 value = def.defaultValue;
             } else {
                 try {
                     value = def.parser._parse(context);
                 } catch (e) {
-                    if (e instanceof ParseError) {
-                        // TODO
-                        Logger.debug("TODO: catch parse error:", e);
-                        throw e;
-                    } else {
-                        // TODO
-                        Logger.debug("TODO: catch error while parsing:", e);
-                        throw e;
-                    }
+                    const position = absolutePositions[current];
+                    const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+                    throw new CommandResultError(CommandResultUtils.parseError(inputArguments, position, error));
                 }
             }
-            values.set(name, value);
+
+            args.set(name, value);
         }
 
-        return { argValues: values, rest: context.rest() };
+        return { flags, args, rest: context.rest() };
     }
+
+    // /** @internal */
+    // private parseFlags(
+    //     message: Message,
+    //     inputArguments: readonly string[],
+    // ): { flagValues: Map<string, unknown>; args: string[] } {
+    //     const args = [...inputArguments];
+    //     const flagValues = new Map<string, unknown>(
+    //         Array.from(this.flags.entries()).map(([k, v]) => [k, v.parser === undefined ? false : v.defaultValue]),
+    //     );
+
+    //     const flagPreParse: { name: string; def: FlagDef; position: number }[] = [];
+
+    //     const getFlagName = (shortcut: Char): string => {
+    //         const name = this._flagsShortcuts.get(shortcut);
+    //         if (name) return name;
+    //         // TODO: raise error ?
+    //         Logger.debug("TODO: unknow shortcut:", shortcut);
+    //         throw new CommandResultError(CommandResultUtils.unknownFlag(shortcut));
+    //     };
+
+    //     const getFlagDef = (name: string): FlagDef => {
+    //         const def = this.flags.get(name);
+    //         if (def) return def;
+    //         // TODO: raise error ?
+    //         Logger.debug("TODO: unknow flag :", name);
+    //         throw new CommandResultError(CommandResultUtils.unknownFlag(name));
+    //     };
+
+    //     for (let i = 0; i < args.length; i++) {
+    //         const a = args[i];
+
+    //         if (a.startsWith("-")) {
+    //             let name: string;
+    //             if (a.startsWith("--")) {
+    //                 name = a.substr(2);
+    //             } else {
+    //                 const shortNames = a.substring(1).split("") as Char[];
+    //                 const lastShort = shortNames.pop() as Char;
+
+    //                 shortNames.forEach(sn => {
+    //                     const def = getFlagDef(getFlagName(sn));
+
+    //                     if (def.parser) {
+    //                         // TODO: raise error ?
+    //                         Logger.debug("TODO: invalid flag value:", name);
+    //                         throw new CommandResultError(CommandResultUtils.wrongFlagUsage(sn, def));
+    //                     }
+
+    //                     flagValues.set(name, true);
+    //                 });
+
+    //                 name = getFlagName(lastShort);
+    //             }
+
+    //             const def = getFlagDef(name);
+
+    //             flagPreParse.push({ name, def, position: i });
+    //         }
+    //     }
+
+    //     for (let i = 0; i < flagPreParse.length; i++) {
+    //         const cur = flagPreParse[i];
+    //         const next = i < flagPreParse.length - 1 ? flagPreParse[i + 1] : undefined;
+
+    //         const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
+
+    //         let value;
+    //         try {
+    //             value = cur.def.parser ? cur.def.parser._parse(context) : true;
+    //         } catch (e) {
+    //             if (e instanceof ParseError) {
+    //                 // TODO
+    //                 Logger.debug("TODO: catch parse error:", e);
+    //                 throw e;
+    //             } else {
+    //                 // TODO
+    //                 Logger.debug("TODO: catch error while parsing:", e);
+    //                 throw e;
+    //             }
+    //         }
+
+    //         flagValues.set(cur.name, value);
+    //         args.splice(cur.position, 1 + context.consumed);
+    //     }
+
+    //     return { flagValues, args };
+    // }
+
+    // /** @internal */
+    // private parseArgs(
+    //     message: Message,
+    //     inputArguments: readonly string[],
+    // ): { argValues: Map<string, unknown>; rest: string[] } {
+    //     const context = new ParsingContext(message, inputArguments);
+    //     const values = new Map<string, unknown>();
+
+    //     for (const [name, def] of this.args) {
+    //         let value: unknown;
+    //         if (context.remaining === 0) {
+    //             if (!def.optional) throw new Error("missing arg"); // TODO //throw new CommandResultError(CommandResultUtils.failParseArgMissing(def));
+    //             value = def.defaultValue;
+    //         } else {
+    //             try {
+    //                 value = def.parser._parse(context);
+    //             } catch (e) {
+    //                 if (e instanceof ParseError) {
+    //                     // TODO
+    //                     Logger.debug("TODO: catch parse error:", e);
+    //                     throw e;
+    //                 } else {
+    //                     // TODO
+    //                     Logger.debug("TODO: catch error while parsing:", e);
+    //                     throw e;
+    //                 }
+    //             }
+    //         }
+    //         values.set(name, value);
+    //     }
+
+    //     return { argValues: values, rest: context.rest() };
+    // }
 }
