@@ -1,9 +1,8 @@
-import { InvalidTypeParseError, ParseError } from "../errors";
+import { InvalidUnionTypeParseError, ParseError } from "../errors";
 import { Parser, ParserType } from "../Parser";
 import { ParsingContext } from "../ParsingContext";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[number]>> {
+export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extends Parser<ParserType<T[number]>> {
     private readonly parsers: T;
 
     constructor(...parsers: T) {
@@ -14,13 +13,11 @@ export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[nu
     protected parse(context: ParsingContext): ParserType<T[number]> {
         for (const parser of this.parsers) {
             try {
-                return parser._parse(context.clone());
+                return parser._parse(context.clone()) as ParserType<T[number]>;
             } catch (e) {
                 if (!(e instanceof ParseError)) throw e;
             }
         }
-        throw new Error("Union Parser Error");
-        // TODO
-        throw new InvalidTypeParseError("", "");
+        throw new InvalidUnionTypeParseError(this);
     }
 }

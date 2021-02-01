@@ -1,3 +1,5 @@
+import { UnionParser } from "../buildin/UnionParser";
+
 export class ParseError extends Error {
     constructor(message?: string) {
         super(message);
@@ -24,6 +26,13 @@ export class InvalidTypeParseError extends ParseError {
     constructor(public readonly expectedType: string, public readonly valueGot: string) {
         super(`the value cannot be parsed: expected ${expectedType}, got "${valueGot}"`);
         this.name = "InvalidTypeParseError";
+    }
+}
+
+export class InvalidUnionTypeParseError extends ParseError {
+    constructor(public readonly unionParser: UnionParser) {
+        super(`cannot parse the following union: ` + unionParser.typeName);
+        this.name = "InvalidUnionTypeParseError";
     }
 }
 
