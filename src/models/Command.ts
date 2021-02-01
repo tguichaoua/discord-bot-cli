@@ -7,7 +7,6 @@ import { ArgDef } from "./definition/ArgDefinition";
 import { FlagDef } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
-import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
 import { CommandResultError } from "./errors/CommandResultError";
 import { ReadonlyCommandCollection, CommandCollection } from "./CommandCollection";
@@ -51,8 +50,6 @@ export class Command {
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
         public readonly args: ReadonlyMap<string, ArgDef>,
-        /** A [[RestDefinition]] if this command use the rest argument, `undefined` otherwise. */
-        public readonly rest: Readonly<RestDefinition> | undefined,
         /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
         public readonly flags: ReadonlyMap<string, FlagDef>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
@@ -117,7 +114,6 @@ export class Command {
             commandSet,
             subs,
             new Map(data.def.args ? Object.entries(data.def.args) : []),
-            data.def.rest,
             new Map(data.def.flags ? Object.entries(data.def.flags) : []),
             new Map(
                 data.def.flags

@@ -7,7 +7,6 @@ import { ArgDef } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
-import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { CommandSetOptions } from "../models/CommandSetOptions";
 import { template } from "../utils/template";
@@ -63,18 +62,6 @@ export function commandRawHelp(command: Command, localization: Localization): Co
 
     const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localization));
 
-    let rest: RestRawHelp | undefined = undefined;
-    if (command.rest) {
-        const name = commandLocalization?.rest?.name ?? command.rest.name;
-        const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
-        const usageString = `[...${name}]`;
-        // const typeNames = isArray(command.rest.type)
-        //     ? command.rest.type.map(t => localization.typeNames[t])
-        //     : [localization.typeNames[command.rest.type]];
-        const typeNames = [""]; // TODO
-        rest = { name, description, usageString, typeNames };
-    }
-
     const tags: string[] = [];
     if (command.devOnly) tags.push(localization.help.tags.devOnly);
     if (command.guildOnly) tags.push(localization.help.tags.guildOnly);
@@ -87,7 +74,6 @@ export function commandRawHelp(command: Command, localization: Localization): Co
         args,
         flags,
         subs,
-        rest,
         tags,
     };
 }
@@ -160,8 +146,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
         const usageString =
             prefix +
             rawHelp.fullName +
-            (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) +
-            (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
+            (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" "));
         embed.addField(
             localization.help.usage,
             `**\`${usageString}\`**` + (rawHelp.args.length !== 0 ? `\n\n${localization.help.argUsageHint}` : ""),
@@ -169,15 +154,9 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
         );
     }
 
-    const args =
-        rawHelp.args
-            .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
-            .join("\n") +
-        (rawHelp.rest
-            ? `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, {
-                  type: rawHelp.rest.typeNames.join(" | "),
-              })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
-            : "");
+    const args = rawHelp.args
+        .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
+        .join("\n");
     if (args !== "") embed.addField(localization.help.arguments, args, true);
 
     const flags = rawHelp.flags
