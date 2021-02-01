@@ -1,11 +1,10 @@
-import { makeCommand } from "../../src/index";
-import { IntegerParser, StringParser, UnionParser } from "../../src/models/parsers";
+import { makeCommand, StringParser, UnionParser, IntegerParser } from "../../src";
 
 const cmd = makeCommand("ping", {
     description: "DESCRIPTION",
     args: {
         name: {
-            parser: new StringParser().length(5, "name is too short, require at least 5 characters."),
+            parser: new StringParser().length(5),
         },
         something: {
             parser: new UnionParser(new IntegerParser(), new StringParser()),
