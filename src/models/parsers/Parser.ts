@@ -1,20 +1,21 @@
 import { ParsingContext } from "./ParsingContext";
 import { InvalidValueParseError, NotEnoughArgParseError } from "./errors";
+import { Predicate } from "../../utils/types";
 
 type OnFail<T> = (value: T) => InvalidValueParseError;
 
 export abstract class Parser<T> {
     private readonly conditions: {
-        readonly predicate: (value: T) => boolean;
-        readonly onFail?: OnFail<T>;
+        readonly predicate: Predicate<unknown>;
+        readonly onFail?: OnFail<unknown>;
     }[] = [];
 
     constructor(public readonly typeName: string, public readonly minimalInputRequired: number) {}
 
     protected abstract parse(context: ParsingContext): T;
 
-    public if(predicate: (value: T) => boolean, onFail?: OnFail<T>): this {
-        this.conditions.push({ predicate, onFail });
+    public if(predicate: Predicate<T>, onFail?: OnFail<T>): this {
+        this.conditions.push({ predicate: predicate as Predicate<unknown>, onFail: onFail as OnFail<unknown> });
         return this;
     }
 
@@ -35,4 +36,4 @@ export abstract class Parser<T> {
     }
 }
 
-export type ParserType<P extends Parser<any>> = P extends Parser<infer T> ? T : never;
+export type ParserType<P extends Parser<unknown>> = P extends Parser<infer T> ? T : never;
