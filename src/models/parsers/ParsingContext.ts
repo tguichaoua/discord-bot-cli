@@ -8,6 +8,7 @@ export class ParsingContext {
     private readonly from: number;
     private readonly to: number;
     private current: number;
+    private states: number[] = [];
 
     public constructor(message: Message, args: readonly string[], from = 0, to?: number) {
         this.message = message;
@@ -23,6 +24,18 @@ export class ParsingContext {
 
     get consumed(): number {
         return this.current - this.from;
+    }
+
+    saveState(): void {
+        this.states.push(this.current);
+    }
+
+    restoreState(): void {
+        if (this.states.length) this.current = this.states[this.states.length - 1];
+    }
+
+    removeState(): void {
+        this.states.pop();
     }
 
     clone(): ParsingContext {
