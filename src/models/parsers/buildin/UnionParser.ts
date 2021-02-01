@@ -11,9 +11,13 @@ export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extend
     }
 
     protected parse(context: ParsingContext): ParserType<T[number]> {
+        context.saveState();
         for (const parser of this.parsers) {
             try {
-                return parser._parse(context.clone()) as ParserType<T[number]>;
+                context.restoreState();
+                const value = parser._parse(context) as ParserType<T[number]>;
+                context.removeState();
+                return value;
             } catch (e) {
                 if (!(e instanceof ParseError)) throw e;
             }
