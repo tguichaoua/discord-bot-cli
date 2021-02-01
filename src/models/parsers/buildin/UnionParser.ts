@@ -23,6 +23,8 @@ export class UnionParser<T extends Parser<any>[]> extends Parser<ParserType<T[nu
                 if (!(e instanceof ParseError)) throw e;
             }
         }
-        throw new InvalidTypeParseError();
+        throw new Error("Union Parser Error");
+        // TODO
+        throw new InvalidTypeParseError("", "");
     }
 }
