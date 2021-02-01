@@ -17,12 +17,8 @@ export class ColorParser extends Parser<Color> {
         const b = context.nextInteger();
         if (b < 0 || b > 255) throw new InvalidValueParseError();
 
-        return { r, g, b };
+        return [r, g, b];
     }
 }
 
-interface Color {
-    r: number;
-    g: number;
-    b: number;
-}
+export type Color = [number, number, number];

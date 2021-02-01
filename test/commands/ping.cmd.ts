@@ -1,4 +1,6 @@
+import { MessageEmbed } from "discord.js";
 import { makeCommand, StringParser, UnionParser, IntegerParser } from "../../src";
+import { ColorParser } from "../parsers/Color";
 
 const cmd = makeCommand("ping", {
     description: "DESCRIPTION",
@@ -9,6 +11,9 @@ const cmd = makeCommand("ping", {
         something: {
             parser: new UnionParser(new IntegerParser(), new StringParser()),
         },
+        color: {
+            parser: new ColorParser(),
+        },
     },
     flags: {
         b: {
@@ -18,10 +23,12 @@ const cmd = makeCommand("ping", {
     },
 });
 
-cmd.executor = async ({ name, something }, { b }, { message }) => {
-    await message.reply(
-        ":ping_pong: Pong !\n" + `name = ${name}\nsomething = (${typeof something}) ${something}\nb = ${b}`,
-    );
+cmd.executor = async ({ name, something, color }, { b }, { message }) => {
+    const m = new MessageEmbed()
+        .setColor(color)
+        .setTitle(":ping_pong: Pong !")
+        .setDescription(`name = ${name}\nsomething = (${typeof something}) ${something}\ncolor=${color}\nb = ${b}`);
+    await message.reply(m);
 };
 
 export default cmd;
