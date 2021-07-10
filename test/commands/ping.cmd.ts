@@ -1,15 +1,15 @@
 import { MessageEmbed } from "discord.js";
-import { makeCommand, StringParser, UnionParser, IntegerParser } from "../../src";
+import { makeCommand, Parsers } from "../../src";
 import { ColorParser } from "../parsers/Color";
 
 const cmd = makeCommand("ping", {
     description: "DESCRIPTION",
     args: {
         name: {
-            parser: new StringParser().length(5),
+            parser: Parsers.string.if(s => s.length < 5),
         },
         something: {
-            parser: new UnionParser(new IntegerParser(), new StringParser()),
+            parser: Parsers.union(Parsers.integer, Parsers.string),
         },
         color: {
             parser: new ColorParser(),

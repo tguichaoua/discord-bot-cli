@@ -1,8 +1,7 @@
 import { makeCommand } from "../other/makeCommand";
 import { Command } from "..";
 import { Logger } from "../logger";
-import { StringParser } from "../models/parsers";
-import { RestParser } from "../models/parsers/buildin/RestParser";
+import { Parsers } from "../models/parsers";
 
 const cmd = makeCommand("cmd", {
     devOnly: true,
@@ -13,7 +12,7 @@ const cmd = makeCommand("cmd", {
             description: "Reload a command",
             args: {
                 command: {
-                    parser: new StringParser(),
+                    parser: Parsers.string,
                     description: "Name of the command to reload.",
                 },
             },
@@ -21,7 +20,7 @@ const cmd = makeCommand("cmd", {
         throttling: {
             aliases: ["t"],
             description: "Get data about command throttler",
-            args: { commandName: { parser: new RestParser() } },
+            args: { commandName: { parser: Parsers.rest } },
             flags: {
                 reset: {
                     shortcut: "r",
@@ -32,7 +31,7 @@ const cmd = makeCommand("cmd", {
                     description: "Reset the trottler of the target command and its sub-commands",
                 },
                 scope: {
-                    parser: new StringParser(),
+                    parser: Parsers.string,
                     shortcut: "s",
                     description: "Perform action on specific scope (comma separated list).",
                 },

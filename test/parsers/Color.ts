@@ -1,13 +1,13 @@
 import { ParsingContext } from "../../src/models/parsers/ParsingContext";
 import { InvalidValueParseError } from "../../src/models/parsers/errors/base";
-import { Parser } from "../../src/models/parsers/Parser";
+import { CustomParser } from "../../src/models/parsers/Parser";
 
-export class ColorParser extends Parser<Color> {
+export class ColorParser extends CustomParser<Color> {
     constructor() {
         super("$color$", 3);
     }
 
-    protected parse(context: ParsingContext): Color {
+    public parse(context: ParsingContext): Color {
         const r = context.nextInteger();
         if (r < 0 || r > 255) throw new InvalidValueParseError();
 

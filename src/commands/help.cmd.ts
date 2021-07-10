@@ -1,13 +1,13 @@
 import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
 import { reply } from "../utils/reply";
-import { RestParser } from "../models/parsers/buildin/RestParser";
+import { Parsers } from "../models/parsers";
 
 const cmd = makeCommand("help", {
     description: "Provide help about a command.",
     args: {
         commandName: {
-            parser: new RestParser(),
+            parser: Parsers.rest,
             name: "command",
             description: "The name of the command.",
         },
