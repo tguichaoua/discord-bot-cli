@@ -3,7 +3,7 @@ import { CommandSet } from "./CommandSet";
 import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
-import { ArgDef } from "./definition/ArgDefinition";
+import { ArgDefinition } from "./definition/ArgDefinition";
 import { FlagDef } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
@@ -48,7 +48,7 @@ export class Command {
         /** A [[ReadonlyCommandCollection]] of this command's sub-commands. */
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
-        public readonly args: ReadonlyMap<string, ArgDef>,
+        public readonly args: ReadonlyMap<string, ArgDefinition>,
         /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
         public readonly flags: ReadonlyMap<string, FlagDef>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,

@@ -2,7 +2,7 @@ import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
 import { FlagDef } from "../models/definition/FlagDefinition";
-import { ArgDef } from "../models/definition/ArgDefinition";
+import { ArgDefinition } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
@@ -75,7 +75,7 @@ export function commandRawHelp(command: Command, localization: Localization): Co
 
 /** @internal */
 function argRawHelp(
-    arg: ArgDef,
+    arg: ArgDefinition,
     name: string,
     localization: CommandLocalization,
     typeNamesLocalization: Record<string, string>,

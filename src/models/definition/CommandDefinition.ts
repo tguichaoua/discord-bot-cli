@@ -1,5 +1,5 @@
 import { PermissionString } from "discord.js";
-import { ArgDef } from "./ArgDefinition";
+import { ArgDefinition } from "./ArgDefinition";
 import { FlagDef } from "./FlagDefinition";
 import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
@@ -22,7 +22,7 @@ type CommandDefinitionBase = {
     /** The description of this command. Used by help command. */
     readonly description?: string;
     /** Arguments that must be passed to the command. */
-    readonly args?: Readonly<Record<string, ArgDef>>;
+    readonly args?: Readonly<Record<string, ArgDefinition>>;
     /** Flags that can be used with this command. */
     readonly flags?: Readonly<Record<string, FlagDef>>;
 
