@@ -269,7 +269,7 @@ export class Command {
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const { flags, args, rest } = this.parse(message, inputArguments);
+        const { flags, args, rest } = this.parse(message, inputArguments, options);
 
         if (throttler) throttler.increment(message);
 
@@ -293,6 +293,7 @@ export class Command {
     private parse(
         message: Message,
         inputArguments: readonly string[],
+        options: CommandSetOptions,
     ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
         const flags = new Map<string, unknown>(
             Array.from(this.flags.entries()).map(([k, v]) => [k, v.parser === undefined ? false : v.defaultValue]),
@@ -303,33 +304,49 @@ export class Command {
 
         const flagDatas: { name: string; def: FlagDef; position: number }[] = [];
 
-        const getFlagName = (shortcut: Char, position: number): string => {
+        const getFlagDefFromShort = (shortcut: Char, position: number): { name: string; def: FlagDef } | null => {
             const name = this._flagsShortcuts.get(shortcut);
-            if (name) return name;
-            // TODO: raise error ?
-            Logger.debug("TODO: unknow shortcut:", shortcut);
-            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, shortcut));
+
+            // if the flag is unknown
+            if (!name) {
+                if (options.ignoreUnknownFlags) return null;
+                throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, shortcut));
+            }
+
+            const def = getFlagDefFromLong(name, position);
+            return def ? { name, def } : null;
         };
 
-        const getFlagDef = (name: string, position: number): FlagDef => {
+        const getFlagDefFromLong = (name: string, position: number): FlagDef | null => {
             const def = this.flags.get(name);
-            if (def) return def;
-            // TODO: raise error ?
-            Logger.debug("TODO: unknow flag :", name);
-            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, name));
+
+            // if the flag is unknown
+            if (!def) {
+                if (options.ignoreUnknownFlags) return null;
+                throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, name));
+            }
+
+            return def;
         };
 
         for (let i = 0; i < inputArguments.length; i++) {
             const a = inputArguments[i];
             if (a.startsWith("-")) {
-                let name: string;
                 if (a.startsWith("--")) {
-                    name = a.substr(2);
+                    const name = a.substr(2);
+                    const def = getFlagDefFromLong(name, i);
+
+                    // check if the flag has not been ignored.
+                    if (def !== null) {
+                        flagDatas.push({ name, def, position: i });
+                    }
                 } else {
                     const shortNames = a.substring(1).split("") as Char[];
                     const lastShort = shortNames.pop() as Char;
                     shortNames.forEach(sn => {
-                        const def = getFlagDef(getFlagName(sn, i), i);
+                        const name_def = getFlagDefFromShort(sn, i);
+                        if (!name_def) return; // the flag is ignored.
+                        const { name, def } = name_def;
                         if (def.parser) {
                             // TODO: raise error ?
                             Logger.debug("TODO: invalid flag value:", name);
@@ -337,9 +354,12 @@ export class Command {
                         }
                         flags.set(name, true);
                     });
-                    name = getFlagName(lastShort, i);
+                    const name_def = getFlagDefFromShort(lastShort, i);
+                    // check if the flag has not been ignored.
+                    if (name_def !== null) {
+                        flagDatas.push({ ...name_def, position: i });
+                    }
                 }
-                flagDatas.push({ name, def: getFlagDef(name, i), position: i });
             }
         }
 
