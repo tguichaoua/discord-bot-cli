@@ -20,7 +20,6 @@ import { CommandExample } from "./CommandExample";
 import { isArray } from "../utils/array";
 import { ParsingContext } from "./parsers/ParsingContext";
 import { ParseError, UnhandledErrorParseError } from "./parsers";
-import { Logger } from "../logger";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -347,11 +346,8 @@ export class Command {
                         const name_def = getFlagDefFromShort(sn, i);
                         if (!name_def) return; // the flag is ignored.
                         const { name, def } = name_def;
-                        if (def.parser) {
-                            // TODO: raise error ?
-                            Logger.debug("TODO: invalid flag value:", name);
+                        if (def.parser)
                             throw new CommandResultError(CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, def));
-                        }
                         flags.set(name, true);
                     });
                     const name_def = getFlagDefFromShort(lastShort, i);
