@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
@@ -9,11 +8,7 @@ import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { CommandSetOptions } from "../models/CommandSetOptions";
-import { template } from "../utils/template";
 import { reply } from "../utils/reply";
-
-// TODO: change these functions to use correctly the parser
-// TODO: re-enable eslint
 
 /** @internal */
 export async function defaultHelp(
