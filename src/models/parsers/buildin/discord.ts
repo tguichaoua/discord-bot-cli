@@ -23,6 +23,12 @@ import { ParsingContext } from "../ParsingContext";
 
 /** @internal */
 const ID_PATTERN = /^\d{17,21}$/;
+/** @internal */
+const USERS_PATTERN = /^<@!?(\d{17,19})>$/; // <@81440962496172032>
+/** @internal */
+const ROLES_PATTERN = /^<@&(\d{17,19})>$/; // <@&297577916114403338>
+/** @internal */
+const CHANNELS_PATTERN = /^<#(\d{17,19})>$/; // <#222079895583457280>
 
 export class UserParser extends Parser<User> {
     constructor() {
@@ -31,8 +37,7 @@ export class UserParser extends Parser<User> {
 
     protected parse(context: ParsingContext): User {
         const str = context.nextString();
-        const idResult = MessageMentions.USERS_PATTERN.exec(str);
-        MessageMentions.USERS_PATTERN.lastIndex = 0;
+        const idResult = str.match(USERS_PATTERN);
 
         let id: string | undefined = undefined;
         let user: User | undefined;
@@ -57,8 +62,7 @@ export class RoleParser extends Parser<Role> {
 
     protected parse(context: ParsingContext): Role {
         const str = context.nextString();
-        const roleResult = MessageMentions.ROLES_PATTERN.exec(str);
-        MessageMentions.ROLES_PATTERN.lastIndex = 0;
+        const roleResult = str.match(ROLES_PATTERN);
 
         let id: string | undefined = undefined;
         let role: Role | undefined;
@@ -117,8 +121,7 @@ export class ChannelParser<T extends Channel> extends Parser<T> {
 
     protected parse(context: ParsingContext): T {
         const str = context.nextString();
-        const channelResult = MessageMentions.CHANNELS_PATTERN.exec(str);
-        MessageMentions.CHANNELS_PATTERN.lastIndex = 0;
+        const channelResult = str.match(CHANNELS_PATTERN);
 
         let id: string | undefined = undefined;
         let channel: Channel | undefined;
