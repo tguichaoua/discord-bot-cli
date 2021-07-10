@@ -2,7 +2,6 @@ import {
     CategoryChannel,
     Channel,
     DMChannel,
-    MessageMentions,
     NewsChannel,
     Role,
     StoreChannel,
