@@ -23,6 +23,12 @@ export abstract class Parser<T> {
         return new MapParser(this, map);
     }
 
+    public discriminate<V extends string | number>(variant: V) {
+        return this.map(value => {
+            return { variant, value };
+        });
+    }
+
     /** @internal */
     public _parse(context: ParsingContext): T {
         if (context.remaining < this.minimalInputRequired)
