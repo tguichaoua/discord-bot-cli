@@ -1,5 +1,5 @@
 import { Command } from "./Command";
-import { FlagDef } from "./definition/FlagDefinition";
+import { FlagDefinition } from "./definition/FlagDefinition";
 import { ParseError } from "./parsers";
 
 interface __Error {
@@ -37,7 +37,7 @@ interface __UnknownFlag extends __ParsingError {
 interface __WrongFlagUsage extends __ParsingError {
     readonly reason: "wrong flag usage";
     readonly name: string;
-    readonly flag: FlagDef;
+    readonly flag: FlagDefinition;
 }
 
 interface __ErrorParsingError extends __ParsingError {
@@ -83,7 +83,7 @@ export const CommandResultUtils = Object.freeze({
     unknownFlag(inputs: readonly string[], position: number, name: string): CommandResult {
         return { status: "parsing error", reason: "unknown flag", inputs, position, name };
     },
-    wrongFlagUsage(inputs: readonly string[], position: number, name: string, flag: FlagDef): CommandResult {
+    wrongFlagUsage(inputs: readonly string[], position: number, name: string, flag: FlagDefinition): CommandResult {
         return { status: "parsing error", reason: "wrong flag usage", inputs, position, name, flag };
     },
     parseError(inputs: readonly string[], position: number, error: ParseError): CommandResult {

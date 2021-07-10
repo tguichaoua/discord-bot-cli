@@ -1,13 +1,7 @@
 import { Char } from "../../utils/char";
 import { Parser } from "../parsers";
 
-// /** @category Definition */
-// export type FlagDefinition = ParsableDefinition & {
-//     /** Shortcut version of the flag. */
-//     readonly shortcut?: Char;
-// };
-
-export interface FlagDef {
+export interface FlagDefinition {
     /**  */
     readonly parser?: Parser<unknown>;
     /** Provide a description. */

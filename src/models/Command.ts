@@ -4,7 +4,7 @@ import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDef } from "./definition/FlagDefinition";
+import { FlagDefinition } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
 import { CommandResultUtils } from "./CommandResult";
@@ -50,7 +50,7 @@ export class Command {
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
         public readonly args: ReadonlyMap<string, ArgDefinition>,
         /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
-        public readonly flags: ReadonlyMap<string, FlagDef>,
+        public readonly flags: ReadonlyMap<string, FlagDefinition>,
         private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
         private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
         private readonly _canUse: CanUseCommandHandler | undefined,
@@ -117,7 +117,7 @@ export class Command {
             new Map(
                 data.def.flags
                     ? Object.entries(data.def.flags)
-                          .filter(function (a): a is [string, FlagDef & { shortcut: Char }] {
+                          .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] {
                               return a[1].shortcut !== undefined;
                           })
                           .map(([k, v]) => [v.shortcut, k])
@@ -301,9 +301,12 @@ export class Command {
         const rest = [...inputArguments];
         const absolutePositions = [...Array(inputArguments.length).keys()];
 
-        const flagDatas: { name: string; def: FlagDef; position: number }[] = [];
+        const flagDatas: { name: string; def: FlagDefinition; position: number }[] = [];
 
-        const getFlagDefFromShort = (shortcut: Char, position: number): { name: string; def: FlagDef } | null => {
+        const getFlagDefFromShort = (
+            shortcut: Char,
+            position: number,
+        ): { name: string; def: FlagDefinition } | null => {
             const name = this._flagsShortcuts.get(shortcut);
 
             // if the flag is unknown
@@ -316,7 +319,7 @@ export class Command {
             return def ? { name, def } : null;
         };
 
-        const getFlagDefFromLong = (name: string, position: number): FlagDef | null => {
+        const getFlagDefFromLong = (name: string, position: number): FlagDefinition | null => {
             const def = this.flags.get(name);
 
             // if the flag is unknown

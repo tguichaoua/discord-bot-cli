@@ -1,7 +1,7 @@
 import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
-import { FlagDef } from "../models/definition/FlagDefinition";
+import { FlagDefinition } from "../models/definition/FlagDefinition";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
@@ -103,7 +103,7 @@ function argRawHelp(
 
 /** @internal */
 function flagRawHelp(
-    flag: FlagDef,
+    flag: FlagDefinition,
     name: string,
     localization: CommandLocalization,
     typeNamesLocalization: Record<string, string>,

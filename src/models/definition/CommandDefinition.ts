@@ -1,6 +1,6 @@
 import { PermissionString } from "discord.js";
 import { ArgDefinition } from "./ArgDefinition";
-import { FlagDef } from "./FlagDefinition";
+import { FlagDefinition } from "./FlagDefinition";
 import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
@@ -24,7 +24,7 @@ type CommandDefinitionBase = {
     /** Arguments that must be passed to the command. */
     readonly args?: Readonly<Record<string, ArgDefinition>>;
     /** Flags that can be used with this command. */
-    readonly flags?: Readonly<Record<string, FlagDef>>;
+    readonly flags?: Readonly<Record<string, FlagDefinition>>;
 
     readonly throttling?: ThrottlingDefinition | null;
     /** Either or not sub-commands will use the same throttler as this command. (default is true) */
