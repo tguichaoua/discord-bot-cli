@@ -9,5 +9,7 @@ export interface FlagDefinition {
     /** The default value if there is no value to parse. */
     readonly defaultValue?: unknown;
     /** Shortcut version of the flag. */
-    readonly shortcut?: Char;
+    readonly short?: Char | null;
+    /** */
+    readonly long?: string | null;
 }

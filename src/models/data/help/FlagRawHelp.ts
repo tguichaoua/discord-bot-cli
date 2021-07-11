@@ -1,11 +1,10 @@
-import { FlagDefinition } from "../../definition/FlagDefinition";
+import { FlagData } from "../../FlagData";
 
 export interface FlagRawHelp {
-    readonly flag: FlagDefinition;
+    readonly flag: FlagData;
     readonly typeName: string;
-    readonly name: string;
     readonly localizedName: string;
     readonly description: string;
-    readonly longUsageString: string;
+    readonly longUsageString?: string;
     readonly shortUsageString?: string;
 }

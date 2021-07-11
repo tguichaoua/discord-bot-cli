@@ -1,7 +1,6 @@
 import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
-import { FlagDefinition } from "../models/definition/FlagDefinition";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
@@ -9,6 +8,7 @@ import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { CommandSetOptions } from "../models/CommandSetOptions";
 import { reply } from "../utils/reply";
+import { FlagData } from "../models/FlagData";
 
 /** @internal */
 export async function defaultHelp(
@@ -51,9 +51,7 @@ export function commandRawHelp(command: Command, localization: Localization): Co
         argRawHelp(arg, name, commandLocalization, localization.typeNames),
     );
 
-    const flags = Array.from(command.flags.entries()).map(([name, flag]) =>
-        flagRawHelp(flag, name, commandLocalization, localization.typeNames),
-    );
+    const flags = command.flags.map(flag => flagRawHelp(flag, commandLocalization, localization.typeNames));
 
     const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localization));
 
@@ -103,22 +101,20 @@ function argRawHelp(
 
 /** @internal */
 function flagRawHelp(
-    flag: FlagDefinition,
-    name: string,
+    flag: FlagData,
     localization: CommandLocalization,
     typeNamesLocalization: Record<string, string>,
 ): FlagRawHelp {
-    const flagLocalization = (localization.flags ?? {})[name] ?? {};
-    const localizedName = flagLocalization.name ?? name;
+    const flagLocalization = (localization.flags ?? {})[flag.key] ?? {};
+    const localizedName = flagLocalization.name ?? flag.long ?? flag.key;
     const description = flagLocalization.description ?? flag.description ?? "";
-    const longUsageString = `--${name}`;
-    const shortUsageString = flag.shortcut ? `-${flag.shortcut}` : undefined;
+    const longUsageString = flag.long ? `--${flag.long}` : undefined;
+    const shortUsageString = flag.short ? `-${flag.short}` : undefined;
 
     return {
         flag,
         typeName:
             flag.parser?._getLocalizedTypeName(typeNamesLocalization) ?? typeNamesLocalization["boolean"] ?? "boolean",
-        name,
         localizedName,
         description,
         longUsageString,
@@ -157,8 +153,9 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
     const flags = rawHelp.flags
         .map(
             f =>
-                `\`--${f.name}\`` +
-                (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") +
+                (f.longUsageString ? `\`${f.longUsageString}\`` : "") +
+                (f.longUsageString && f.shortUsageString ? " " : "") +
+                (f.shortUsageString ? `\`${f.shortUsageString}\`` : "") +
                 ` *${f.typeName}*` +
                 (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )

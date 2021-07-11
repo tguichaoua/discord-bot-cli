@@ -23,16 +23,14 @@ const cmd = makeCommand("cmd", {
             args: { commandName: { parser: Parsers.rest } },
             flags: {
                 reset: {
-                    shortcut: "r",
                     description: "Reset the trottler of the target command",
                 },
-                "reset-all": {
-                    shortcut: "R",
+                resetAll: {
+                    short: "R",
                     description: "Reset the trottler of the target command and its sub-commands",
                 },
                 scope: {
                     parser: Parsers.string,
-                    shortcut: "s",
                     description: "Perform action on specific scope (comma separated list).",
                 },
             },
@@ -63,7 +61,7 @@ cmd.subs.reload.executor = async ({ command }, _, { commandSet, message }) => {
     }
 };
 
-cmd.subs.throttling.executor = async (_, { reset, "reset-all": resetAll, scope }, { commandSet, rest, channel }) => {
+cmd.subs.throttling.executor = async (_, { reset, resetAll, scope }, { commandSet, rest, channel }) => {
     const commandName = `\`${rest.join(" ")}\``;
     const { command } = commandSet.resolve(rest);
     if (!command) {

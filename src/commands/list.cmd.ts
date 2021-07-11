@@ -7,7 +7,6 @@ const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",
     flags: {
         detail: {
-            shortcut: "d",
             description: "Provide commands description.",
         },
     },

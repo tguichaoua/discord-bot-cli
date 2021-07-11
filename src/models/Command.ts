@@ -4,7 +4,6 @@ import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDefinition } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
 import { CommandResultUtils } from "./CommandResult";
@@ -20,6 +19,8 @@ import { CommandExample } from "./CommandExample";
 import { isArray } from "../utils/array";
 import { ParsingContext } from "./parsers/ParsingContext";
 import { ParseError, UnhandledErrorParseError } from "./parsers";
+import { FlagData } from "./FlagData";
+import { toKebabCase } from "../utils/case";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -49,9 +50,10 @@ export class Command {
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
         public readonly args: ReadonlyMap<string, ArgDefinition>,
-        /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
-        public readonly flags: ReadonlyMap<string, FlagDefinition>,
-        private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
+        /** A `ReadonlyArray` with this command's flags' [[FlagData]] */
+        public readonly flags: ReadonlyArray<FlagData>,
+        private readonly flagLong: ReadonlyMap<string, FlagData>,
+        private readonly flagShort: ReadonlyMap<Char, FlagData>,
         private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
         private readonly _canUse: CanUseCommandHandler | undefined,
         private readonly _help: HelpHandler | undefined,
@@ -90,8 +92,21 @@ export class Command {
             return (data.def.inherit ?? true) && parent ? parent[prop] : defaultValue;
         }
 
+        const makeLoadError = (msg: string) => {
+            const cmdPath = parent
+                ? parent
+                      .getParents()
+                      .map(c => c.name)
+                      .join(".") +
+                  "." +
+                  data.name
+                : data.name;
+            return new CommandLoadError(`At command \`${cmdPath}\` : ${msg}`);
+        };
+
         const subs = new CommandCollection();
 
+        //___ Parse examples ______________________________________________________________________
         const examples: CommandExample[] = [];
         if (data.def.examples) {
             for (const e of data.def.examples) {
@@ -101,6 +116,63 @@ export class Command {
             }
         }
 
+        //___ Parse the flags _____________________________________________________________________
+        const flags: FlagData[] = [];
+        const flagLong = new Map<string, FlagData>();
+        const flagShort = new Map<Char, FlagData>();
+
+        if (data.def.flags) {
+            Object.entries(data.def.flags).forEach(([key, def]) => {
+                let long: string | undefined;
+                if (typeof def.long === "string") {
+                    long = toKebabCase(def.long);
+                } else if (typeof def.long === "undefined") {
+                    long = toKebabCase(key);
+                } else {
+                    long = undefined;
+                }
+
+                let short: Char | undefined;
+                if (typeof def.short === "string") {
+                    short = def.short;
+                } else if (typeof def.short === "undefined") {
+                    short = long ? (long[0] as Char) : (key[0] as Char);
+                } else {
+                    short = undefined;
+                }
+
+                if (!long && !short) throw makeLoadError(`flag \`${key}\` has neither long nor short name.`);
+
+                const data: FlagData = {
+                    key,
+                    parser: def.parser,
+                    description: def.description,
+                    defaultValue: def.defaultValue,
+                    long,
+                    short,
+                };
+
+                if (long) {
+                    const conflict = flagLong.get(long);
+                    if (conflict)
+                        throw makeLoadError(
+                            `flags \`${conflict.key}\` and \`${key}\` has the same long name \`${long}\``,
+                        );
+                    flagLong.set(long, data);
+                }
+                if (short) {
+                    const conflict = flagShort.get(short);
+                    if (conflict)
+                        throw makeLoadError(
+                            `flags \`${conflict.key}\` and \`${key}\` has the same short name \`${short}\``,
+                        );
+                    flagShort.set(short, data);
+                }
+                flags.push(data);
+            });
+        }
+
+        //___ Create the Command object ___________________________________________________________
         const cmd = new Command(
             filepath,
             data.name,
@@ -113,16 +185,9 @@ export class Command {
             commandSet,
             subs,
             new Map(data.def.args ? Object.entries(data.def.args) : []),
-            new Map(data.def.flags ? Object.entries(data.def.flags) : []),
-            new Map(
-                data.def.flags
-                    ? Object.entries(data.def.flags)
-                          .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] {
-                              return a[1].shortcut !== undefined;
-                          })
-                          .map(([k, v]) => [v.shortcut, k])
-                    : [],
-            ),
+            flags,
+            flagLong,
+            flagShort,
             data.executor,
             data.def.canUse,
             data.def.help ?? parentHelp,
@@ -295,69 +360,52 @@ export class Command {
         options: CommandSetOptions,
     ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
         const flags = new Map<string, unknown>(
-            Array.from(this.flags.entries()).map(([k, v]) => [k, v.parser === undefined ? false : v.defaultValue]),
+            this.flags.map(f => [f.key, f.parser === undefined ? false : f.defaultValue]),
         );
         const args = new Map<string, unknown>();
         const rest = [...inputArguments];
         const absolutePositions = [...Array(inputArguments.length).keys()];
 
-        const flagDatas: { name: string; def: FlagDefinition; position: number }[] = [];
+        const flagDatas: { data: FlagData; position: number }[] = [];
 
-        const getFlagDefFromShort = (
-            shortcut: Char,
-            position: number,
-        ): { name: string; def: FlagDefinition } | null => {
-            const name = this._flagsShortcuts.get(shortcut);
-
-            // if the flag is unknown
-            if (!name) {
-                if (options.ignoreUnknownFlags) return null;
-                throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, shortcut));
-            }
-
-            const def = getFlagDefFromLong(name, position);
-            return def ? { name, def } : null;
+        const getFlagDataFromShort = (short: Char, position: number): FlagData | null => {
+            const data = this.flagShort.get(short);
+            if (data) return data;
+            if (options.ignoreUnknownFlags) return null;
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, short));
         };
 
-        const getFlagDefFromLong = (name: string, position: number): FlagDefinition | null => {
-            const def = this.flags.get(name);
-
-            // if the flag is unknown
-            if (!def) {
-                if (options.ignoreUnknownFlags) return null;
-                throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, name));
-            }
-
-            return def;
+        const getFlagDataFromLong = (long: string, position: number): FlagData | null => {
+            const data = this.flagLong.get(long);
+            if (data) return data;
+            if (options.ignoreUnknownFlags) return null;
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, long));
         };
 
         for (let i = 0; i < inputArguments.length; i++) {
             const a = inputArguments[i];
             if (a.startsWith("-")) {
                 if (a.startsWith("--")) {
-                    const name = a.substr(2);
-                    const def = getFlagDefFromLong(name, i);
+                    const long = a.substr(2);
+                    const data = getFlagDataFromLong(long, i);
 
                     // check if the flag has not been ignored.
-                    if (def !== null) {
-                        flagDatas.push({ name, def, position: i });
-                    }
+                    if (data !== null) flagDatas.push({ data, position: i });
                 } else {
                     const shortNames = a.substring(1).split("") as Char[];
                     const lastShort = shortNames.pop() as Char;
                     shortNames.forEach(sn => {
-                        const name_def = getFlagDefFromShort(sn, i);
-                        if (!name_def) return; // the flag is ignored.
-                        const { name, def } = name_def;
-                        if (def.parser)
-                            throw new CommandResultError(CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, def));
-                        flags.set(name, true);
+                        const data = getFlagDataFromShort(sn, i);
+                        if (data === null) return;
+                        if (data.parser)
+                            throw new CommandResultError(
+                                CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
+                            );
+                        flags.set(data.key, true);
                     });
-                    const name_def = getFlagDefFromShort(lastShort, i);
-                    // check if the flag has not been ignored.
-                    if (name_def !== null) {
-                        flagDatas.push({ ...name_def, position: i });
-                    }
+
+                    const data = getFlagDataFromShort(lastShort, i);
+                    if (data !== null) flagDatas.push({ data, position: i });
                 }
             }
         }
@@ -368,9 +416,9 @@ export class Command {
             const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
 
             let value: unknown;
-            if (cur.def.parser) {
+            if (cur.data.parser) {
                 try {
-                    value = cur.def.parser._parse(context);
+                    value = cur.data.parser._parse(context);
                 } catch (e) {
                     const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
                     throw new CommandResultError(CommandResultUtils.parseError(inputArguments, cur.position, error));
@@ -379,7 +427,7 @@ export class Command {
                 value = true;
             }
 
-            flags.set(cur.name, value);
+            flags.set(cur.data.key, value);
             rest.splice(cur.position, 1 + context.consumed);
             absolutePositions.splice(cur.position, 1 + context.consumed);
         }
