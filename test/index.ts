@@ -43,6 +43,7 @@ client.on("message", async message => {
     if (message.system || message.author.bot) return;
     try {
         const result = await commands.parse(message);
+        if (result.status === "error") throw result.error;
         const reply = new MessageEmbed()
             .setTitle(`\`${message.content}\``)
             .setColor(COLORS[result.status])
