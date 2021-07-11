@@ -90,6 +90,7 @@ const CHANNEL_PARSER_FC = discordParser(
 export const CHANNEL_PARSER = Parser.fromFunction("$channel$", 1, CHANNEL_PARSER_FC);
 
 export function channelParser(): Parser<Channel>;
+/** Parses a channel and checks its type is one of the provided. */
 export function channelParser<Type extends Exclude<Channel["type"], "unknown" | "group">>(
     ...types: Type[]
 ): Parser<Type2Channel<Type>>;

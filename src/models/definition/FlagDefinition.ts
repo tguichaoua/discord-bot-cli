@@ -2,14 +2,25 @@ import { Char } from "../../utils/char";
 import { Parser } from "../parsers";
 
 export interface FlagDefinition {
-    /**  */
+    /** The parser used to parse the flag value.
+     * If not set, the flag value is the number of occurrences of the flag.
+     */
     readonly parser?: Parser<unknown>;
-    /** Provide a description. */
+    /** The description of the flag. */
     readonly description?: string;
-    /** The default value if there is no value to parse. */
+    /** The value returned if the flag is not passed by the user.
+     * Otherwise the value returned is `undefined`.
+     * Ignored if the parser is not set.
+     */
     readonly defaultValue?: unknown;
-    /** Shortcut version of the flag. */
-    readonly short?: Char | null;
-    /** */
+    /** The long name of the flag (eg '--flag).
+     * If not set, the key of the flag is used as kebab case.
+     * If set to `null`, the flag has no long name.
+     */
     readonly long?: string | null;
+    /** The short name of the flag (eg '-f').
+     * If not set, use the first letter of the long name.
+     * If set to `null`, the flag has no short name.
+     */
+    readonly short?: Char | null;
 }
