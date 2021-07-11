@@ -1,6 +1,7 @@
 import { makeCommand } from "../other/makeCommand";
 import { Command } from "..";
 import { Logger } from "../logger";
+import { Parsers } from "../models/parsers";
 
 const cmd = makeCommand("cmd", {
     devOnly: true,
@@ -11,7 +12,7 @@ const cmd = makeCommand("cmd", {
             description: "Reload a command",
             args: {
                 command: {
-                    type: "string",
+                    parser: Parsers.string,
                     description: "Name of the command to reload.",
                 },
             },
@@ -19,23 +20,17 @@ const cmd = makeCommand("cmd", {
         throttling: {
             aliases: ["t"],
             description: "Get data about command throttler",
-            rest: { type: "string", name: "command" },
+            args: { commandName: { parser: Parsers.rest } },
             flags: {
                 reset: {
-                    type: "boolean",
-                    defaultValue: false,
-                    shortcut: "r",
                     description: "Reset the trottler of the target command",
                 },
-                "reset-all": {
-                    type: "boolean",
-                    defaultValue: false,
-                    shortcut: "R",
+                resetAll: {
+                    short: "R",
                     description: "Reset the trottler of the target command and its sub-commands",
                 },
                 scope: {
-                    type: "string",
-                    shortcut: "s",
+                    parser: Parsers.string,
                     description: "Perform action on specific scope (comma separated list).",
                 },
             },
@@ -66,7 +61,7 @@ cmd.subs.reload.executor = async ({ command }, _, { commandSet, message }) => {
     }
 };
 
-cmd.subs.throttling.executor = async (_, { reset, "reset-all": resetAll, scope }, { commandSet, rest, channel }) => {
+cmd.subs.throttling.executor = async (_, { reset, resetAll, scope }, { commandSet, rest, channel }) => {
     const commandName = `\`${rest.join(" ")}\``;
     const { command } = commandSet.resolve(rest);
     if (!command) {

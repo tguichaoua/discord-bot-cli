@@ -1,12 +1,11 @@
 import { CommandLocalization } from "./CommandLocalization";
-import { TypeNameLocalization } from "./TypeNameLocalization";
 
 /**
  * See [localization.json](https://github.com/tguichaoua/discord-bot-cli/blob/master/src/data/localization.json) for default localization.
  * @category Localization
  */
 export interface Localization {
-    typeNames: TypeNameLocalization;
+    typeNames: Record<string, string>;
     /** Localization used by the build-in command `help`. */
     help: {
         tags: {

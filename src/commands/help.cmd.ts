@@ -1,19 +1,22 @@
 import { template } from "../utils/template";
 import { makeCommand } from "../other/makeCommand";
 import { reply } from "../utils/reply";
+import { Parsers } from "../models/parsers";
 
 const cmd = makeCommand("help", {
     description: "Provide help about a command.",
-    rest: {
-        type: "string",
-        name: "command",
-        description: "The name of the command.",
+    args: {
+        commandName: {
+            parser: Parsers.rest,
+            name: "command",
+            description: "The name of the command.",
+        },
     },
     examples: ["help", "help list", "help help", "help command subCommand", "help command subCommand1 subCommand2"],
 });
 
-cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
-    if (rest.length === 0)
+cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
+    if (commandName.length === 0)
         await reply(
             message,
             template(options.localization.help.default, {
@@ -21,12 +24,12 @@ cmd.executor = async (_a, _f, { rest, options, commandSet, message }) => {
             }),
         );
     else {
-        const { command, args } = commandSet.resolve(rest);
+        const { command, args } = commandSet.resolve(commandName);
         if (!command || args.length != 0)
             await reply(
                 message,
                 template(options.localization.help.commandNotFound, {
-                    command: rest.join(" "),
+                    command: commandName.join(" "),
                 }),
             );
         else {

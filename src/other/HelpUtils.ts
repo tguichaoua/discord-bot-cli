@@ -1,18 +1,14 @@
 import { Command } from "../models/Command";
 import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
-import { TypeNameLocalization } from "../models/localization/TypeNameLocalization";
-import { FlagDefinition } from "../models/definition/FlagDefinition";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
-import { RestRawHelp } from "../models/data/help/RestRawHelp";
 import { CommandLocalization } from "../models/localization/CommandLocalization";
 import { CommandSetOptions } from "../models/CommandSetOptions";
-import { isArray } from "../utils/array";
-import { template } from "../utils/template";
 import { reply } from "../utils/reply";
+import { FlagData } from "../models/FlagData";
 
 /** @internal */
 export async function defaultHelp(
@@ -55,22 +51,9 @@ export function commandRawHelp(command: Command, localization: Localization): Co
         argRawHelp(arg, name, commandLocalization, localization.typeNames),
     );
 
-    const flags = Array.from(command.flags.entries()).map(([name, flag]) =>
-        flagRawHelp(flag, name, commandLocalization, localization.typeNames),
-    );
+    const flags = command.flags.map(flag => flagRawHelp(flag, commandLocalization, localization.typeNames));
 
     const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localization));
-
-    let rest: RestRawHelp | undefined = undefined;
-    if (command.rest) {
-        const name = commandLocalization?.rest?.name ?? command.rest.name;
-        const description = commandLocalization?.rest?.description ?? command.rest.description ?? "";
-        const usageString = `[...${name}]`;
-        const typeNames = isArray(command.rest.type)
-            ? command.rest.type.map(t => localization.typeNames[t])
-            : [localization.typeNames[command.rest.type]];
-        rest = { name, description, usageString, typeNames };
-    }
 
     const tags: string[] = [];
     if (command.devOnly) tags.push(localization.help.tags.devOnly);
@@ -84,7 +67,6 @@ export function commandRawHelp(command: Command, localization: Localization): Co
         args,
         flags,
         subs,
-        rest,
         tags,
     };
 }
@@ -94,12 +76,9 @@ function argRawHelp(
     arg: ArgDefinition,
     name: string,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization,
+    typeNamesLocalization: Record<string, string>,
 ): ArgumentRawHelp {
     const argLocalization = (localization.args ?? {})[name] ?? {};
-    const typeNames = isArray(arg.type)
-        ? arg.type.map(t => typeNamesLocalization[t])
-        : [typeNamesLocalization[arg.type]];
     const localizedName = argLocalization.name ?? name;
     const description = argLocalization.description ?? arg.description ?? "";
     let usageString: string;
@@ -112,7 +91,7 @@ function argRawHelp(
 
     return {
         arg,
-        typeNames: typeNames,
+        typeName: arg.parser._getLocalizedTypeName(typeNamesLocalization),
         name,
         localizedName,
         description,
@@ -122,24 +101,19 @@ function argRawHelp(
 
 /** @internal */
 function flagRawHelp(
-    flag: FlagDefinition,
-    name: string,
+    flag: FlagData,
     localization: CommandLocalization,
-    typeNamesLocalization: TypeNameLocalization,
+    typeNamesLocalization: Record<string, string>,
 ): FlagRawHelp {
-    const flagLocalization = (localization.flags ?? {})[name] ?? {};
-    const typeNames = isArray(flag.type)
-        ? flag.type.map(t => typeNamesLocalization[t])
-        : [typeNamesLocalization[flag.type]];
-    const localizedName = flagLocalization.name ?? name;
+    const flagLocalization = (localization.flags ?? {})[flag.key] ?? {};
+    const localizedName = flagLocalization.name ?? flag.long ?? flag.key;
     const description = flagLocalization.description ?? flag.description ?? "";
-    const longUsageString = `--${name}`;
-    const shortUsageString = flag.shortcut ? `-${flag.shortcut}` : undefined;
+    const longUsageString = flag.long ? `--${flag.long}` : undefined;
+    const shortUsageString = flag.short ? `-${flag.short}` : undefined;
 
     return {
         flag,
-        typeNames,
-        name,
+        typeName: flag.parser?._getLocalizedTypeName(typeNamesLocalization),
         localizedName,
         description,
         longUsageString,
@@ -162,8 +136,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
         const usageString =
             prefix +
             rawHelp.fullName +
-            (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" ")) +
-            (rawHelp.rest ? " " + rawHelp.rest.usageString : "");
+            (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" "));
         embed.addField(
             localization.help.usage,
             `**\`${usageString}\`**` + (rawHelp.args.length !== 0 ? `\n\n${localization.help.argUsageHint}` : ""),
@@ -171,27 +144,18 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
         );
     }
 
-    const args =
-        rawHelp.args
-            .map(
-                a =>
-                    `\`${a.name}\` *${a.typeNames.join(" | ")}*` +
-                    (a.description !== "" ? `\n⮩  ${a.description}` : ""),
-            )
-            .join("\n") +
-        (rawHelp.rest
-            ? `\n\`${rawHelp.rest.name}\` *${template(localization.help.restTypeName, {
-                  type: rawHelp.rest.typeNames.join(" | "),
-              })}*` + (rawHelp.rest.description !== "" ? `\n⮩  ${rawHelp.rest.description}` : "")
-            : "");
+    const args = rawHelp.args
+        .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
+        .join("\n");
     if (args !== "") embed.addField(localization.help.arguments, args, true);
 
     const flags = rawHelp.flags
         .map(
             f =>
-                `\`--${f.name}\`` +
-                (f.flag.shortcut ? ` \`-${f.flag.shortcut}\`` : "") +
-                ` *${f.typeNames.join(" | ")}*` +
+                (f.longUsageString ? `\`${f.longUsageString}\`` : "") +
+                (f.longUsageString && f.shortUsageString ? " " : "") +
+                (f.shortUsageString ? `\`${f.shortUsageString}\`` : "") +
+                (f.typeName ? ` *${f.typeName}*` : "") +
                 (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )
         .join("\n");

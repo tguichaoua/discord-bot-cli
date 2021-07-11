@@ -4,25 +4,23 @@ import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDefinition } from "./definition/FlagDefinition";
 import { Char } from "../utils/char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
-import { parseFlags } from "../other/parsing/parseFlags";
-import { parseArgs } from "../other/parsing/parseArgs";
-import { RestDefinition } from "./definition/RestDefinition";
 import { CommandResultUtils } from "./CommandResult";
 import { CommandResultError } from "./errors/CommandResultError";
 import { ReadonlyCommandCollection, CommandCollection } from "./CommandCollection";
 import { CanUseCommandHandler } from "./callbacks/CanUseCommandHandler";
 import { HelpHandler } from "./callbacks/HelpHandler";
-import { parseValue } from "../other/parsing/parseValue";
-import { ParsableType } from "./ParsableType";
 import { ThrottlingDefinition } from "./definition/ThrottlingDefinition";
 import { CommandThrottler } from "./Throttler";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { defaultHelp } from "../other/HelpUtils";
 import { CommandExample } from "./CommandExample";
 import { isArray } from "../utils/array";
+import { ParsingContext } from "./parsers/ParsingContext";
+import { ParseError, UnhandledErrorParseError } from "./parsers";
+import { FlagData } from "./FlagData";
+import { toKebabCase } from "../utils/case";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -52,11 +50,10 @@ export class Command {
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
         public readonly args: ReadonlyMap<string, ArgDefinition>,
-        /** A [[RestDefinition]] if this command use the rest argument, `undefined` otherwise. */
-        public readonly rest: Readonly<RestDefinition> | undefined,
-        /** A `ReadonlyMap` with this command's flags' [[FlagDefinition]] */
-        public readonly flags: ReadonlyMap<string, FlagDefinition>,
-        private readonly _flagsShortcuts: ReadonlyMap<Char, string>,
+        /** A `ReadonlyArray` with this command's flags' [[FlagData]] */
+        public readonly flags: ReadonlyArray<FlagData>,
+        private readonly flagLong: ReadonlyMap<string, FlagData>,
+        private readonly flagShort: ReadonlyMap<Char, FlagData>,
         private readonly _executor: CommandExecutor<any> | undefined, // eslint-disable-line @typescript-eslint/no-explicit-any
         private readonly _canUse: CanUseCommandHandler | undefined,
         private readonly _help: HelpHandler | undefined,
@@ -95,8 +92,21 @@ export class Command {
             return (data.def.inherit ?? true) && parent ? parent[prop] : defaultValue;
         }
 
+        const makeLoadError = (msg: string) => {
+            const cmdPath = parent
+                ? parent
+                      .getParents()
+                      .map(c => c.name)
+                      .join(".") +
+                  "." +
+                  data.name
+                : data.name;
+            return new CommandLoadError(`At command \`${cmdPath}\` : ${msg}`);
+        };
+
         const subs = new CommandCollection();
 
+        //___ Parse examples ______________________________________________________________________
         const examples: CommandExample[] = [];
         if (data.def.examples) {
             for (const e of data.def.examples) {
@@ -106,6 +116,63 @@ export class Command {
             }
         }
 
+        //___ Parse the flags _____________________________________________________________________
+        const flags: FlagData[] = [];
+        const flagLong = new Map<string, FlagData>();
+        const flagShort = new Map<Char, FlagData>();
+
+        if (data.def.flags) {
+            Object.entries(data.def.flags).forEach(([key, def]) => {
+                let long: string | undefined;
+                if (typeof def.long === "string") {
+                    long = toKebabCase(def.long);
+                } else if (typeof def.long === "undefined") {
+                    long = toKebabCase(key);
+                } else {
+                    long = undefined;
+                }
+
+                let short: Char | undefined;
+                if (typeof def.short === "string") {
+                    short = def.short;
+                } else if (typeof def.short === "undefined") {
+                    short = long ? (long[0] as Char) : (key[0] as Char);
+                } else {
+                    short = undefined;
+                }
+
+                if (!long && !short) throw makeLoadError(`flag \`${key}\` has neither long nor short name.`);
+
+                const data: FlagData = {
+                    key,
+                    parser: def.parser,
+                    description: def.description,
+                    defaultValue: def.defaultValue,
+                    long,
+                    short,
+                };
+
+                if (long) {
+                    const conflict = flagLong.get(long);
+                    if (conflict)
+                        throw makeLoadError(
+                            `flags \`${conflict.key}\` and \`${key}\` has the same long name \`${long}\``,
+                        );
+                    flagLong.set(long, data);
+                }
+                if (short) {
+                    const conflict = flagShort.get(short);
+                    if (conflict)
+                        throw makeLoadError(
+                            `flags \`${conflict.key}\` and \`${key}\` has the same short name \`${short}\``,
+                        );
+                    flagShort.set(short, data);
+                }
+                flags.push(data);
+            });
+        }
+
+        //___ Create the Command object ___________________________________________________________
         const cmd = new Command(
             filepath,
             data.name,
@@ -118,17 +185,9 @@ export class Command {
             commandSet,
             subs,
             new Map(data.def.args ? Object.entries(data.def.args) : []),
-            data.def.rest,
-            new Map(data.def.flags ? Object.entries(data.def.flags) : []),
-            new Map(
-                data.def.flags
-                    ? Object.entries(data.def.flags)
-                          .filter(function (a): a is [string, FlagDefinition & { shortcut: Char }] {
-                              return a[1].shortcut !== undefined;
-                          })
-                          .map(([k, v]) => [v.shortcut, k])
-                    : [],
-            ),
+            flags,
+            flagLong,
+            flagShort,
             data.executor,
             data.def.canUse,
             data.def.help ?? parentHelp,
@@ -274,28 +333,134 @@ export class Command {
 
         if (!this._executor) throw new CommandResultError(CommandResultUtils.noExecutor(this));
 
-        const flags = parseFlags(message, inputArguments, this.flags, this._flagsShortcuts);
-        const args = parseArgs(message, flags.args, this.args);
-
-        const rest: ParsableType[] = [];
-        if (this.rest) {
-            for (const e of args.rest) {
-                const parsed = parseValue(this.rest, message, e);
-                if (parsed.value !== undefined) rest.push(parsed.value);
-            }
-        }
+        const { flags, args, rest } = this.parse(message, inputArguments, options);
 
         if (throttler) throttler.increment(message);
 
-        return await this._executor(Object.fromEntries(args.argValues), Object.fromEntries(flags.flagValues), {
-            rest: rest as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-            message,
-            guild: message.guild,
-            member: message.member,
-            channel: message.channel,
-            options,
-            commandSet,
-            command: this,
-        });
+        await this._executor(
+            Object.fromEntries(args),
+            Object.fromEntries(flags) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+            {
+                rest,
+                message,
+                guild: message.guild,
+                member: message.member,
+                channel: message.channel,
+                options,
+                commandSet,
+                command: this,
+            },
+        );
+    }
+
+    /** @internal */
+    private parse(
+        message: Message,
+        inputArguments: readonly string[],
+        options: CommandSetOptions,
+    ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
+        const flags = new Map<string, unknown>(
+            this.flags.map(f => [f.key, f.parser === undefined ? 0 : f.defaultValue]),
+        );
+        const args = new Map<string, unknown>();
+        const rest = [...inputArguments];
+        const absolutePositions = [...Array(inputArguments.length).keys()];
+
+        const flagDatas: { data: FlagData; position: number }[] = [];
+
+        //* Must only be called if the flag has no parser. */
+        const incrementFlag = (key: string) => {
+            // Since incrementFlag is called only when the flag has no parser,
+            // the value is necessary an integer.
+            const value = flags.get(key) as number;
+            flags.set(key, value + 1);
+        };
+
+        const getFlagDataFromShort = (short: Char, position: number): FlagData | null => {
+            const data = this.flagShort.get(short);
+            if (data) return data;
+            if (options.ignoreUnknownFlags) return null;
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, short));
+        };
+
+        const getFlagDataFromLong = (long: string, position: number): FlagData | null => {
+            const data = this.flagLong.get(long);
+            if (data) return data;
+            if (options.ignoreUnknownFlags) return null;
+            throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, long));
+        };
+
+        for (let i = 0; i < inputArguments.length; i++) {
+            const a = inputArguments[i];
+            if (a.startsWith("-")) {
+                if (a.startsWith("--")) {
+                    const long = a.substr(2);
+                    const data = getFlagDataFromLong(long, i);
+
+                    // check if the flag has not been ignored.
+                    if (data !== null) flagDatas.push({ data, position: i });
+                } else {
+                    const shortNames = a.substring(1).split("") as Char[];
+                    const lastShort = shortNames.pop() as Char;
+                    shortNames.forEach(sn => {
+                        const data = getFlagDataFromShort(sn, i);
+                        if (data === null) return;
+                        // A flag with a parser cannot be used in middle of multiple short flags.
+                        if (data.parser)
+                            throw new CommandResultError(
+                                CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
+                            );
+                        incrementFlag(data.key);
+                    });
+
+                    const data = getFlagDataFromShort(lastShort, i);
+                    if (data !== null) flagDatas.push({ data, position: i });
+                }
+            }
+        }
+
+        for (let i = 0; i < flagDatas.length; i++) {
+            const cur = flagDatas[i];
+            const next = flagDatas[i + 1];
+            const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
+
+            if (cur.data.parser) {
+                try {
+                    const value = cur.data.parser._parse(context);
+                    flags.set(cur.data.key, value);
+                } catch (e) {
+                    const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+                    throw new CommandResultError(CommandResultUtils.parseError(inputArguments, cur.position, error));
+                }
+            } else {
+                incrementFlag(cur.data.key);
+            }
+
+            rest.splice(cur.position, 1 + context.consumed);
+            absolutePositions.splice(cur.position, 1 + context.consumed);
+        }
+
+        const context = new ParsingContext(message, rest);
+        let current: number;
+        for (const [name, def] of this.args) {
+            let value: unknown;
+            current = context.consumed;
+
+            if (context.remaining === 0 && def.optional) {
+                value = def.defaultValue;
+            } else {
+                try {
+                    value = def.parser._parse(context);
+                } catch (e) {
+                    const position = absolutePositions[current];
+                    const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+                    throw new CommandResultError(CommandResultUtils.parseError(inputArguments, position, error));
+                }
+            }
+
+            args.set(name, value);
+        }
+
+        return { flags, args, rest: context.rest() };
     }
 }

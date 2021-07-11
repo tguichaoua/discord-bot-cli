@@ -202,4 +202,5 @@ const defaultOptions: CommandSetOptions = {
     localization: defaultLocalization,
     allowMentionAsPrefix: false,
     skipDevsPermissionsChecking: false,
+    ignoreUnknownFlags: false,
 };

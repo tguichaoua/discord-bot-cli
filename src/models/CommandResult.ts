@@ -1,55 +1,51 @@
 import { Command } from "./Command";
-import { ArgDefinition } from "./definition/ArgDefinition";
-import { FlagDefinition } from "./definition/FlagDefinition";
+import { FlagData } from "./FlagData";
+import { ParseError } from "./parsers";
 
-export type CommandResult =
-    | {
-          readonly status: "error";
-          readonly error: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-      }
-    | {
-          readonly status:
-              | "ok"
-              | "no executor"
-              | "guild only"
-              | "dev only"
-              | "unauthorized user"
-              | "throttling"
-              | "client permissions";
-          readonly command: Command;
-      }
-    | {
-          readonly status: "not prefixed" | "command not found";
-      }
-    | ({
-          readonly status: "parsing error";
-      } & (
-          | ({
-                readonly type: "arg";
-                readonly arg: Readonly<ArgDefinition>;
-            } & (
-                | {
-                      readonly reason: "invalid value";
-                      readonly got: string;
-                  }
-                | {
-                      readonly reason: "missing argument";
-                  }
-            ))
-          | ({
-                readonly type: "flag";
-            } & (
-                | {
-                      readonly reason: "unknown flag";
-                      readonly name: string;
-                  }
-                | {
-                      readonly reason: "invalid value";
-                      readonly flag: Readonly<FlagDefinition>;
-                      readonly got: string;
-                  }
-            ))
-      ));
+interface __Error {
+    readonly status: "error";
+    readonly error: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+interface __Command {
+    readonly status:
+        | "ok"
+        | "no executor"
+        | "guild only"
+        | "dev only"
+        | "unauthorized user"
+        | "throttling"
+        | "client permissions";
+    readonly command: Command;
+}
+
+interface __NoData {
+    readonly status: "not prefixed" | "command not found";
+}
+
+interface __ParsingError {
+    readonly status: "parsing error";
+    readonly inputs: readonly string[];
+    readonly position: number;
+}
+
+interface __UnknownFlag extends __ParsingError {
+    readonly reason: "unknown flag";
+    readonly name: string;
+}
+
+interface __WrongFlagUsage extends __ParsingError {
+    readonly reason: "wrong flag usage";
+    readonly name: string;
+    readonly flag: FlagData;
+}
+
+interface __ErrorParsingError extends __ParsingError {
+    readonly reason: "error";
+    readonly error: ParseError;
+}
+
+export type CommandResult = __Error | __Command | __NoData | __UnknownFlag | __WrongFlagUsage | __ErrorParsingError;
 
 /** @internal */
 export const CommandResultUtils = Object.freeze({
@@ -84,38 +80,13 @@ export const CommandResultUtils = Object.freeze({
     commandNotFound(): CommandResult {
         return { status: "command not found" };
     },
-    failParseArgInvalid(arg: Readonly<ArgDefinition>, got: string): CommandResult {
-        return {
-            status: "parsing error",
-            type: "arg",
-            arg,
-            reason: "invalid value",
-            got,
-        };
+    unknownFlag(inputs: readonly string[], position: number, name: string): CommandResult {
+        return { status: "parsing error", reason: "unknown flag", inputs, position, name };
     },
-    failParseArgMissing(arg: Readonly<ArgDefinition>): CommandResult {
-        return {
-            status: "parsing error",
-            type: "arg",
-            arg,
-            reason: "missing argument",
-        };
+    wrongFlagUsage(inputs: readonly string[], position: number, name: string, flag: FlagData): CommandResult {
+        return { status: "parsing error", reason: "wrong flag usage", inputs, position, name, flag };
     },
-    failParseFlagUnknown(name: string): CommandResult {
-        return {
-            status: "parsing error",
-            type: "flag",
-            reason: "unknown flag",
-            name,
-        };
-    },
-    failParseFlagInvalid(flag: Readonly<FlagDefinition>, got: string): CommandResult {
-        return {
-            status: "parsing error",
-            type: "flag",
-            flag,
-            reason: "invalid value",
-            got,
-        };
+    parseError(inputs: readonly string[], position: number, error: ParseError): CommandResult {
+        return { status: "parsing error", reason: "error", inputs, position, error };
     },
 });

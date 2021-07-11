@@ -2,9 +2,9 @@ import { Message, DMChannel } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
 import { CommandDefinition, CommandSettings } from "../definition/CommandDefinition";
-import { ParsableTypeOf } from "../ParsableType";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
+import { ParserType } from "../parsers";
 
 /** @ignore */
 type IsGuildOnly<S extends CommandSettings, True, False> = S["guildOnly"] extends true ? True : False;
@@ -26,7 +26,7 @@ export type CommandExecutor<
 > = (
     args: {
         readonly [name in keyof T["args"]]:
-            | ParsableTypeOf<NonNullable<T["args"]>[name]["type"]>
+            | ParserType<NonNullable<T["args"]>[name]["parser"]>
             | (NonNullable<T["args"]>[name]["optional"] extends true
                   ? undefined extends NonNullable<T["args"]>[name]["defaultValue"]
                       ? undefined
@@ -34,14 +34,16 @@ export type CommandExecutor<
                   : never);
     },
     flags: {
-        readonly [name in keyof T["flags"]]:
-            | ParsableTypeOf<NonNullable<T["flags"]>[name]["type"]>
-            | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
-                  ? undefined
-                  : NonNullable<T["flags"]>[name]["defaultValue"]);
+        readonly [name in keyof T["flags"]]: undefined extends NonNullable<T["flags"]>[name]["parser"]
+            ? number
+            :
+                  | ParserType<NonNullable<NonNullable<T["flags"]>[name]["parser"]>>
+                  | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
+                        ? undefined
+                        : NonNullable<T["flags"]>[name]["defaultValue"]);
     },
     others: {
-        readonly rest: undefined extends T["rest"] ? void : readonly ParsableTypeOf<NonNullable<T["rest"]>["type"]>[];
+        readonly rest: string[];
         readonly message: Message & MessageExtension<S>;
         readonly options: CommandSetOptions;
         readonly commandSet: CommandSet;

@@ -11,4 +11,6 @@ export interface CommandSetOptions {
     allowMentionAsPrefix: boolean;
     /** Either or not dev users are not subject to permissions checking (default is `false`). */
     skipDevsPermissionsChecking: boolean;
+    /** Either or not the unknown flags are ignored at parsing (default is `false`). */
+    ignoreUnknownFlags: boolean;
 }
