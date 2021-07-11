@@ -34,13 +34,13 @@ export type CommandExecutor<
                   : never);
     },
     flags: {
-        readonly [name in keyof T["flags"]]:
-            | (undefined extends NonNullable<T["flags"]>[name]["parser"]
-                  ? boolean
-                  : ParserType<NonNullable<NonNullable<T["flags"]>[name]["parser"]>>)
-            | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
-                  ? undefined
-                  : NonNullable<T["flags"]>[name]["defaultValue"]);
+        readonly [name in keyof T["flags"]]: undefined extends NonNullable<T["flags"]>[name]["parser"]
+            ? number
+            :
+                  | ParserType<NonNullable<NonNullable<T["flags"]>[name]["parser"]>>
+                  | (undefined extends NonNullable<T["flags"]>[name]["defaultValue"]
+                        ? undefined
+                        : NonNullable<T["flags"]>[name]["defaultValue"]);
     },
     others: {
         readonly rest: string[];

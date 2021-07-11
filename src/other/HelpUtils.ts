@@ -113,8 +113,7 @@ function flagRawHelp(
 
     return {
         flag,
-        typeName:
-            flag.parser?._getLocalizedTypeName(typeNamesLocalization) ?? typeNamesLocalization["boolean"] ?? "boolean",
+        typeName: flag.parser?._getLocalizedTypeName(typeNamesLocalization),
         localizedName,
         description,
         longUsageString,
@@ -156,7 +155,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
                 (f.longUsageString ? `\`${f.longUsageString}\`` : "") +
                 (f.longUsageString && f.shortUsageString ? " " : "") +
                 (f.shortUsageString ? `\`${f.shortUsageString}\`` : "") +
-                ` *${f.typeName}*` +
+                (f.typeName ? ` *${f.typeName}*` : "") +
                 (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )
         .join("\n");

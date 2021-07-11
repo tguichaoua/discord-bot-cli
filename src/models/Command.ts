@@ -360,13 +360,21 @@ export class Command {
         options: CommandSetOptions,
     ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
         const flags = new Map<string, unknown>(
-            this.flags.map(f => [f.key, f.parser === undefined ? false : f.defaultValue]),
+            this.flags.map(f => [f.key, f.parser === undefined ? 0 : f.defaultValue]),
         );
         const args = new Map<string, unknown>();
         const rest = [...inputArguments];
         const absolutePositions = [...Array(inputArguments.length).keys()];
 
         const flagDatas: { data: FlagData; position: number }[] = [];
+
+        //* Must only be called if the flag has no parser. */
+        const incrementFlag = (key: string) => {
+            // Since incrementFlag is called only when the flag has no parser,
+            // the value is necessary an integer.
+            const value = flags.get(key) as number;
+            flags.set(key, value + 1);
+        };
 
         const getFlagDataFromShort = (short: Char, position: number): FlagData | null => {
             const data = this.flagShort.get(short);
@@ -397,11 +405,12 @@ export class Command {
                     shortNames.forEach(sn => {
                         const data = getFlagDataFromShort(sn, i);
                         if (data === null) return;
+                        // A flag with a parser cannot be used in middle of multiple short flags.
                         if (data.parser)
                             throw new CommandResultError(
                                 CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
                             );
-                        flags.set(data.key, true);
+                        incrementFlag(data.key);
                     });
 
                     const data = getFlagDataFromShort(lastShort, i);
@@ -415,19 +424,18 @@ export class Command {
             const next = flagDatas[i + 1];
             const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
 
-            let value: unknown;
             if (cur.data.parser) {
                 try {
-                    value = cur.data.parser._parse(context);
+                    const value = cur.data.parser._parse(context);
+                    flags.set(cur.data.key, value);
                 } catch (e) {
                     const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
                     throw new CommandResultError(CommandResultUtils.parseError(inputArguments, cur.position, error));
                 }
             } else {
-                value = true;
+                incrementFlag(cur.data.key);
             }
 
-            flags.set(cur.data.key, value);
             rest.splice(cur.position, 1 + context.consumed);
             absolutePositions.splice(cur.position, 1 + context.consumed);
         }
