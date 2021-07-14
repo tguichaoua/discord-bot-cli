@@ -11,10 +11,7 @@
         "release": "ts-node chores/release.ts",
         "v": "npm --no-git-tag-version version",
         "test": "npm run lint && npm run build:test",
-        "test:cmd": "ts-node ./src/bin/cli.ts cmd -l ts -p ./test/commands",
         "build:test": "tsc",
-        "start": "ts-node test/index.ts",
-        "start:log": "ts-node test/log.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix",
         "docs": "typedoc ./src/",
@@ -23,7 +20,12 @@
         "build:clean": "shx rm -rf ./dist",
         "rebuild": "npm run build:clean && npm run build",
         "prepublishOnly": "npm run rebuild",
-        "example": "ts-node ./example/index.ts"
+        "example": "ts-node ./example/index.ts",
+        "bot:make": "shx cp -r ./bot-template ./bot",
+        "bot:rm": "shx rm -rf ./bot",
+        "bot:remake": "npm run bot:rm && npm run bot:make",
+        "bot:run": "ts-node bot/index.ts",
+        "bot:cmd": "ts-node ./src/bin/cli.ts cmd -l ts -p ./bot/commands"
     },
     "repository": {
         "type": "git",
