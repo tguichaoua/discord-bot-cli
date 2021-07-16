@@ -1,7 +1,7 @@
+import { makeCommand, Parsers } from "../lib";
+
 import { template } from "../lib/utils/template";
-import { makeCommand } from "../lib/other/makeCommand";
 import { reply } from "../lib/utils/reply";
-import { Parsers } from "../lib/models/parsers";
 
 const cmd = makeCommand("help", {
     description: "Provide help about a command.",
