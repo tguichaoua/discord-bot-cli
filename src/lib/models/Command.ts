@@ -4,7 +4,7 @@ import { CommandSetOptions } from "./CommandSetOptions";
 import { CommandData } from "./CommandData";
 import { CommandDefinition } from "./definition/CommandDefinition";
 import { ArgDefinition } from "./definition/ArgDefinition";
-import { Char } from "../utils/char";
+import { Char } from "../utils/Char";
 import { CommandExecutor } from "./callbacks/CommandExecutor";
 import { CommandResultUtils } from "./CommandResult";
 import { CommandResultError } from "./errors/CommandResultError";

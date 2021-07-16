@@ -1,4 +1,4 @@
-import { Char } from "../utils/char";
+import { Char } from "../utils/Char";
 import { Parser } from "./parsers";
 
 export interface FlagData {
