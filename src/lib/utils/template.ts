@@ -1,5 +1,5 @@
 /** @internal */
 export function template(str: string, replaceValues: { [key: string]: string }) {
-    for (const key in replaceValues) str = str.replace(new RegExp(`{{${key}}}`, "gi"), replaceValues[key]);
+    Object.entries(replaceValues).forEach(([k, v]) => (str = str.replace(new RegExp(`{{${k}}}`, "gi"), v)));
     return str;
 }
