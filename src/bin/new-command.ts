@@ -34,7 +34,7 @@ export default function () {
     }
 
     const ext = cli.flags.lang;
-    const { dir: cmdDir, base: name } = path.parse(cli.input[1]);
+    const { dir: cmdDir, base: name } = path.parse(cli.input[1]!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
     const dir = cli.flags.path ? path.join(cli.flags.path, cmdDir) : cmdDir;
 

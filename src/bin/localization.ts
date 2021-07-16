@@ -13,7 +13,7 @@ export default function () {
 
     if (cli.input.length < 2) cli.showHelp();
 
-    const parsedPath = path.parse(cli.input[1]);
+    const parsedPath = path.parse(cli.input[1]!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
     fs.mkdirSync(parsedPath.dir, { recursive: true });
 

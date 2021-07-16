@@ -1,7 +1,4 @@
-import { makeCommand } from "../other/makeCommand";
-import { Command } from "..";
-import { Logger } from "../logger";
-import { Parsers } from "../models/parsers";
+import { makeCommand, Command, Logger, Parsers } from "../lib";
 
 const cmd = makeCommand("cmd", {
     devOnly: true,
