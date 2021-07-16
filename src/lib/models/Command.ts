@@ -490,7 +490,7 @@ export class Command {
 
         const context = new ParsingContext(message, rest);
 
-        const args = mapMapEntries(this.args, def => {
+        const args = map(this.args, def => {
             if (context.remaining === 0 && def.optional) {
                 return def.defaultValue;
             }

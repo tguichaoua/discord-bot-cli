@@ -8,7 +8,7 @@ import { distinct } from "../utils/array";
  * @param definition Definition of the command.
  */
 export function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T> {
-    const subs = definition.subs ? mapEntries(definition.subs, (def, key) => makeCommand(key, def)) : {};
+    const subs = definition.subs ? map(definition.subs, (def, key) => makeCommand(key, def)) : {};
 
     // for (const k in definition.args) {
     //     const t = definition.args[k].type;
