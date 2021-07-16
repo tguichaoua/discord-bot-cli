@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
-import { makeCommand } from "../other/makeCommand";
-import { getListRawData } from "../other/ListUtils";
-import { reply } from "../utils/reply";
+import { makeCommand } from "../lib/other/makeCommand";
+import { getListRawData } from "../lib/other/ListUtils";
+import { reply } from "../lib/utils/reply";
 
 const cmd = makeCommand("list", {
     description: "Display a list of all avaible commands.",

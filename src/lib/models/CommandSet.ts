@@ -8,7 +8,7 @@ import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { CommandSetOptions } from "./CommandSetOptions";
 
-import defaultLocalization from "../data/localization.json";
+import defaultLocalization from "../../assets/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
 import { commandFullName } from "../other/HelpUtils";
