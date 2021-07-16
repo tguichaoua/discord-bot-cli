@@ -21,6 +21,7 @@ import { ParsingContext } from "./parsers/ParsingContext";
 import { ParseError, UnhandledErrorParseError } from "./parsers";
 import { FlagData } from "./FlagData";
 import { toKebabCase } from "../utils/case";
+import { map } from "../utils/object";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;

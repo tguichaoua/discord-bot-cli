@@ -1,6 +1,7 @@
 import { CommandDefinition } from "../models/definition/CommandDefinition";
 import { CommandData } from "../models/CommandData";
 import { distinct } from "../utils/array";
+import { map } from "../utils/object";
 
 /**
  * Generate command data.
