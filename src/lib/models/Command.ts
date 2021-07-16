@@ -362,7 +362,7 @@ export class Command {
         const flags = new Map<string, unknown>(
             this.flags.map(f => [f.key, f.parser === undefined ? 0 : f.defaultValue]),
         );
-        const args = new Map<string, unknown>();
+        // const args = new Map<string, unknown>();
         const rest = [...inputArguments];
         const absolutePositions = [...Array(inputArguments.length).keys()];
 
@@ -390,8 +390,7 @@ export class Command {
             throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, long));
         };
 
-        for (let i = 0; i < inputArguments.length; i++) {
-            const a = inputArguments[i];
+        inputArguments.forEach((a, i) => {
             if (a.startsWith("-")) {
                 if (a.startsWith("--")) {
                     const long = a.substr(2);
@@ -417,10 +416,38 @@ export class Command {
                     if (data !== null) flagDatas.push({ data, position: i });
                 }
             }
-        }
+        });
 
-        for (let i = 0; i < flagDatas.length; i++) {
-            const cur = flagDatas[i];
+        // for (let i = 0; i < inputArguments.length; i++) {
+        //     const a = inputArguments[i];
+        //     if (a.startsWith("-")) {
+        //         if (a.startsWith("--")) {
+        //             const long = a.substr(2);
+        //             const data = getFlagDataFromLong(long, i);
+
+        //             // check if the flag has not been ignored.
+        //             if (data !== null) flagDatas.push({ data, position: i });
+        //         } else {
+        //             const shortNames = a.substring(1).split("") as Char[];
+        //             const lastShort = shortNames.pop() as Char;
+        //             shortNames.forEach(sn => {
+        //                 const data = getFlagDataFromShort(sn, i);
+        //                 if (data === null) return;
+        //                 // A flag with a parser cannot be used in middle of multiple short flags.
+        //                 if (data.parser)
+        //                     throw new CommandResultError(
+        //                         CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
+        //                     );
+        //                 incrementFlag(data.key);
+        //             });
+
+        //             const data = getFlagDataFromShort(lastShort, i);
+        //             if (data !== null) flagDatas.push({ data, position: i });
+        //         }
+        //     }
+        // }
+
+        flagDatas.forEach((cur, i) => {
             const next = flagDatas[i + 1];
             const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
 
@@ -438,28 +465,65 @@ export class Command {
 
             rest.splice(cur.position, 1 + context.consumed);
             absolutePositions.splice(cur.position, 1 + context.consumed);
-        }
+        });
+
+        // for (let i = 0; i < flagDatas.length; i++) {
+        //     const cur = flagDatas[i];
+        //     const next = flagDatas[i + 1];
+        //     const context = new ParsingContext(message, inputArguments, cur.position, next?.position);
+
+        //     if (cur.data.parser) {
+        //         try {
+        //             const value = cur.data.parser._parse(context);
+        //             flags.set(cur.data.key, value);
+        //         } catch (e) {
+        //             const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+        //             throw new CommandResultError(CommandResultUtils.parseError(inputArguments, cur.position, error));
+        //         }
+        //     } else {
+        //         incrementFlag(cur.data.key);
+        //     }
+
+        //     rest.splice(cur.position, 1 + context.consumed);
+        //     absolutePositions.splice(cur.position, 1 + context.consumed);
+        // }
 
         const context = new ParsingContext(message, rest);
-        let current: number;
-        for (const [name, def] of this.args) {
-            let value: unknown;
-            current = context.consumed;
 
+        const args = mapMapEntries(this.args, def => {
             if (context.remaining === 0 && def.optional) {
-                value = def.defaultValue;
-            } else {
-                try {
-                    value = def.parser._parse(context);
-                } catch (e) {
-                    const position = absolutePositions[current];
-                    const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
-                    throw new CommandResultError(CommandResultUtils.parseError(inputArguments, position, error));
-                }
+                return def.defaultValue;
             }
 
-            args.set(name, value);
-        }
+            const current = context.consumed;
+            try {
+                return def.parser._parse(context);
+            } catch (e) {
+                const position = absolutePositions[current];
+                if (!position) throw Error("Shouldn't happen !");
+                const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+                throw new CommandResultError(CommandResultUtils.parseError(inputArguments, position, error));
+            }
+        });
+
+        // for (const [name, def] of this.args) {
+        //     let value: unknown;
+        //     current = context.consumed;
+
+        //     if (context.remaining === 0 && def.optional) {
+        //         value = def.defaultValue;
+        //     } else {
+        //         try {
+        //             value = def.parser._parse(context);
+        //         } catch (e) {
+        //             const position = absolutePositions[current];
+        //             const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
+        //             throw new CommandResultError(CommandResultUtils.parseError(inputArguments, position, error));
+        //         }
+        //     }
+
+        //     args.set(name, value);
+        // }
 
         return { flags, args, rest: context.rest() };
     }
