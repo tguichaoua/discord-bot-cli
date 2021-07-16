@@ -31,7 +31,7 @@ export class ParsingContext {
     }
 
     restoreState(): void {
-        if (this.states.length) this.current = this.states[this.states.length - 1]!;
+        if (this.states.length) this.current = this.states[this.states.length - 1]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
 
     removeState(): void {
@@ -47,7 +47,7 @@ export class ParsingContext {
     private next(): string {
         if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
         // to is never greater than args length.
-        return this.args[this.current++]!;
+        return this.args[this.current++]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
 
     nextString(): string {

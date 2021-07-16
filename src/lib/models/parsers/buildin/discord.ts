@@ -48,7 +48,7 @@ function discordParser<T>(
         let obj: T | undefined;
         if (idResult) {
             // Every pattern have a capturing group to capture the id
-            id = idResult[1]!;
+            id = idResult[1]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
             obj = mentionToCollection(context.message.mentions).get(id);
         } else if (ID_PATTERN.test(str)) {
             obj = resolve(context.message, str);
