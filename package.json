@@ -59,8 +59,8 @@
         "@types/semver": "^7.3.7",
         "@types/shelljs": "^0.8.9",
         "@types/ws": "^7.4.6",
-        "@typescript-eslint/eslint-plugin": "^4.28.2",
-        "@typescript-eslint/parser": "^4.28.2",
+        "@typescript-eslint/eslint-plugin": "^4.28.3",
+        "@typescript-eslint/parser": "^4.28.3",
         "discord.js": "12.3",
         "eslint": "^7.30.0",
         "eslint-config-prettier": "^6.15.0",
@@ -70,7 +70,7 @@
         "shelljs": "^0.8.4",
         "shx": "^0.3.3",
         "ts-node": "^9.1.1",
-        "typedoc": "^0.21.3",
+        "typedoc": "^0.21.4",
         "typescript": "^4.3.5"
     },
     "dependencies": {
