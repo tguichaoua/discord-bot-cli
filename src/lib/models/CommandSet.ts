@@ -111,14 +111,14 @@ export class CommandSet {
     /** @internal */
     resolve(args: readonly string[]) {
         const _args = [...args]; // make a copy of args
-        let cmd = this._commands.get(_args[0]);
+        let cmd = _args[0] ? this._commands.get(_args[0]) : undefined;
 
         if (cmd) {
             let sub: Command | undefined = cmd;
             do {
                 cmd = sub;
                 _args.shift();
-                sub = cmd.subs.get(_args[0]);
+                sub = _args[0] ? cmd.subs.get(_args[0]) : undefined;
             } while (sub);
 
             return { command: cmd, args: _args };

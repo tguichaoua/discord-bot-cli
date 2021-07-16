@@ -31,7 +31,9 @@ const ROLES_PATTERN = /^<@&(\d{17,19})>$/; // <@&297577916114403338>
 /** @internal */
 const CHANNELS_PATTERN = /^<#(\d{17,19})>$/; // <#222079895583457280>
 
-/** @internal */
+/** @internal
+ * ! The pattern should have a capturing group for the id
+ */
 function discordParser<T>(
     pattern: RegExp,
     mentionToCollection: (m: MessageMentions) => Collection<string, T>,
@@ -45,7 +47,8 @@ function discordParser<T>(
         let id: string | undefined;
         let obj: T | undefined;
         if (idResult) {
-            id = idResult[1];
+            // Every pattern have a capturing group to capture the id
+            id = idResult[1]!;
             obj = mentionToCollection(context.message.mentions).get(id);
         } else if (ID_PATTERN.test(str)) {
             obj = resolve(context.message, str);

@@ -31,7 +31,7 @@ export class ParsingContext {
     }
 
     restoreState(): void {
-        if (this.states.length) this.current = this.states[this.states.length - 1];
+        if (this.states.length) this.current = this.states[this.states.length - 1]!;
     }
 
     removeState(): void {
@@ -46,7 +46,8 @@ export class ParsingContext {
 
     private next(): string {
         if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
-        return this.args[this.current++];
+        // to is never greater than args length.
+        return this.args[this.current++]!;
     }
 
     nextString(): string {
