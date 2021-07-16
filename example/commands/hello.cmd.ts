@@ -9,7 +9,7 @@ const cmd = makeCommand("hello", {
     },
 });
 
-cmd.executor = async ({ where }, _f, _) => {
+cmd.executor = async ({ where }) => {
     switch (where.variant) {
         case "user":
             await where.value.send(`Hello ${where.value.username} !`);

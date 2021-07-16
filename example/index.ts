@@ -36,19 +36,20 @@ client.on("message", async message => {
     // The status field is used to discriminate the sum type
     switch (result.status) {
         case "client permissions":
-            // The command require client permission the bot hasn't
-            result.command; // The requested command
+            {
+                // The command require client permission the bot hasn't
+                result.command; // The requested command
 
-            const permissions = message.guild?.me?.permissions.toArray() ?? [];
-            const missingPermissions = result.command.clientPermissions
-                .filter(p => !permissions.includes(p))
-                .map(p => `\`${p}\``)
-                .join(", ");
+                const permissions = message.guild?.me?.permissions.toArray() ?? [];
+                const missingPermissions = result.command.clientPermissions
+                    .filter(p => !permissions.includes(p))
+                    .map(p => `\`${p}\``)
+                    .join(", ");
 
-            await message.reply(
-                `cannot execute the command, the following permissions are missing : ${missingPermissions}`,
-            );
-
+                await message.reply(
+                    `cannot execute the command, the following permissions are missing : ${missingPermissions}`,
+                );
+            }
             break;
 
         case "command not found":
@@ -121,14 +122,16 @@ client.on("message", async message => {
             break;
 
         case "throttling":
-            // The requested command reach its usage limit
-            result.command; // The requested command
+            {
+                // The requested command reach its usage limit
+                result.command; // The requested command
 
-            // Since the result's status is "throttling", we are sure that command.throttler
-            // isn't undefined. So, we can use the !. operator without problem.
-            const cooldown = result.command.throttler!.getCooldown(message);
+                // Since the result's status is "throttling", we are sure that command.throttler
+                // isn't undefined. So, we can use the !. operator without problem.
+                const cooldown = result.command.throttler!.getCooldown(message); //eslint-disable-line @typescript-eslint/no-non-null-assertion
 
-            await message.reply(`please, wait ${cooldown} seconds before execute this command.`);
+                await message.reply(`please, wait ${cooldown} seconds before execute this command.`);
+            }
             break;
 
         case "unauthorized user":

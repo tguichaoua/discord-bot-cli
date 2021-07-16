@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { CategoryChannel, Client, ColorResolvable, MessageEmbed } from "discord.js";
+import { Client, ColorResolvable, MessageEmbed } from "discord.js";
 import { CommandResult, CommandSet, LogLevel, Logs } from "../src/index";
 import env from "./env.json";
 

@@ -22,7 +22,7 @@ type MessageExtension<S> = {
  */
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
-    S extends CommandSettings = Record<string, unknown>
+    S extends CommandSettings = Record<string, unknown>,
 > = (
     args: {
         readonly [name in keyof T["args"]]:
