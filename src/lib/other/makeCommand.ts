@@ -8,10 +8,7 @@ import { distinct } from "../utils/array";
  * @param definition Definition of the command.
  */
 export function makeCommand<T extends CommandDefinition>(name: string, definition: T): CommandData<T> {
-    const subs = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    for (const key in definition.subs) {
-        subs[key] = makeCommand(key, definition.subs[key]);
-    }
+    const subs = definition.subs ? mapEntries(definition.subs, (def, key) => makeCommand(key, def)) : {};
 
     // for (const k in definition.args) {
     //     const t = definition.args[k].type;
@@ -31,7 +28,7 @@ export function makeCommand<T extends CommandDefinition>(name: string, definitio
     return {
         def: definition,
         name,
-        subs,
+        subs: subs as CommandData<T>["subs"],
     };
 }
 
