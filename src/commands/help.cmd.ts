@@ -7,7 +7,7 @@ const cmd = makeCommand("help", {
     description: "Provide help about a command.",
     args: {
         commandName: {
-            parser: Parsers.rest,
+            parser: Parsers.rest(Parsers.string),
             name: "command",
             description: "The name of the command.",
         },
