@@ -19,6 +19,7 @@ import { relativeFromEntryPoint, resolveFromEntryPoint } from "../utils/PathUtil
 import chalk from "chalk";
 import { CommandLoadError } from "./errors/CommandLoadError";
 import { HelpHandler } from "./callbacks/HelpHandler";
+import { Analyser, ArgItem } from "arg-analyser";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
@@ -27,7 +28,17 @@ export class CommandSet {
     /** If defined, called when [[Command.help]] is called and if the command didn't define its own help handler. */
     public helpHandler: HelpHandler | undefined = undefined;
 
-    constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {}
+    private readonly analyser: Analyser;
+
+    constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {
+        this.analyser = new Analyser({
+            groupDelimiters: [
+                ["(", ")"],
+                ["[", "]"],
+                ["{", "}"],
+            ],
+        });
+    }
 
     /** A readonly collection of commands. */
     get commands() {
@@ -109,22 +120,18 @@ export class CommandSet {
     }
 
     /** @internal */
-    resolve(args: readonly string[]) {
-        const _args = [...args]; // make a copy of args
-        let cmd = _args[0] ? this._commands.get(_args[0]) : undefined;
+    resolve(args: readonly string[]): { command: Command | null; consumed: number } {
+        let command = args[0] ? this._commands.get(args[0]) : undefined;
 
-        if (cmd) {
-            let sub: Command | undefined = cmd;
-            do {
-                cmd = sub;
-                _args.shift();
-                sub = _args[0] ? cmd.subs.get(_args[0]) : undefined;
-            } while (sub);
+        if (!command) return { command: null, consumed: 0 };
 
-            return { command: cmd, args: _args };
-        } else {
-            return { args: _args };
+        for (let i = 1; i < args.length; ++i) {
+            const sub: Command | undefined = command.subs.get(args[i]!);
+            if (!sub) return { command, consumed: i };
+            command = sub;
         }
+
+        return { command, consumed: args.length };
     }
 
     /**
@@ -153,12 +160,33 @@ export class CommandSet {
         else if (message.content.startsWith(opts.prefix)) content = message.content.substring(opts.prefix.length);
         else return CommandResultUtils.notPrefixed();
 
-        // extract the command & arguments from message
-        const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []).map(a =>
-            /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a,
-        );
+        Logger.debug("content = ", content);
 
-        const { command, args } = this.resolve(rawArgs);
+        // // extract the command & arguments from message
+        // const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []).map(a =>
+        //     /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a,
+        // );
+
+        const args = this.analyser.analyse(content);
+
+        Logger.debug("args = ", args);
+
+        const isSimpleStringArg = (a: ArgItem): a is ArgItem & { kind: "string"; delimiter: "" } =>
+            a.kind === "string" && a.delimiter === "";
+
+        const commandName =
+            args.length === 1
+                ? isSimpleStringArg(args[0]!)
+                    ? [args[0].content]
+                    : []
+                : (
+                      args.slice(
+                          0,
+                          args.findIndex(a => !isSimpleStringArg(a)),
+                      ) as (ArgItem & { kind: "string" })[]
+                  ).map(a => a.content);
+
+        const { command, consumed } = this.resolve(commandName);
 
         if (!command) return CommandResultUtils.commandNotFound();
 
@@ -182,6 +210,7 @@ export class CommandSet {
         if (message.member && !command.hasPermissions(message.member))
             return CommandResultUtils.unauthorizedUser(command);
 
+        args.splice(0, consumed); // Remove consumed argument by the resolve process.
         try {
             await command.execute(message, args, opts, this);
             if (command.deleteMessage && message.channel.type === "text") await message.delete().catch(Logger.error);

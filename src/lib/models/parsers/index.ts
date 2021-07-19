@@ -3,7 +3,7 @@ import {
     channelParser,
     FLOAT_PARSER,
     INTEGER_PARSER,
-    REST_PARSER,
+    restParser,
     ROLE_PARSER,
     STRING_PARSER,
     UnionParser,
@@ -30,9 +30,7 @@ export const Parsers = Object.freeze({
     get boolean() {
         return BOOLEAN_PARSER;
     },
-    get rest() {
-        return REST_PARSER;
-    },
+    rest: restParser,
     get user() {
         return USER_PARSER;
     },

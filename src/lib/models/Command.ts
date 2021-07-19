@@ -22,6 +22,7 @@ import { ParseError, UnhandledErrorParseError } from "./parsers";
 import { FlagData } from "./FlagData";
 import { toKebabCase } from "../utils/case";
 import { map } from "../utils/object";
+import { ArgItem } from "arg-analyser";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -318,7 +319,12 @@ export class Command {
     }
 
     /** @internal */
-    async execute(message: Message, inputArguments: string[], options: CommandSetOptions, commandSet: CommandSet) {
+    async execute(
+        message: Message,
+        inputArguments: readonly ArgItem[],
+        options: CommandSetOptions,
+        commandSet: CommandSet,
+    ) {
         if (message.guild && !this.hasClientPermissions(message.guild))
             throw new CommandResultError(CommandResultUtils.clientPermissions(this));
 
@@ -357,9 +363,9 @@ export class Command {
     /** @internal */
     private parse(
         message: Message,
-        inputArguments: readonly string[],
+        inputArguments: readonly ArgItem[],
         options: CommandSetOptions,
-    ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: string[] } {
+    ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: ArgItem[] } {
         const flags = new Map<string, unknown>(
             this.flags.map(f => [f.key, f.parser === undefined ? 0 : f.defaultValue]),
         );
@@ -391,33 +397,36 @@ export class Command {
             throw new CommandResultError(CommandResultUtils.unknownFlag(inputArguments, position, long));
         };
 
-        inputArguments.forEach((a, i) => {
-            if (a.startsWith("-")) {
-                if (a.startsWith("--")) {
-                    const long = a.substr(2);
-                    const data = getFlagDataFromLong(long, i);
+        inputArguments
+            // Only arguments of type string and that is not between quotes can be flags.
+            .filter((a): a is ArgItem & { kind: "string" } => a.kind === "string" && a.delimiter === "")
+            .forEach((a, i) => {
+                if (a.content.startsWith("-")) {
+                    if (a.content.startsWith("--")) {
+                        const long = a.content.substr(2);
+                        const data = getFlagDataFromLong(long, i);
 
-                    // check if the flag has not been ignored.
-                    if (data !== null) flagDatas.push({ data, position: i });
-                } else {
-                    const shortNames = a.substring(1).split("") as Char[];
-                    const lastShort = shortNames.pop() as Char;
-                    shortNames.forEach(sn => {
-                        const data = getFlagDataFromShort(sn, i);
-                        if (data === null) return;
-                        // A flag with a parser cannot be used in middle of multiple short flags.
-                        if (data.parser)
-                            throw new CommandResultError(
-                                CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
-                            );
-                        incrementFlag(data.key);
-                    });
+                        // check if the flag has not been ignored.
+                        if (data !== null) flagDatas.push({ data, position: i });
+                    } else {
+                        const shortNames = a.content.substring(1).split("") as Char[];
+                        const lastShort = shortNames.pop() as Char;
+                        shortNames.forEach(sn => {
+                            const data = getFlagDataFromShort(sn, i);
+                            if (data === null) return;
+                            // A flag with a parser cannot be used in middle of multiple short flags.
+                            if (data.parser)
+                                throw new CommandResultError(
+                                    CommandResultUtils.wrongFlagUsage(inputArguments, i, sn, data),
+                                );
+                            incrementFlag(data.key);
+                        });
 
-                    const data = getFlagDataFromShort(lastShort, i);
-                    if (data !== null) flagDatas.push({ data, position: i });
+                        const data = getFlagDataFromShort(lastShort, i);
+                        if (data !== null) flagDatas.push({ data, position: i });
+                    }
                 }
-            }
-        });
+            });
 
         // for (let i = 0; i < inputArguments.length; i++) {
         //     const a = inputArguments[i];

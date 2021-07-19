@@ -5,6 +5,7 @@ import { CommandDefinition, CommandSettings } from "../definition/CommandDefinit
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 import { ParserType } from "../parsers";
+import { ArgItem } from "arg-analyser";
 
 /** @ignore */
 type IsGuildOnly<S extends CommandSettings, True, False> = S["guildOnly"] extends true ? True : False;
@@ -43,7 +44,7 @@ export type CommandExecutor<
                         : NonNullable<T["flags"]>[name]["defaultValue"]);
     },
     others: {
-        readonly rest: string[];
+        readonly rest: ArgItem[];
         readonly message: Message & MessageExtension<S>;
         readonly options: CommandSetOptions;
         readonly commandSet: CommandSet;
