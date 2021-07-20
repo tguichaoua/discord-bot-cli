@@ -2,20 +2,20 @@ import { InvalidUnionTypeParseError, ParseError } from "../errors";
 import { CustomParser, Parser, ParserType } from "../Parser";
 import { ParsingContext } from "../ParsingContext";
 
-export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extends CustomParser<ParserType<T[number]>> {
-    public readonly inners: Readonly<T>;
+export class UnionParser<P extends Parser<unknown>[] = Parser<unknown>[]> extends CustomParser<ParserType<P[number]>> {
+    public readonly inners: Readonly<P>;
 
-    constructor(...parsers: T) {
+    constructor(...parsers: P) {
         super(parsers.map(p => p.typeName).join(" | "));
         this.inners = parsers;
     }
 
-    public parse(context: ParsingContext): ParserType<T[number]> {
+    public parse(context: ParsingContext): ParserType<P[number]> {
         context.saveState();
         for (const parser of this.inners) {
             try {
                 context.restoreState();
-                const value = parser.parse(context) as ParserType<T[number]>;
+                const value = parser.parse(context) as ParserType<P[number]>;
                 context.removeState();
                 return value;
             } catch (e) {
