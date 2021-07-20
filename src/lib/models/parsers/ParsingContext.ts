@@ -58,11 +58,12 @@ export class ParsingContext {
     }
 
     private nextNumber(typename: "float" | "integer"): { arg: string; n: number } {
-        const s = this.nextString();
-        if (s === "") throw new InvalidTypeParseError(typename, s);
-        const n = new Number(s);
-        if (Number.isNaN(n)) throw new InvalidTypeParseError(typename, s);
-        return { arg: s, n: n.valueOf() };
+        const next = this.next();
+        if (next.kind !== "string") throw new InvalidArgumentTypeError(typename, next);
+        if (next.content === "") throw new InvalidTypeParseError(typename, next.content);
+        const n = new Number(next.content);
+        if (Number.isNaN(n)) throw new InvalidTypeParseError(typename, next.content);
+        return { arg: next.content, n: n.valueOf() };
     }
 
     nextFloat(): number {
@@ -76,8 +77,9 @@ export class ParsingContext {
     }
 
     nextBoolean(): boolean {
-        const s = this.nextString();
-        switch (s.toLowerCase()) {
+        const next = this.next();
+        if (next.kind !== "string") throw new InvalidArgumentTypeError("boolean", next);
+        switch (next.content.toLowerCase()) {
             case "1":
             case "true":
             case "yes":
@@ -87,7 +89,7 @@ export class ParsingContext {
             case "no":
                 return false;
             default:
-                throw new InvalidTypeParseError("boolean", s);
+                throw new InvalidTypeParseError("boolean", next.content);
         }
     }
 
