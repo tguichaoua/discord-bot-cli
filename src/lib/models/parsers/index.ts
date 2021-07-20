@@ -8,9 +8,10 @@ import {
     USER_PARSER,
     ROLE_PARSER,
     channelParser,
+    values,
+    rangei,
+    rangef,
 } from "./buildin";
-import { InvalidRangeParseError } from "./errors";
-import { Parser } from "./Parser";
 
 export * from "./Parser";
 export * from "./ParsingContext";
@@ -27,19 +28,7 @@ export const Parsers = Object.freeze({
     user: USER_PARSER,
     role: ROLE_PARSER,
     channel: channelParser,
-    /** Parses an interger and checks the value is in range [min; max). */
-    rangei: (min: number, max: number) =>
-        INTEGER_PARSER.if(
-            n => n >= min && n < max,
-            n => new InvalidRangeParseError(n, min, max),
-        ),
-    /** Parses a float and checks the value is in range [min; max]. */
-    rangef: (min: number, max: number) =>
-        FLOAT_PARSER.if(
-            n => n >= min && n <= max,
-            n => new InvalidRangeParseError(n, min, max),
-        ),
-    /** Parses a string and checks the value is one of the values. */
-    values: <T extends string = never>(...values: T[]): Parser<T> =>
-        STRING_PARSER.if((s): s is T => values.includes(s as T)),
+    values,
+    rangei,
+    rangef,
 });
