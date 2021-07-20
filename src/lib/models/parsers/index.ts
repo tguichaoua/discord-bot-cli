@@ -11,6 +11,7 @@ import {
     values,
     rangei,
     rangef,
+    TupleParser,
 } from "./buildin";
 
 export * from "./Parser";
@@ -25,6 +26,7 @@ export const Parsers = Object.freeze({
     boolean: BOOLEAN_PARSER,
     rest: RestParser.create,
     union: UnionParser.create,
+    tuple: TupleParser.create,
     user: USER_PARSER,
     role: ROLE_PARSER,
     channel: channelParser,
