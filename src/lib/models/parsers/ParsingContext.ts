@@ -54,10 +54,27 @@ export class ParsingContext {
         if (this.remaining < minimumArgExpected) throw new NotEnoughArgParseError(minimumArgExpected, this.remaining);
     }
 
-    private next(): ArgItem {
+    /**
+     * Consumes the next argument and returns it.
+     * @returns The next argument
+     * @throws {NotEnoughArgParseError} If the remaining number of argument is 0
+     *
+     */
+    next(): ArgItem {
         if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
         // to is never greater than args length.
         return this.args[this.current++]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    }
+
+    /**
+     * Returns the next arguments without consumes it.
+     * @returns The next argument
+     * @throws {NotEnoughArgParseError} If the remaining number of argument is 0
+     */
+    peek(): ArgItem {
+        if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
+        // to is never greater than args length.
+        return this.args[this.current]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
 
     nextString(): string {
