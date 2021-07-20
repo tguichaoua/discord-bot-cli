@@ -6,6 +6,10 @@ type OnFail<T> = (value: T) => InvalidValueParseError;
 
 export type ParserType<P extends Parser<unknown>> = P extends Parser<infer T> ? T : never;
 
+export type ParserTupleType<P extends Parser<unknown>[]> = {
+    [K in keyof P]: P[K] extends Parser<infer T> ? T : never;
+};
+
 export abstract class Parser<T> {
     public abstract get typeName(): string;
 
