@@ -18,25 +18,13 @@ export * from "./buildin";
 export * from "./errors";
 
 export const Parsers = Object.freeze({
-    get string() {
-        return STRING_PARSER;
-    },
-    get integer() {
-        return INTEGER_PARSER;
-    },
-    get float() {
-        return FLOAT_PARSER;
-    },
-    get boolean() {
-        return BOOLEAN_PARSER;
-    },
+    string: STRING_PARSER,
+    integer: INTEGER_PARSER,
+    float: FLOAT_PARSER,
+    boolean: BOOLEAN_PARSER,
     rest: restParser,
-    get user() {
-        return USER_PARSER;
-    },
-    get role() {
-        return ROLE_PARSER;
-    },
+    user: USER_PARSER,
+    role: ROLE_PARSER,
     channel: channelParser,
     /** Parses the value using each parser **in order** until the first that successfully parse the value.*/
     union: <T extends Parser<unknown>[] = Parser<unknown>[]>(...parsers: T) => {
