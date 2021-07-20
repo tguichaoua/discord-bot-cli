@@ -3,12 +3,12 @@ import {
     channelParser,
     FLOAT_PARSER,
     INTEGER_PARSER,
-    restParser,
     ROLE_PARSER,
     STRING_PARSER,
     UnionParser,
     USER_PARSER,
 } from "./buildin";
+import { RestParser } from "./buildin/RestParser";
 import { InvalidRangeParseError } from "./errors";
 import { Parser } from "./Parser";
 
@@ -22,7 +22,7 @@ export const Parsers = Object.freeze({
     integer: INTEGER_PARSER,
     float: FLOAT_PARSER,
     boolean: BOOLEAN_PARSER,
-    rest: restParser,
+    rest: RestParser.create,
     user: USER_PARSER,
     role: ROLE_PARSER,
     channel: channelParser,

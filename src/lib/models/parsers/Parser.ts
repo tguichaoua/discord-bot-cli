@@ -110,7 +110,7 @@ class FunctionParser<T> extends CustomParser<T> {
     }
 }
 
-abstract class WrapperParser<I, O = I> extends Parser<O> {
+export abstract class WrapperParser<I, O = I> extends Parser<O> {
     constructor(public readonly inner: Parser<I>) {
         super();
     }
