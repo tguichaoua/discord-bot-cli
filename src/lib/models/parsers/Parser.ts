@@ -1,5 +1,5 @@
 import { ParsingContext } from "./ParsingContext";
-import { InvalidValueParseError, NotEnoughArgParseError } from "./errors";
+import { InvalidValueParseError } from "./errors";
 import { Predicate, TypeGuard } from "../../utils/types";
 
 type OnFail<T> = (value: T) => InvalidValueParseError;
@@ -8,9 +8,6 @@ export type ParserType<P extends Parser<unknown>> = P extends Parser<infer T> ? 
 
 export abstract class Parser<T> {
     public abstract get typeName(): string;
-
-    /** The minimum number of argument required by this parser. */
-    public abstract get minimalInputRequired(): number;
 
     /**
      * Parses next inputs into a value.
@@ -78,14 +75,6 @@ export abstract class Parser<T> {
     }
 
     /** @internal */
-    public _parse(context: ParsingContext): T {
-        if (context.remaining < this.minimalInputRequired)
-            throw new NotEnoughArgParseError(this.minimalInputRequired, context.remaining);
-
-        return this.parse(context);
-    }
-
-    /** @internal */
     public _getLocalizedTypeName(localization: Record<string, string>): string {
         return this.typeName.replace(/\$(.*?)\$/g, (_, typename) => localization[typename] ?? typename);
     }
@@ -96,12 +85,8 @@ export abstract class Parser<T> {
      * @param minimalInputRequired The minimal number of argument required by the parser
      * @param parser The function used to parse the inputs into a value
      */
-    public static fromFunction<T>(
-        typeName: string,
-        minimalInputRequired: number,
-        parser: (ctx: ParsingContext) => T,
-    ): Parser<T> {
-        return new FunctionParser(typeName, minimalInputRequired, parser);
+    public static fromFunction<T>(typeName: string, parser: (ctx: ParsingContext) => T): Parser<T> {
+        return new FunctionParser(typeName, parser);
     }
 }
 
@@ -110,22 +95,18 @@ export abstract class Parser<T> {
  * field.
  */
 export abstract class CustomParser<T> extends Parser<T> {
-    constructor(private readonly _typeName: string, private readonly _minimalInputRequired: number) {
+    constructor(private readonly _typeName: string) {
         super();
     }
 
     get typeName() {
         return this._typeName;
     }
-
-    get minimalInputRequired() {
-        return this._minimalInputRequired;
-    }
 }
 
 class FunctionParser<T> extends CustomParser<T> {
-    constructor(typeName: string, minimalInputRequired: number, public readonly parse: (ctx: ParsingContext) => T) {
-        super(typeName, minimalInputRequired);
+    constructor(typeName: string, public readonly parse: (ctx: ParsingContext) => T) {
+        super(typeName);
     }
 }
 
@@ -136,10 +117,6 @@ abstract class WrapperParser<I, O = I> extends Parser<O> {
 
     public get typeName() {
         return this.inner.typeName;
-    }
-
-    public get minimalInputRequired() {
-        return this.inner.minimalInputRequired;
     }
 }
 

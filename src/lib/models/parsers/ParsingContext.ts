@@ -45,6 +45,15 @@ export class ParsingContext {
         return context;
     }
 
+    /**
+     * Checks if the remaining number of arguments is greater or equals than the expected number of arguments.
+     * If it's not the case, throws an `NotEnoughArgParseError` error.
+     * @param minimumArgExpected The minimum number of arguments expected
+     */
+    public require(minimumArgExpected: number): void {
+        if (this.remaining < minimumArgExpected) throw new NotEnoughArgParseError(minimumArgExpected, this.remaining);
+    }
+
     private next(): ArgItem {
         if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
         // to is never greater than args length.

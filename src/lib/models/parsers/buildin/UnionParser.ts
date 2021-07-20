@@ -6,7 +6,7 @@ export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extend
     private readonly parsers: T;
 
     constructor(...parsers: T) {
-        super(parsers.map(p => p.typeName).join(" | "), Math.min(...parsers.map(p => p.minimalInputRequired)));
+        super(parsers.map(p => p.typeName).join(" | "));
         this.parsers = parsers;
     }
 
@@ -15,7 +15,7 @@ export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extend
         for (const parser of this.parsers) {
             try {
                 context.restoreState();
-                const value = parser._parse(context) as ParserType<T[number]>;
+                const value = parser.parse(context) as ParserType<T[number]>;
                 context.removeState();
                 return value;
             } catch (e) {
