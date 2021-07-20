@@ -23,13 +23,10 @@ export const Parsers = Object.freeze({
     float: FLOAT_PARSER,
     boolean: BOOLEAN_PARSER,
     rest: RestParser.create,
+    union: UnionParser.create,
     user: USER_PARSER,
     role: ROLE_PARSER,
     channel: channelParser,
-    /** Parses the value using each parser **in order** until the first that successfully parse the value.*/
-    union: <T extends Parser<unknown>[] = Parser<unknown>[]>(...parsers: T) => {
-        return new UnionParser(...parsers);
-    },
     /** Parses an interger and checks the value is in range [min; max). */
     rangei: (min: number, max: number) =>
         INTEGER_PARSER.if(

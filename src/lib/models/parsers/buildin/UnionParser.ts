@@ -24,4 +24,11 @@ export class UnionParser<T extends Parser<unknown>[] = Parser<unknown>[]> extend
         }
         throw new InvalidUnionTypeParseError(this);
     }
+
+    /**
+     * Parses the value using each parser **in order** until the first that successfully parse the value.
+     */
+    static create<P extends Parser<unknown>[] = Parser<unknown>[]>(...parsers: P): Parser<ParserType<P[number]>> {
+        return new UnionParser(...parsers);
+    }
 }
