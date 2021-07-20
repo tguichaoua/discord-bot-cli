@@ -18,13 +18,13 @@
         "docs:test": "typedoc ./src/ --out ./docs/test/",
         "build": "npm run build:clean && tsc && ts-node ./chores/post_build.ts",
         "build:clean": "shx rm -rf ./dist",
-        "prepublishOnly": "npm run rebuild",
         "example": "ts-node ./example/index.ts",
         "bot:make": "shx cp -r ./bot-template ./bot",
         "bot:rm": "shx rm -rf ./bot",
         "bot:remake": "npm run bot:rm && npm run bot:make",
         "bot:run": "ts-node bot/index.ts",
         "bot:cmd": "ts-node ./src/bin/cli.ts cmd -l ts -p ./bot/commands",
+        "prepack": "npm run build",
         "prepare": "is-ci || husky install"
     },
     "repository": {
