@@ -17,7 +17,7 @@ const cmd = makeCommand("cmd", {
         throttling: {
             aliases: ["t"],
             description: "Get data about command throttler",
-            args: { commandName: { parser: Parsers.rest } },
+            args: { commandName: { parser: Parsers.rest(Parsers.string) } },
             flags: {
                 reset: {
                     description: "Reset the trottler of the target command",
@@ -58,9 +58,8 @@ cmd.subs.reload.executor = async ({ command }, _, { commandSet, message }) => {
     }
 };
 
-cmd.subs.throttling.executor = async (_, { reset, resetAll, scope }, { commandSet, rest, channel }) => {
-    const commandName = `\`${rest.join(" ")}\``;
-    const { command } = commandSet.resolve(rest);
+cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope }, { commandSet, channel }) => {
+    const { command } = commandSet.resolve(commandName);
     if (!command) {
         await channel.send(`:x: Command ${commandName} not found.`);
         return;

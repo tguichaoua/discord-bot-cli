@@ -7,7 +7,7 @@ const cmd = makeCommand("help", {
     description: "Provide help about a command.",
     args: {
         commandName: {
-            parser: Parsers.rest,
+            parser: Parsers.rest(Parsers.string),
             name: "command",
             description: "The name of the command.",
         },
@@ -24,8 +24,8 @@ cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
             }),
         );
     else {
-        const { command, args } = commandSet.resolve(commandName);
-        if (!command || args.length != 0)
+        const { command, consumed } = commandSet.resolve(commandName);
+        if (!command || consumed < commandName.length)
             await reply(
                 message,
                 template(options.localization.help.commandNotFound, {

@@ -1,16 +1,17 @@
+import { ArgItem } from "arg-analyser";
 import { Message } from "discord.js";
 import { clamp } from "../../utils/math";
-import { InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
+import { InvalidArgumentTypeError, InvalidTypeParseError, NotEnoughArgParseError } from "./errors";
 
 export class ParsingContext {
     public readonly message: Message;
-    private readonly args: readonly string[];
+    private readonly args: readonly ArgItem[];
     private readonly from: number;
     private readonly to: number;
     private current: number;
     private states: number[] = [];
 
-    public constructor(message: Message, args: readonly string[], from = 0, to?: number) {
+    public constructor(message: Message, args: readonly ArgItem[], from = 0, to?: number) {
         this.message = message;
         this.args = args;
         this.from = Math.max(from, 0);
@@ -44,22 +45,25 @@ export class ParsingContext {
         return context;
     }
 
-    private next(): string {
+    private next(): ArgItem {
         if (this.current === this.to) throw new NotEnoughArgParseError(1, 0);
         // to is never greater than args length.
         return this.args[this.current++]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
 
     nextString(): string {
-        return this.next();
+        const next = this.next();
+        if (next.kind === "string") return next.content;
+        throw new InvalidArgumentTypeError("string", next);
     }
 
     private nextNumber(typename: "float" | "integer"): { arg: string; n: number } {
-        const s = this.next();
-        if (s === "") throw new InvalidTypeParseError(typename, s);
-        const n = new Number(s);
-        if (Number.isNaN(n)) throw new InvalidTypeParseError(typename, s);
-        return { arg: s, n: n.valueOf() };
+        const next = this.next();
+        if (next.kind !== "string") throw new InvalidArgumentTypeError(typename, next);
+        if (next.content === "") throw new InvalidTypeParseError(typename, next.content);
+        const n = new Number(next.content);
+        if (Number.isNaN(n)) throw new InvalidTypeParseError(typename, next.content);
+        return { arg: next.content, n: n.valueOf() };
     }
 
     nextFloat(): number {
@@ -73,8 +77,9 @@ export class ParsingContext {
     }
 
     nextBoolean(): boolean {
-        const s = this.next();
-        switch (s.toLowerCase()) {
+        const next = this.next();
+        if (next.kind !== "string") throw new InvalidArgumentTypeError("boolean", next);
+        switch (next.content.toLowerCase()) {
             case "1":
             case "true":
             case "yes":
@@ -84,11 +89,11 @@ export class ParsingContext {
             case "no":
                 return false;
             default:
-                throw new InvalidTypeParseError("boolean", s);
+                throw new InvalidTypeParseError("boolean", next.content);
         }
     }
 
-    rest(): string[] {
+    rest(): ArgItem[] {
         const rest = this.args.slice(this.current, this.to);
         this.current = this.to;
         return rest;

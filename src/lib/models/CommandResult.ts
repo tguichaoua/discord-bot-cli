@@ -1,3 +1,4 @@
+import { ArgItem } from "arg-analyser";
 import { Command } from "./Command";
 import { FlagData } from "./FlagData";
 import { ParseError } from "./parsers";
@@ -25,7 +26,7 @@ interface __NoData {
 
 interface __ParsingError {
     readonly status: "parsing error";
-    readonly inputs: readonly string[];
+    readonly inputs: readonly ArgItem[];
     readonly position: number;
 }
 
@@ -80,13 +81,13 @@ export const CommandResultUtils = Object.freeze({
     commandNotFound(): CommandResult {
         return { status: "command not found" };
     },
-    unknownFlag(inputs: readonly string[], position: number, name: string): CommandResult {
+    unknownFlag(inputs: readonly ArgItem[], position: number, name: string): CommandResult {
         return { status: "parsing error", reason: "unknown flag", inputs, position, name };
     },
-    wrongFlagUsage(inputs: readonly string[], position: number, name: string, flag: FlagData): CommandResult {
+    wrongFlagUsage(inputs: readonly ArgItem[], position: number, name: string, flag: FlagData): CommandResult {
         return { status: "parsing error", reason: "wrong flag usage", inputs, position, name, flag };
     },
-    parseError(inputs: readonly string[], position: number, error: ParseError): CommandResult {
+    parseError(inputs: readonly ArgItem[], position: number, error: ParseError): CommandResult {
         return { status: "parsing error", reason: "error", inputs, position, error };
     },
 });

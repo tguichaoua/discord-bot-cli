@@ -1,3 +1,4 @@
+import { ArgItem } from "arg-analyser";
 import { UnionParser } from "../buildin/UnionParser";
 
 export class ParseError extends Error {
@@ -18,6 +19,13 @@ export class NotEnoughArgParseError extends ParseError {
     constructor(public readonly expected: number, public readonly got: number) {
         super(`not enough arguments: expected ${expected}, got ${got}.`);
         this.name = "NotEnoughArgParseError";
+    }
+}
+
+export class InvalidArgumentTypeError extends ParseError {
+    constructor(public readonly expected: string, public readonly got: ArgItem) {
+        super(); // TODO
+        this.name = "InvalidArgumentTypeError";
     }
 }
 
