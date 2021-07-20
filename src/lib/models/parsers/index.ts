@@ -1,14 +1,14 @@
 import {
     BOOLEAN_PARSER,
-    channelParser,
-    FLOAT_PARSER,
-    INTEGER_PARSER,
-    ROLE_PARSER,
     STRING_PARSER,
+    INTEGER_PARSER,
+    FLOAT_PARSER,
     UnionParser,
+    RestParser,
     USER_PARSER,
+    ROLE_PARSER,
+    channelParser,
 } from "./buildin";
-import { RestParser } from "./buildin/RestParser";
 import { InvalidRangeParseError } from "./errors";
 import { Parser } from "./Parser";
 
