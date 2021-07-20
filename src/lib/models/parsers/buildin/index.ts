@@ -1,4 +1,5 @@
-export * from "./primitives";
 export * from "./discord";
-export * from "./UnionParser";
+export * from "./primitives";
 export * from "./RestParser";
+export * from "./TupleParser";
+export * from "./UnionParser";
