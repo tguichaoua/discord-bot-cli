@@ -62,7 +62,6 @@ function discordParser<T>(
 
 export const USER_PARSER = Parser.fromFunction(
     "$user$",
-    1,
     discordParser(
         USERS_PATTERN,
         m => m.users,
@@ -73,7 +72,6 @@ export const USER_PARSER = Parser.fromFunction(
 
 export const ROLE_PARSER = Parser.fromFunction(
     "$role$",
-    1,
     discordParser(
         ROLES_PATTERN,
         m => m.roles,
@@ -90,7 +88,7 @@ const CHANNEL_PARSER_FC = discordParser(
     UnresolvedChannelParseError,
 );
 
-export const CHANNEL_PARSER = Parser.fromFunction("$channel$", 1, CHANNEL_PARSER_FC);
+export const CHANNEL_PARSER = Parser.fromFunction("$channel$", CHANNEL_PARSER_FC);
 
 export function channelParser(): Parser<Channel>;
 /** Parses a channel and checks its type is one of the provided. */
@@ -105,7 +103,7 @@ export function channelParser<Type extends Exclude<Channel["type"], "unknown" | 
     types = distinct(types).sort();
     const typeName = types.map(t => `$${t} channel$`).join(" | ");
 
-    return Parser.fromFunction(typeName, 1, CHANNEL_PARSER_FC).if(
+    return Parser.fromFunction(typeName, CHANNEL_PARSER_FC).if(
         (c): c is Type2Channel<Type> => types.includes(c.type as Type),
         c => new WrongTypeChannelParseError(c, types),
     );

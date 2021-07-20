@@ -463,7 +463,7 @@ export class Command {
 
             if (cur.data.parser) {
                 try {
-                    const value = cur.data.parser._parse(context);
+                    const value = cur.data.parser.parse(context);
                     flags.set(cur.data.key, value);
                 } catch (e) {
                     const error = e instanceof ParseError ? e : new UnhandledErrorParseError(e);
@@ -507,7 +507,7 @@ export class Command {
 
             const current = context.consumed;
             try {
-                return def.parser._parse(context);
+                return def.parser.parse(context);
             } catch (e) {
                 const position = absolutePositions[current];
                 if (!position) throw Error("Shouldn't happen !");
