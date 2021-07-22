@@ -58,16 +58,16 @@ cmd.subs.reload.executor = async ({ command }, _, { commandSet, message }) => {
     }
 };
 
-cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope }, { commandSet, channel }) => {
+cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope }, { commandSet, message }) => {
     const { command } = commandSet.resolve(commandName);
     if (!command) {
-        await channel.send(`:x: Command ${commandName} not found.`);
+        await message.channel.send(`:x: Command ${commandName} not found.`);
         return;
     }
 
     const throttler = command.throttler;
     if (!throttler) {
-        await channel.send(`:x: Throttling is not enabled on ${commandName}.`);
+        await message.channel.send(`:x: Throttling is not enabled on ${commandName}.`);
         return;
     }
 
@@ -84,7 +84,7 @@ cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope 
                 if (t) for (const id of ids) t.reset(id);
             };
             resetAllThrottling(command);
-            await channel.send(
+            await message.channel.send(
                 ":white_check_mark: Throttlers for the following scopes have been reset: " +
                     ids.map(s => `\`${s}\``).join(", "),
             );
@@ -93,7 +93,7 @@ cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope 
 
         if (reset) {
             for (const id of ids) throttler.reset(id);
-            await channel.send(
+            await message.channel.send(
                 ":white_check_mark: Throttler for the following scopes have been reset: " +
                     ids.map(s => `\`${s}\``).join(", "),
             );
@@ -106,7 +106,7 @@ cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope 
 **Usage**: ${throttler.getCurrent(id)} / ${throttler.count}
 **Cooldown**: ${throttler.getCooldown(id)} / ${throttler.duration}\n`;
         }
-        await channel.send(res);
+        await message.channel.send(res);
     } else {
         if (resetAll) {
             const resetAllThrottling = (cmd: Command) => {
@@ -114,23 +114,23 @@ cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope 
                 cmd.throttler?.reset();
             };
             resetAllThrottling(command);
-            await channel.send(":white_check_mark: Throttlers have been reset.");
+            await message.channel.send(":white_check_mark: Throttlers have been reset.");
             return;
         }
 
         if (reset) {
             throttler.reset();
-            await channel.send(":white_check_mark: Throttler have been reset.");
+            await message.channel.send(":white_check_mark: Throttler have been reset.");
             return;
         }
 
         if (throttler.scope === "global") {
-            await channel.send(`
+            await message.channel.send(`
 **Command**: ${commandName}
 **Usage**: ${throttler.getCurrent("")} / ${throttler.count}
 **Cooldown**: ${throttler.getCooldown("")} / ${throttler.duration} seconds`);
         } else {
-            await channel.send(`${commandName} throttler scope is \`${throttler.scope}\``);
+            await message.channel.send(`${commandName} throttler scope is \`${throttler.scope}\``);
         }
     }
 };

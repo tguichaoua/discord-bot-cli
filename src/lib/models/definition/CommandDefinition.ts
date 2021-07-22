@@ -5,9 +5,12 @@ import { CanUseCommandHandler } from "../callbacks/CanUseCommandHandler";
 import { HelpHandler } from "../callbacks/HelpHandler";
 import { ThrottlingDefinition } from "./ThrottlingDefinition";
 import { CommandExampleDefinition } from "./CommandExampleDefinition";
+import { CommandGuardDefinition } from "../guards";
 
 /** @category Definition */
 type CommandDefinitionBase = {
+    readonly guards?: ReadonlyArray<CommandGuardDefinition>;
+
     /** Aliases for this command. */
     readonly aliases?: string[];
     /** Define which permissions the bot's user require to perform the command. */
@@ -53,17 +56,17 @@ type CommandDefinitionBase = {
     readonly inherit?: boolean;
 };
 
-/** @category Definition */
-export type CommandSettings = {
-    /** Either or not this command will be ignored. (default is false). [inheritable] */
-    readonly ignore?: boolean;
-    /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). (default is false). [inheritable] */
-    readonly devOnly?: boolean;
-    /** Either or not this command can only be used from a guild. (default is false). [inheritable] */
-    readonly guildOnly?: boolean;
-    /** Either or not the message that executed this command is deleted after the command execution. (default is false). [inheritable] */
-    readonly deleteMessage?: boolean;
-};
+// /** @category Definition */
+// export type CommandSettings = {
+//     /** Either or not this command will be ignored. (default is false). [inheritable] */
+//     readonly ignore?: boolean;
+//     /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). (default is false). [inheritable] */
+//     readonly devOnly?: boolean;
+//     /** Either or not this command can only be used from a guild. (default is false). [inheritable] */
+//     readonly guildOnly?: boolean;
+//     /** Either or not the message that executed this command is deleted after the command execution. (default is false). [inheritable] */
+//     readonly deleteMessage?: boolean;
+// };
 
 /** @category Definition */
-export type CommandDefinition = CommandDefinitionBase & CommandSettings;
+export type CommandDefinition = CommandDefinitionBase /* & CommandSettings */;

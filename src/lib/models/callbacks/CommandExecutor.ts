@@ -1,21 +1,13 @@
-import { Message, DMChannel } from "discord.js";
+import { Message } from "discord.js";
 import { CommandSet } from "../CommandSet";
 
-import { CommandDefinition, CommandSettings } from "../definition/CommandDefinition";
+import { CommandDefinition } from "../definition/CommandDefinition";
 import { CommandSetOptions } from "../CommandSetOptions";
 import { Command } from "../Command";
 import { ParserType } from "../parsers";
 import { ArgItem } from "arg-analyser";
-
-/** @ignore */
-type IsGuildOnly<S extends CommandSettings, True, False> = S["guildOnly"] extends true ? True : False;
-
-/** @ignore */
-type MessageExtension<S> = {
-    readonly guild: IsGuildOnly<S, NonNullable<Message["guild"]>, Message["guild"]>;
-    readonly member: IsGuildOnly<S, NonNullable<Message["member"]>, Message["member"]>;
-    readonly channel: IsGuildOnly<S, Exclude<Message["channel"], DMChannel>, Message["channel"]>;
-};
+import { CommandGuard, CommandGuardTuple } from "../guards";
+import { UnionToIntersection } from "../../utils/types";
 
 /**
  * Command's executor handler.
@@ -23,7 +15,7 @@ type MessageExtension<S> = {
  */
 export type CommandExecutor<
     T extends CommandDefinition = CommandDefinition,
-    S extends CommandSettings = Record<string, unknown>,
+    Guards extends CommandGuardTuple = never,
 > = (
     args: {
         readonly [name in keyof T["args"]]:
@@ -45,9 +37,22 @@ export type CommandExecutor<
     },
     others: {
         readonly rest: ArgItem[];
-        readonly message: Message & MessageExtension<S>;
+        readonly message: Message;
         readonly options: CommandSetOptions;
         readonly commandSet: CommandSet;
         readonly command: Command;
-    } & MessageExtension<S>,
+    },
+    guards: UnknownToNever<UnionToIntersection<CommandGuard_Tuple2Object<Guards>>>,
+    // guards2: CommandGuard_Tuple2Object<Guards>,
+    // guards3: Guards,
 ) => void | Promise<void>;
+
+type CommandGuard_Tuple2Object<T extends CommandGuardTuple> = T extends readonly [unknown, infer K, infer G]
+    ? K extends string
+        ? G extends CommandGuard<infer V>
+            ? { [k in K]: V }
+            : never
+        : never
+    : never;
+
+type UnknownToNever<T> = unknown extends T ? never : T;
