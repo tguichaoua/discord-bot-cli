@@ -36,8 +36,5 @@
     "list": {
         "title": "Command List"
     },
-    "commands": {},
-    "misc": {
-        "guildOnlyWarning": "The command `{{command}}` can only be executed from a server."
-    }
+    "commands": {}
 }
