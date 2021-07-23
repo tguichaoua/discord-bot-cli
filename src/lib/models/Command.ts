@@ -23,6 +23,7 @@ import { FlagData } from "./FlagData";
 import { toKebabCase } from "../utils/case";
 import { map } from "../utils/object";
 import { ArgItem } from "arg-analyser";
+import { Localizator } from "./localization";
 
 export class Command {
     private readonly _throttler: CommandThrottler | null | undefined;
@@ -307,6 +308,7 @@ export class Command {
             message,
             options,
             commandSet: this.commandSet,
+            localizator: Localizator.create(options.localizationResolver, message),
         };
 
         if (this._help) {

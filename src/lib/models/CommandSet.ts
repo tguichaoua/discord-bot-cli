@@ -8,9 +8,6 @@ import { Logger } from "../logger";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
 import { CommandSetOptions } from "./CommandSetOptions";
 
-import defaultLocalization from "../../assets/localization.json";
-import { deepMerge } from "../utils/deepMerge";
-import { DeepPartial } from "../utils/DeepPartial";
 import { CommandResultError } from "./errors/CommandResultError";
 import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 import { relativeFromEntryPoint, resolveFromEntryPoint } from "../utils/PathUtils";
@@ -28,7 +25,7 @@ export class CommandSet {
 
     private readonly analyser: Analyser;
 
-    constructor(private _defaultOptions?: DeepPartial<CommandSetOptions>) {
+    constructor(private _defaultOptions?: Partial<CommandSetOptions>) {
         this.analyser = new Analyser({
             groupDelimiters: [
                 ["(", ")"],
@@ -138,7 +135,7 @@ export class CommandSet {
      * @param options - Options to define the parsing behaviour.
      * @returns The result of the parsing.
      */
-    async parse(message: Message, options?: DeepPartial<CommandSetOptions>): Promise<CommandResult> {
+    async parse(message: Message, options?: Partial<CommandSetOptions>): Promise<CommandResult> {
         // function OptionsError(paramName: string) {
         //     return new Error(
         //         `Invalid options value: "${paramName}" is invalid.`
@@ -149,7 +146,7 @@ export class CommandSet {
             await message.reply(content).catch(Logger.error);
         }
 
-        const opts = deepMerge({}, defaultOptions, this._defaultOptions, options);
+        const opts = Object.assign({}, defaultOptions, this._defaultOptions, options);
 
         let content: string;
         const botMentionStr = `<@!${message.client.user?.id}>`;
@@ -219,8 +216,8 @@ export class CommandSet {
 const defaultOptions: CommandSetOptions = {
     prefix: "",
     devIDs: [],
-    localization: defaultLocalization,
     allowMentionAsPrefix: false,
     skipDevsPermissionsChecking: false,
     ignoreUnknownFlags: false,
+    localizationResolver: undefined,
 };

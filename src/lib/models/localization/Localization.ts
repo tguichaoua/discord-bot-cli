@@ -1,37 +1,43 @@
-import { CommandLocalization } from "./CommandLocalization";
-
-/**
- * See [localization.json](https://github.com/tguichaoua/discord-bot-cli/blob/master/src/data/localization.json) for default localization.
- * @category Localization
- */
 export interface Localization {
-    typeNames: Record<string, string>;
-    /** Localization used by the build-in command `help`. */
-    help: {
-        tags: {
-            guildOnly: string;
-            devOnly: string;
-        };
-        usage: string;
-        arguments: string;
-        flags: string;
-        subCommands: string;
-        aliases: string;
-        examples: string;
-        bot_permissions: string;
-        user_permissions: string;
-        default: string;
-        commandNotFound: string;
-        restTypeName: string;
-        argUsageHint: string;
-    };
-    /** Localization used by the build-in command `list`. */
-    list: {
-        title: string;
-    };
-    /**
-     * Localization for user-defined commands.
-     * If set, localization values will override command definition values.
-     */
-    commands: Record<string, CommandLocalization>;
+    readonly help?: HelpLocalization;
+    readonly list?: ListLocalization;
+    getTypeName(typeName: string): string | undefined;
+    getCommand(name: string): CommandLocalization | undefined;
+}
+
+export interface HelpLocalization {
+    readonly usage?: string;
+    readonly argumentUsageHint?: string;
+    readonly arguments?: string;
+    readonly flags?: string;
+    readonly subCommands?: string;
+    readonly aliases?: string;
+    readonly botPermissions?: string;
+    readonly userPermissions?: string;
+    readonly examples?: string;
+    readonly devOnly?: string;
+    readonly guildOnly?: string;
+    readonly default?: string;
+    readonly commandNotFound?: string;
+}
+
+export interface ListLocalization {
+    readonly title?: string;
+}
+
+export interface CommandLocalization {
+    readonly description?: string;
+    getArgument(name: string): ArgumentLocalization | undefined;
+    getFlag(key: string): FlagLocalization | undefined;
+    getSub(name: string): CommandLocalization | undefined;
+}
+
+export interface ArgumentLocalization {
+    readonly name?: string;
+    readonly description?: string;
+}
+
+export interface FlagLocalization {
+    readonly name?: string;
+    readonly description?: string;
 }
