@@ -26,14 +26,14 @@ export class Localizator {
     }
 
     getTypeName(typeName: string): string {
-        return this.localization?.getTypeName(typeName) ?? typeName;
+        return (this.localization?.getTypeName ? this.localization.getTypeName(typeName) : undefined) ?? typeName;
     }
 
     getCommand(command: Command): CommandLocalizator {
         const path = command.getParents().map(c => c.name);
-        let commandLocalization = this.localization?.getCommand(path[0]!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        let commandLocalization = this.localization?.getCommand ? this.localization.getCommand(path[0]!) : undefined; // eslint-disable-line @typescript-eslint/no-non-null-assertion
         for (let i = 1; i < path.length && commandLocalization; ++i) {
-            commandLocalization = commandLocalization.getSub(path[i]!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            commandLocalization = commandLocalization.getSub ? commandLocalization.getSub(path[i]!) : undefined; // eslint-disable-line @typescript-eslint/no-non-null-assertion
         }
         return new CommandLocalizator(command, commandLocalization);
     }
@@ -49,13 +49,17 @@ export class CommandLocalizator {
     getArgument(name: string): ArgumentLocalizator {
         const def = this.command.args.get(name);
         if (!def) throw new Error(`No argument with name '${name}'`);
-        return new ArgumentLocalizator(name, def, this.localization?.getArgument(name));
+        return new ArgumentLocalizator(
+            name,
+            def,
+            this.localization?.getArgument ? this.localization.getArgument(name) : undefined,
+        );
     }
 
     getFlag(key: string): FlagLocalizator {
         const def = this.command.flags.find(f => f.key === key);
         if (!def) throw new Error(`No flag with key 'key'`);
-        return new FlagLocalizator(def, this.localization?.getFlag(key));
+        return new FlagLocalizator(def, this.localization?.getFlag ? this.localization.getFlag(key) : undefined);
     }
 }
 

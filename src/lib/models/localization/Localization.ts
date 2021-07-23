@@ -1,8 +1,8 @@
 export interface Localization {
     readonly help?: HelpLocalization;
     readonly list?: ListLocalization;
-    getTypeName(typeName: string): string | undefined;
-    getCommand(name: string): CommandLocalization | undefined;
+    getTypeName?(typeName: string): string | undefined;
+    getCommand?(name: string): CommandLocalization | undefined;
 }
 
 export interface HelpLocalization {
@@ -27,9 +27,9 @@ export interface ListLocalization {
 
 export interface CommandLocalization {
     readonly description?: string;
-    getArgument(name: string): ArgumentLocalization | undefined;
-    getFlag(key: string): FlagLocalization | undefined;
-    getSub(name: string): CommandLocalization | undefined;
+    getArgument?(name: string): ArgumentLocalization | undefined;
+    getFlag?(key: string): FlagLocalization | undefined;
+    getSub?(name: string): CommandLocalization | undefined;
 }
 
 export interface ArgumentLocalization {
