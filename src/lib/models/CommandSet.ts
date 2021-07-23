@@ -11,8 +11,6 @@ import { CommandSetOptions } from "./CommandSetOptions";
 import defaultLocalization from "../../assets/localization.json";
 import { deepMerge } from "../utils/deepMerge";
 import { DeepPartial } from "../utils/DeepPartial";
-import { commandFullName } from "../other/HelpUtils";
-import { template } from "../utils/template";
 import { CommandResultError } from "./errors/CommandResultError";
 import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 import { relativeFromEntryPoint, resolveFromEntryPoint } from "../utils/PathUtils";
@@ -190,14 +188,7 @@ export class CommandSet {
 
         if (!command) return CommandResultUtils.commandNotFound();
 
-        if (command.guildOnly && !message.guild) {
-            await message.reply(
-                template(opts.localization.misc.guildOnlyWarning, {
-                    command: commandFullName(command),
-                }),
-            );
-            return CommandResultUtils.guildOnly(command);
-        }
+        if (command.guildOnly && !message.guild) return CommandResultUtils.guildOnly(command);
 
         if (command.devOnly && !opts.devIDs.includes(message.author.id)) return CommandResultUtils.devOnly(command);
 
