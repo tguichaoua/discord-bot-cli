@@ -7,7 +7,7 @@ import { isArray } from "../utils/array";
 import { map } from "../utils/object";
 
 import { ParseError, UnhandledErrorParseError } from "../parsers";
-import { defaultHelp } from "../humanize/help";
+import { defaultHelpHandler } from "../humanize/help";
 import { Localizator } from "../localization";
 
 import { ThrottlingDefinition, CommandDefinition, ArgDefinition } from "./definitions";
@@ -317,7 +317,7 @@ export class Command {
         } else if (this.commandSet.helpHandler) {
             await this.commandSet.helpHandler(this, context);
         } else {
-            await defaultHelp(this, context);
+            await defaultHelpHandler(this, context);
         }
     }
 

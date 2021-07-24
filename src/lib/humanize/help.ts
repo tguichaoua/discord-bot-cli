@@ -16,7 +16,7 @@ import { ArgumentHelpHumanized, CommandHelpHumanized, FlagHelpHumanized } from "
 //     await reply(message, { embed });
 // }
 
-export const defaultHelp: HelpHandler = async (command, { message, options }) => {
+export const defaultHelpHandler: HelpHandler = async (command, { message, options }) => {
     const embed = embedHelp(
         command,
         options.prefix,
