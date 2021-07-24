@@ -6,16 +6,6 @@ import { reply } from "../utils/reply";
 
 import { ArgumentHelpHumanized, CommandHelpHumanized, FlagHelpHumanized } from "./types";
 
-// /** @internal */
-// export async function defaultHelp(
-//     command: Command,
-//     localization: Localization,
-//     { message, options }: { message: Message; options: CommandSetOptions },
-// ) {
-//     const embed = embedHelp(command, options.prefix, localization, message);
-//     await reply(message, { embed });
-// }
-
 export const defaultHelpHandler: HelpHandler = async (command, { message, options }) => {
     const embed = embedHelp(
         command,

@@ -135,12 +135,6 @@ export class CommandSet {
      * @returns The result of the parsing.
      */
     async parse(message: Message, options?: Partial<CommandSetOptions>): Promise<CommandResult> {
-        // function OptionsError(paramName: string) {
-        //     return new Error(
-        //         `Invalid options value: "${paramName}" is invalid.`
-        //     );
-        // }
-
         async function Reply(content: string) {
             await message.reply(content).catch(Logger.error);
         }
@@ -155,11 +149,6 @@ export class CommandSet {
         else return CommandResultUtils.notPrefixed();
 
         Logger.debug("content = ", content);
-
-        // // extract the command & arguments from message
-        // const rawArgs = (content.match(/[^\s"']+|"([^"]*)"|'([^']*)'/g) || []).map(a =>
-        //     /^(".*"|'.*')$/.test(a) ? a.substring(1, a.length - 1) : a,
-        // );
 
         const args = this.analyser.analyse(content);
 
