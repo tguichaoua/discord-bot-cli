@@ -11,7 +11,6 @@ import { Logger } from "../../logger";
 const ajv = new Ajv();
 
 const schema = {
-    type: "object",
     optionalProperties: {
         typeNames: {
             values: { type: "string" },
@@ -20,7 +19,6 @@ const schema = {
             values: { ref: "command" },
         },
         help: {
-            type: "object",
             optionalProperties: {
                 usage: { type: "string" },
                 argumentUsageHint: { type: "string" },
@@ -38,7 +36,6 @@ const schema = {
             },
         },
         list: {
-            type: "object",
             optionalProperties: {
                 title: { type: "string" },
             },
@@ -46,7 +43,6 @@ const schema = {
     },
     definitions: {
         command: {
-            type: "object",
             optionalProperties: {
                 description: { type: "string" },
                 arguments: {
@@ -71,7 +67,6 @@ const schema = {
             },
         },
     },
-    required: [],
 } as const;
 
 type JsonLocalizationData = JTDDataType<typeof schema>;
