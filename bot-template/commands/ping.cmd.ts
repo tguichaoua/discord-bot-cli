@@ -1,4 +1,4 @@
-import { makeCommand } from "../../src";
+import { makeCommand } from "../../src/lib";
 
 const cmd = makeCommand("ping", {});
 

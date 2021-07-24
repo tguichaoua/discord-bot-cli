@@ -1,6 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { makeCommand, ListUtils } from "../lib";
-import { Localizator } from "../lib/models/localization";
+import { makeCommand, humanize, Localizator } from "../lib";
 
 import { reply } from "../lib/utils/reply";
 
@@ -16,7 +15,7 @@ const cmd = makeCommand("list", {
 
 cmd.executor = async (_, { detail }, { commandSet, options, message }) => {
     const localizator = Localizator.create(options.localizationResolver, message);
-    const raw = ListUtils.getListRawData(commandSet, localizator);
+    const raw = humanize.getListRawData(commandSet, localizator);
     let commands = options.devIDs.includes(message.author.id)
         ? raw.commands
         : raw.commands.filter(c => !c.command.devOnly);

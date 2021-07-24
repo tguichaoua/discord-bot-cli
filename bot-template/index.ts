@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Client, ColorResolvable, MessageEmbed } from "discord.js";
-import { CommandResult, CommandSet, LogLevel, Logs } from "../src/index";
+import { CommandResult, CommandSet, LogLevel, Logs } from "../src/lib";
 import env from "./env.json";
 
 Logs.auto(true).minLevel(LogLevel.DEBUG);

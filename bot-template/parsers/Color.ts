@@ -1,11 +1,9 @@
-import { ParsingContext } from "../../src/models/parsers/ParsingContext";
-import { InvalidValueParseError } from "../../src/models/parsers/errors/base";
-import { CustomParser } from "../../src/models/parsers/Parser";
+import { CustomParser, InvalidValueParseError, ParsingContext } from "../../src/lib";
 import { Color } from "../models/Color";
 
 export class ColorParser extends CustomParser<Color> {
     constructor() {
-        super("$color$", 3);
+        super("$color$");
     }
 
     public parse(context: ParsingContext): Color {
