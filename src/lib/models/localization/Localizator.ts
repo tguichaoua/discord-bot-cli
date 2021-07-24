@@ -10,7 +10,7 @@ import {
     ListLocalization,
     Localization,
 } from "./Localization";
-import { LocalizationResolver } from "./LocalizationResolver";
+import { LocalizationResolver } from "./resolvers";
 
 export class Localizator {
     public readonly help: HelpLocalizator;
