@@ -59,8 +59,8 @@ type CommandDefinitionBase = {
 export type CommandSettings = {
     /** Either or not this command will be ignored. (default is false). [inheritable] */
     readonly ignore?: boolean;
-    /** Either or not this command can only be used by dev (see [[CommandManagerOptions.devIDs]]). (default is false). [inheritable] */
-    readonly devOnly?: boolean;
+    /** Either or not this command can only be used by owner of the bot (see [[CommandManagerOptions.ownerIDs]]). (default is false). [inheritable] */
+    readonly ownerOnly?: boolean;
     /** Either or not this command can only be used from a guild. (default is false). [inheritable] */
     readonly guildOnly?: boolean;
     /** Either or not the message that executed this command is deleted after the command execution. (default is false). [inheritable] */

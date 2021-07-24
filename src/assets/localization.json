@@ -28,7 +28,7 @@
         "commandNotFound": "The command/sub-command `{{command}}` cannot be found.",
         "argumentUsageHint": "Required: `<>` | Optional: `[]`",
         "guildOnly": "Guild Only",
-        "devOnly": "Dev Only"
+        "ownerOnly": "Owner Only"
     },
     "list": {
         "title": "Command List"

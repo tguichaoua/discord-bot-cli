@@ -15,7 +15,7 @@ export interface HelpLocalization {
     readonly botPermissions?: string;
     readonly userPermissions?: string;
     readonly examples?: string;
-    readonly devOnly?: string;
+    readonly ownerOnly?: string;
     readonly guildOnly?: string;
     readonly default?: string;
     readonly commandNotFound?: string;

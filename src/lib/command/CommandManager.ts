@@ -175,9 +175,10 @@ export class CommandManager {
 
         if (command.guildOnly && !message.guild) return CommandResultUtils.guildOnly(command);
 
-        if (command.devOnly && !opts.devIDs.includes(message.author.id)) return CommandResultUtils.devOnly(command);
+        if (command.ownerOnly && !opts.ownerIDs.includes(message.author.id))
+            return CommandResultUtils.ownerOnly(command);
 
-        if (!opts.devIDs.includes(message.author.id) || !opts.skipDevsPermissionsChecking) {
+        if (!opts.ownerIDs.includes(message.author.id) || !opts.skipOwnerPermissionsChecking) {
             const result = command.canUse(message.author, message);
             if (typeof result === "string") await Reply(result);
             if (result !== true) return CommandResultUtils.unauthorizedUser(command);
@@ -203,9 +204,9 @@ export class CommandManager {
 /** @internal */
 const defaultOptions: CommandManagerOptions = {
     prefix: "",
-    devIDs: [],
+    ownerIDs: [],
     allowMentionAsPrefix: false,
-    skipDevsPermissionsChecking: false,
+    skipOwnerPermissionsChecking: false,
     ignoreUnknownFlags: false,
     localizationResolver: undefined,
 };

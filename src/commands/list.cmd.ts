@@ -16,11 +16,11 @@ const cmd = makeCommand("list", {
 cmd.executor = async (_, { detail }, { commandManager, options, message }) => {
     const localizator = Localizator.create(options.localizationResolver, message);
     const raw = humanize.getListRawData(commandManager, localizator);
-    let commands = options.devIDs.includes(message.author.id)
+    let commands = options.ownerIDs.includes(message.author.id)
         ? raw.commands
-        : raw.commands.filter(c => !c.command.devOnly);
+        : raw.commands.filter(c => !c.command.ownerOnly);
 
-    if (!options.devIDs.includes(message.author.id) || !options.skipDevsPermissionsChecking)
+    if (!options.ownerIDs.includes(message.author.id) || !options.skipOwnerPermissionsChecking)
         commands = commands.filter(c => c.command.checkPermissions(message));
 
     const embed = new MessageEmbed().setColor("#0099ff").setTitle(localizator.list.title);

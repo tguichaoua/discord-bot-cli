@@ -30,7 +30,7 @@ const schema = {
                 botPermissions: { type: "string" },
                 userPermissions: { type: "string" },
                 examples: { type: "string" },
-                devOnly: { type: "string" },
+                ownerOnly: { type: "string" },
                 guildOnly: { type: "string" },
                 default: { type: "string" },
                 commandNotFound: { type: "string" },

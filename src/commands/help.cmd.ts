@@ -35,7 +35,7 @@ cmd.executor = async ({ commandName }, _, { options, commandManager, message }) 
             );
         else {
             if (
-                (!options.devIDs.includes(message.author.id) || !options.skipDevsPermissionsChecking) &&
+                (!options.ownerIDs.includes(message.author.id) || !options.skipOwnerPermissionsChecking) &&
                 !command.checkPermissions(message)
             )
                 return;

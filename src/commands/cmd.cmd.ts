@@ -1,7 +1,7 @@
 import { makeCommand, Command, Logger, Parsers } from "../lib";
 
 const cmd = makeCommand("cmd", {
-    devOnly: true,
+    ownerOnly: true,
     description: "Manage commands",
     subs: {
         reload: {

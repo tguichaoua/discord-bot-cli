@@ -129,8 +129,8 @@ export class HelpLocalizator {
         return this.localization?.examples ?? "Examples";
     }
 
-    get devOnly(): string {
-        return this.localization?.devOnly ?? "Dev Only";
+    get ownerOnly(): string {
+        return this.localization?.ownerOnly ?? "Owner Only";
     }
 
     get guildOnly(): string {

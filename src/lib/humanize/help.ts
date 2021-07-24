@@ -53,7 +53,7 @@ export function commandHelp(command: Command, localizator: Localizator): Command
     const subs = Array.from(command.subs.values()).map(c => commandHelp(c, localizator));
 
     const tags: string[] = [];
-    if (command.devOnly) tags.push(localizator.help.devOnly);
+    if (command.ownerOnly) tags.push(localizator.help.ownerOnly);
     if (command.guildOnly) tags.push(localizator.help.guildOnly);
 
     return {

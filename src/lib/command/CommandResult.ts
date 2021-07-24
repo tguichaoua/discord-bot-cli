@@ -15,7 +15,7 @@ interface __Command {
         | "ok"
         | "no executor"
         | "guild only"
-        | "dev only"
+        | "owner only"
         | "unauthorized user"
         | "throttling"
         | "client permissions";
@@ -62,8 +62,8 @@ export const CommandResultUtils = Object.freeze({
     noExecutor(command: Command): CommandResult {
         return { status: "no executor", command };
     },
-    devOnly(command: Command): CommandResult {
-        return { status: "dev only", command };
+    ownerOnly(command: Command): CommandResult {
+        return { status: "owner only", command };
     },
     guildOnly(command: Command): CommandResult {
         return { status: "guild only", command };

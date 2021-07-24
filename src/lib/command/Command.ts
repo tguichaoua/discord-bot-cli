@@ -65,8 +65,8 @@ export class Command {
         private readonly _useThrottlerOnSubs: boolean,
         /** Either or not this command is ignored. */
         public readonly ignored: boolean,
-        /** Either or not this command can only be used by dev (see [[CommandManagerOptions.devIDs]]). */
-        public readonly devOnly: boolean,
+        /** Either or not this command can only be used by owners (see [[CommandManagerOptions.ownerIDs]]). */
+        public readonly ownerOnly: boolean,
         /** Either or not this command can only be used from a guild. */
         public readonly guildOnly: boolean,
         /** Either or not the message that executed this command is deleted after the command execution. */
@@ -198,7 +198,7 @@ export class Command {
             data.def.throttling,
             data.def.useThrottlerForSubs ?? true,
             data.def.ignore ?? resolveInheritance("ignored", false),
-            data.def.devOnly ?? resolveInheritance("devOnly", false),
+            data.def.ownerOnly ?? resolveInheritance("ownerOnly", false),
             data.def.guildOnly ?? resolveInheritance("guildOnly", false),
             data.def.deleteMessage ?? resolveInheritance("deleteMessage", false),
         );
@@ -333,7 +333,7 @@ export class Command {
 
         /** This command throttler if is required and defined, undefined otherwise. */
         const throttler =
-            !options.devIDs.includes(message.author.id) &&
+            !options.ownerIDs.includes(message.author.id) &&
             !(!this.throttlingIncludeAdmins && message.member && message.member.permissions.has("ADMINISTRATOR"))
                 ? this.throttler
                 : undefined;
