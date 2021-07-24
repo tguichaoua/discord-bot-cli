@@ -2,6 +2,7 @@ import { makeCommand, Parsers } from "../lib";
 
 import { template } from "../lib/utils/template";
 import { reply } from "../lib/utils/reply";
+import { Localizator } from "../lib/models/localization";
 
 const cmd = makeCommand("help", {
     description: "Provide help about a command.",
@@ -16,10 +17,11 @@ const cmd = makeCommand("help", {
 });
 
 cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
+    const localizator = Localizator.create(options.localizationResolver, message);
     if (commandName.length === 0)
         await reply(
             message,
-            template(options.localization.help.default, {
+            template(localizator.help.default, {
                 prefix: options.prefix,
             }),
         );
@@ -28,7 +30,7 @@ cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
         if (!command || consumed < commandName.length)
             await reply(
                 message,
-                template(options.localization.help.commandNotFound, {
+                template(localizator.help.commandNotFound, {
                     command: commandName.join(" "),
                 }),
             );

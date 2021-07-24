@@ -1,6 +1,7 @@
 import { ParsingContext } from "./ParsingContext";
 import { InvalidValueParseError } from "./errors";
 import { Predicate, TypeGuard } from "../../utils/types";
+import { Localizator } from "../localization";
 
 type OnFail<T> = (value: T) => InvalidValueParseError;
 
@@ -78,9 +79,13 @@ export abstract class Parser<T> {
         });
     }
 
-    /** @internal */
-    public _getLocalizedTypeName(localization: Record<string, string>): string {
-        return this.typeName.replace(/\$(.*?)\$/g, (_, typename) => localization[typename] ?? typename);
+    // /** @internal */
+    // public _getLocalizedTypeName(localization: Record<string, string>): string {
+    //     return this.typeName.replace(/\$(.*?)\$/g, (_, typename) => localization[typename] ?? typename);
+    // }
+
+    public getLocalizedTypeName(localizator: Localizator): string {
+        return this.typeName.replace(/\$(.*?)\$/g, (_, typeName) => localizator.getTypeName(typeName));
     }
 
     /**

@@ -1,23 +1,33 @@
 import { Command } from "../models/Command";
-import { Localization } from "../models/localization/Localization";
 import { MessageEmbed, Message } from "discord.js";
 import { ArgDefinition } from "../models/definition/ArgDefinition";
 import { CommandRawHelp } from "../models/data/help/CommandRawHelp";
 import { ArgumentRawHelp } from "../models/data/help/ArgumentRawHelp";
 import { FlagRawHelp } from "../models/data/help/FlagRawHelp";
-import { CommandLocalization } from "../models/localization/CommandLocalization";
-import { CommandSetOptions } from "../models/CommandSetOptions";
-import { reply } from "../utils/reply";
 import { FlagData } from "../models/FlagData";
+import { HelpHandler } from "../models/callbacks/HelpHandler";
+import { reply } from "../utils/reply";
+import { CommandLocalizator, Localizator } from "../models/localization";
 
-/** @internal */
-export async function defaultHelp(
-    command: Command,
-    { message, options }: { message: Message; options: CommandSetOptions },
-) {
-    const embed = embedHelp(command, options.prefix, options.localization, message);
+// /** @internal */
+// export async function defaultHelp(
+//     command: Command,
+//     localization: Localization,
+//     { message, options }: { message: Message; options: CommandSetOptions },
+// ) {
+//     const embed = embedHelp(command, options.prefix, localization, message);
+//     await reply(message, { embed });
+// }
+
+export const defaultHelp: HelpHandler = async (command, { message, options }) => {
+    const embed = embedHelp(
+        command,
+        options.prefix,
+        Localizator.create(options.localizationResolver, message),
+        message,
+    );
     await reply(message, { embed });
-}
+};
 
 /**
  * Get the command full name.
@@ -39,25 +49,25 @@ export function commandFullName(command: Command) {
  * @param localization
  * @returns Raw help datas.
  */
-export function commandRawHelp(command: Command, localization: Localization): CommandRawHelp {
-    const commandLocalization = localization.commands[command.name] ?? {};
+export function commandRawHelp(command: Command, localizator: Localizator): CommandRawHelp {
+    const commandLocalization = localizator.getCommand(command);
     const fullName = commandFullName(command);
-    const description = commandLocalization.description ?? command.description;
+    const description = commandLocalization.description;
 
     const collection = command.parent?.subs ?? command.commandSet.commands;
     const aliases = command.aliases.filter(a => collection.hasAlias(a));
 
     const args = Array.from(command.args.entries()).map(([name, arg]) =>
-        argRawHelp(arg, name, commandLocalization, localization.typeNames),
+        argRawHelp(arg, name, commandLocalization, localizator),
     );
 
-    const flags = command.flags.map(flag => flagRawHelp(flag, commandLocalization, localization.typeNames));
+    const flags = command.flags.map(flag => flagRawHelp(flag, commandLocalization, localizator));
 
-    const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localization));
+    const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localizator));
 
     const tags: string[] = [];
-    if (command.devOnly) tags.push(localization.help.tags.devOnly);
-    if (command.guildOnly) tags.push(localization.help.tags.guildOnly);
+    if (command.devOnly) tags.push(localizator.help.devOnly);
+    if (command.guildOnly) tags.push(localizator.help.guildOnly);
 
     return {
         command,
@@ -75,12 +85,12 @@ export function commandRawHelp(command: Command, localization: Localization): Co
 function argRawHelp(
     arg: ArgDefinition,
     name: string,
-    localization: CommandLocalization,
-    typeNamesLocalization: Record<string, string>,
+    commandLocalizator: CommandLocalizator,
+    localizator: Localizator,
 ): ArgumentRawHelp {
-    const argLocalization = (localization.args ?? {})[name] ?? {};
-    const localizedName = argLocalization.name ?? name;
-    const description = argLocalization.description ?? arg.description ?? "";
+    const argLocalizator = commandLocalizator.getArgument(name); //(localization.args ?? {})[name] ?? {};
+    const localizedName = argLocalizator.name;
+    const description = argLocalizator.description;
     let usageString: string;
     if (arg.optional) {
         const defaultValue = arg.defaultValue ? ` = ${arg.defaultValue}` : "";
@@ -91,7 +101,7 @@ function argRawHelp(
 
     return {
         arg,
-        typeName: arg.parser._getLocalizedTypeName(typeNamesLocalization),
+        typeName: arg.parser.getLocalizedTypeName(localizator),
         name,
         localizedName,
         description,
@@ -100,20 +110,16 @@ function argRawHelp(
 }
 
 /** @internal */
-function flagRawHelp(
-    flag: FlagData,
-    localization: CommandLocalization,
-    typeNamesLocalization: Record<string, string>,
-): FlagRawHelp {
-    const flagLocalization = (localization.flags ?? {})[flag.key] ?? {};
-    const localizedName = flagLocalization.name ?? flag.long ?? flag.key;
-    const description = flagLocalization.description ?? flag.description ?? "";
+function flagRawHelp(flag: FlagData, commandLocalizator: CommandLocalizator, localizator: Localizator): FlagRawHelp {
+    const flagLocalizator = commandLocalizator.getFlag(flag.key);
+    const localizedName = flagLocalizator.name;
+    const description = flagLocalizator.description;
     const longUsageString = flag.long ? `--${flag.long}` : undefined;
     const shortUsageString = flag.short ? `-${flag.short}` : undefined;
 
     return {
         flag,
-        typeName: flag.parser?._getLocalizedTypeName(typeNamesLocalization),
+        typeName: flag.parser?.getLocalizedTypeName(localizator),
         localizedName,
         description,
         longUsageString,
@@ -122,8 +128,8 @@ function flagRawHelp(
 }
 
 /** @internal */
-function embedHelp(command: Command, prefix: string, localization: Localization, message?: Message) {
-    const rawHelp = commandRawHelp(command, localization);
+function embedHelp(command: Command, prefix: string, localizator: Localizator, message?: Message) {
+    const rawHelp = commandRawHelp(command, localizator);
 
     const embed = new MessageEmbed()
         .setTitle(rawHelp.fullName)
@@ -138,8 +144,8 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
             rawHelp.fullName +
             (rawHelp.args.length === 0 ? "" : " " + rawHelp.args.map(a => a.usageString).join(" "));
         embed.addField(
-            localization.help.usage,
-            `**\`${usageString}\`**` + (rawHelp.args.length !== 0 ? `\n\n${localization.help.argUsageHint}` : ""),
+            localizator.help.usage,
+            `**\`${usageString}\`**` + (rawHelp.args.length !== 0 ? `\n\n${localizator.help.argumentUsageHint}` : ""),
             false,
         );
     }
@@ -147,7 +153,7 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
     const args = rawHelp.args
         .map(a => `\`${a.name}\` *${a.typeName}*` + (a.description !== "" ? `\n⮩  ${a.description}` : ""))
         .join("\n");
-    if (args !== "") embed.addField(localization.help.arguments, args, true);
+    if (args !== "") embed.addField(localizator.help.arguments, args, true);
 
     const flags = rawHelp.flags
         .map(
@@ -159,28 +165,28 @@ function embedHelp(command: Command, prefix: string, localization: Localization,
                 (f.description !== "" ? `\n⮩  ${f.description}` : ""),
         )
         .join("\n");
-    if (flags !== "") embed.addField(localization.help.flags, flags, true);
+    if (flags !== "") embed.addField(localizator.help.flags, flags, true);
 
     const subs = (message ? rawHelp.subs.filter(s => s.command.checkPermissions(message)) : rawHelp.subs)
         .map(s => `\`${s.command.name}\`` + (s.description !== "" ? ` ${s.description}` : ""))
         .join("\n");
-    if (subs !== "") embed.addField(localization.help.subCommands, subs, false);
+    if (subs !== "") embed.addField(localizator.help.subCommands, subs, false);
 
     const aliases = rawHelp.aliases.map(a => `\`${a}\``).join(" ");
-    if (aliases !== "") embed.addField(localization.help.aliases, aliases, false);
+    if (aliases !== "") embed.addField(localizator.help.aliases, aliases, false);
 
     const clientPermissions = rawHelp.command.clientPermissions.map(p => `\`${p}\``).join(" ");
-    if (clientPermissions !== "") embed.addField(localization.help.bot_permissions, clientPermissions, false);
+    if (clientPermissions !== "") embed.addField(localizator.help.botPermissions, clientPermissions, false);
 
     if (rawHelp.command.userPermissions) {
         const userPermissions = rawHelp.command.userPermissions.map(p => `\`${p}\``).join(" ");
-        if (userPermissions !== "") embed.addField(localization.help.user_permissions, userPermissions, false);
+        if (userPermissions !== "") embed.addField(localizator.help.userPermissions, userPermissions, false);
     }
 
     const exemples = rawHelp.command.examples
         .map(e => `\`${e.example}\`${e.description ? ` — ${e.description}` : ""}`)
         .join("\n");
-    if (exemples !== "") embed.addField(localization.help.examples, exemples, false);
+    if (exemples !== "") embed.addField(localizator.help.examples, exemples, false);
 
     return embed;
 }
