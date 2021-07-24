@@ -1,10 +1,10 @@
-import { commandFullName, commandRawHelp } from "./help";
-import { getListRawData } from "./list";
+import { commandFullName, commandHelp } from "./help";
+import { commandList } from "./list";
 
 export * from "./types";
 
 export const humanize = Object.freeze({
     commandFullName,
-    commandRawHelp,
-    getListRawData,
+    commandRawHelp: commandHelp,
+    getListRawData: commandList,
 });

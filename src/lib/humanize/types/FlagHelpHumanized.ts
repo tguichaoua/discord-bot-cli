@@ -1,6 +1,6 @@
 import { FlagData } from "../../commands";
 
-export interface FlagRawHelp {
+export interface FlagHelpHumanized {
     readonly flag: FlagData;
     readonly typeName?: string;
     readonly localizedName: string;

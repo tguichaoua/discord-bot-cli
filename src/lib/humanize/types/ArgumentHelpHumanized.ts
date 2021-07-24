@@ -1,6 +1,6 @@
 import { ArgDefinition } from "../../commands";
 
-export interface ArgumentRawHelp {
+export interface ArgumentHelpHumanized {
     readonly arg: ArgDefinition;
     readonly typeName: string;
     readonly name: string;

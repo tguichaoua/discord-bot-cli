@@ -4,7 +4,7 @@ import { ArgDefinition, Command, FlagData, HelpHandler } from "../commands";
 import { CommandLocalizator, Localizator } from "../localization";
 import { reply } from "../utils/reply";
 
-import { ArgumentRawHelp, CommandRawHelp, FlagRawHelp } from "./types";
+import { ArgumentHelpHumanized, CommandHelpHumanized, FlagHelpHumanized } from "./types";
 
 // /** @internal */
 // export async function defaultHelp(
@@ -46,7 +46,7 @@ export function commandFullName(command: Command) {
  * @param localization
  * @returns Raw help datas.
  */
-export function commandRawHelp(command: Command, localizator: Localizator): CommandRawHelp {
+export function commandHelp(command: Command, localizator: Localizator): CommandHelpHumanized {
     const commandLocalization = localizator.getCommand(command);
     const fullName = commandFullName(command);
     const description = commandLocalization.description;
@@ -55,12 +55,12 @@ export function commandRawHelp(command: Command, localizator: Localizator): Comm
     const aliases = command.aliases.filter(a => collection.hasAlias(a));
 
     const args = Array.from(command.args.entries()).map(([name, arg]) =>
-        argRawHelp(arg, name, commandLocalization, localizator),
+        argumentHelp(arg, name, commandLocalization, localizator),
     );
 
-    const flags = command.flags.map(flag => flagRawHelp(flag, commandLocalization, localizator));
+    const flags = command.flags.map(flag => flagHelp(flag, commandLocalization, localizator));
 
-    const subs = Array.from(command.subs.values()).map(c => commandRawHelp(c, localizator));
+    const subs = Array.from(command.subs.values()).map(c => commandHelp(c, localizator));
 
     const tags: string[] = [];
     if (command.devOnly) tags.push(localizator.help.devOnly);
@@ -79,12 +79,12 @@ export function commandRawHelp(command: Command, localizator: Localizator): Comm
 }
 
 /** @internal */
-function argRawHelp(
+function argumentHelp(
     arg: ArgDefinition,
     name: string,
     commandLocalizator: CommandLocalizator,
     localizator: Localizator,
-): ArgumentRawHelp {
+): ArgumentHelpHumanized {
     const argLocalizator = commandLocalizator.getArgument(name); //(localization.args ?? {})[name] ?? {};
     const localizedName = argLocalizator.name;
     const description = argLocalizator.description;
@@ -107,7 +107,7 @@ function argRawHelp(
 }
 
 /** @internal */
-function flagRawHelp(flag: FlagData, commandLocalizator: CommandLocalizator, localizator: Localizator): FlagRawHelp {
+function flagHelp(flag: FlagData, commandLocalizator: CommandLocalizator, localizator: Localizator): FlagHelpHumanized {
     const flagLocalizator = commandLocalizator.getFlag(flag.key);
     const localizedName = flagLocalizator.name;
     const description = flagLocalizator.description;
@@ -126,7 +126,7 @@ function flagRawHelp(flag: FlagData, commandLocalizator: CommandLocalizator, loc
 
 /** @internal */
 function embedHelp(command: Command, prefix: string, localizator: Localizator, message?: Message) {
-    const rawHelp = commandRawHelp(command, localizator);
+    const rawHelp = commandHelp(command, localizator);
 
     const embed = new MessageEmbed()
         .setTitle(rawHelp.fullName)

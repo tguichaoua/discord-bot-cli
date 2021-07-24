@@ -1,6 +1,6 @@
 import { Command } from "../../commands";
 
-export interface CommandRawList {
+export interface CommandListHumanized {
     readonly command: Command;
     readonly description: string;
 }
