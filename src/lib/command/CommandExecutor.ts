@@ -1,7 +1,7 @@
 import { Message, DMChannel } from "discord.js";
 import { ArgItem } from "arg-analyser";
 
-import { ParserType } from "../parsers";
+import { ParserType } from "../parser";
 import { CommandDefinition, CommandSettings } from "./definitions";
 
 import { CommandSetOptions } from "./CommandSetOptions";

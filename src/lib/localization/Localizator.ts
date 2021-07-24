@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { ArgDefinition, Command, FlagData } from "../commands";
+import { ArgDefinition, Command, FlagData } from "../command";
 
 import {
     ArgumentLocalization,

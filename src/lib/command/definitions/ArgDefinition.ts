@@ -1,4 +1,4 @@
-import { Parser } from "../../parsers";
+import { Parser } from "../../parser";
 
 export interface ArgDefinition {
     /** The parser used to parse the value of the argument. */

@@ -1,4 +1,4 @@
-import { Command } from "../../commands";
+import { Command } from "../../command";
 
 export interface CommandListHumanized {
     readonly command: Command;

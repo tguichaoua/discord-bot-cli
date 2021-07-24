@@ -1,4 +1,4 @@
-import { Command, CommandSet } from "../commands";
+import { Command, CommandSet } from "../command";
 import { Localizator } from "../localization";
 
 import { CommandListHumanized, CommandListDataHumanized } from "./types";

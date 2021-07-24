@@ -1,5 +1,5 @@
 import { Char } from "../../utils/Char";
-import { Parser } from "../../parsers";
+import { Parser } from "../../parser";
 
 export interface FlagDefinition {
     /** The parser used to parse the flag value.

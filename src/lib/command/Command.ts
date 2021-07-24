@@ -6,7 +6,7 @@ import { toKebabCase } from "../utils/case";
 import { isArray } from "../utils/array";
 import { map } from "../utils/object";
 
-import { ParseError, UnhandledErrorParseError } from "../parsers";
+import { ParseError, UnhandledErrorParseError } from "../parser";
 import { defaultHelpHandler } from "../humanize/help";
 import { Localizator } from "../localization";
 
@@ -23,7 +23,7 @@ import { CanUseCommandHandler } from "./CanUseCommandHandler";
 import { HelpHandler } from "./HelpHandler";
 import { CommandThrottler } from "./Throttler";
 import { CommandExample } from "./CommandExample";
-import { ParsingContext } from "../parsers/ParsingContext";
+import { ParsingContext } from "../parser/ParsingContext";
 import { FlagData } from "./FlagData";
 
 export class Command {

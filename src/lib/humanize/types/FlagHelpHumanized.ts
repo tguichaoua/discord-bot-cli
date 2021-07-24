@@ -1,4 +1,4 @@
-import { FlagData } from "../../commands";
+import { FlagData } from "../../command";
 
 export interface FlagHelpHumanized {
     readonly flag: FlagData;

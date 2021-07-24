@@ -1,4 +1,4 @@
-import { Command } from "../../commands";
+import { Command } from "../../command";
 
 import { ArgumentHelpHumanized } from "./ArgumentHelpHumanized";
 import { FlagHelpHumanized } from "./FlagHelpHumanized";

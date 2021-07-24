@@ -1,6 +1,6 @@
 import { MessageEmbed, Message } from "discord.js";
 
-import { ArgDefinition, Command, FlagData, HelpHandler } from "../commands";
+import { ArgDefinition, Command, FlagData, HelpHandler } from "../command";
 import { CommandLocalizator, Localizator } from "../localization";
 import { reply } from "../utils/reply";
 

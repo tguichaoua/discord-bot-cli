@@ -1,6 +1,6 @@
 import { ArgItem } from "arg-analyser";
 
-import { ParseError } from "../parsers";
+import { ParseError } from "../parser";
 
 import { Command } from "./Command";
 import { FlagData } from "./FlagData";

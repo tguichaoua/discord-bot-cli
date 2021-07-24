@@ -1,4 +1,4 @@
-import { ArgDefinition } from "../../commands";
+import { ArgDefinition } from "../../command";
 
 export interface ArgumentHelpHumanized {
     readonly arg: ArgDefinition;
