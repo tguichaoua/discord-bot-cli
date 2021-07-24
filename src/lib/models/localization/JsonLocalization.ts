@@ -7,6 +7,7 @@ import { resolveFromEntryPoint } from "../../utils/PathUtils";
 import { CommandLocalization, Localization, LanguageResolver, LocalizationResolver } from ".";
 import { mapToLocalizationResolver } from "./utils";
 import { Logger } from "../../logger";
+import { getFilePosition } from "../../utils/getFilePosition";
 
 const ajv = new Ajv();
 
@@ -81,11 +82,15 @@ export function jsonLocalization(localizationPath: string, languageResolver: Lan
         const jsonFiles = fs.readdirSync(localizationPath).filter(file => file.endsWith("json"));
         for (const file of jsonFiles) {
             const filePath = path.resolve(path.format({ dir: localizationPath, base: file }));
-            const data = parseJsonLocalizationData(fs.readFileSync(filePath, "utf-8"));
+            const json = fs.readFileSync(filePath, "utf-8");
+            const data = parseJsonLocalizationData(json);
 
             if (data === undefined) {
                 Logger.warn(
-                    `(${filePath} at ${parseJsonLocalizationData.position}) Invalid JSON format : ${parseJsonLocalizationData.message}`,
+                    `Invalid JSON format : ${parseJsonLocalizationData.message} (${filePath}:${getFilePosition(
+                        json,
+                        parseJsonLocalizationData.position!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
+                    ).join(":")})`,
                 );
             } else {
                 localizations.set(path.basename(filePath, ".json"), toLocalization(data));
