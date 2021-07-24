@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { makeCommand, Parsers } from "../../dist";
+import { makeCommand, Parsers } from "../../dist/lib";
 
 const cmd = makeCommand("math", {
     description: "Do math.",

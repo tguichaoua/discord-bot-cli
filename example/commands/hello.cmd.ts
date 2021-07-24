@@ -1,4 +1,4 @@
-import { makeCommand, Parsers } from "../../dist";
+import { makeCommand, Parsers } from "../../dist/lib";
 
 const cmd = makeCommand("hello", {
     description: "Send a hello message to either a user (in DM) or in a channel.",

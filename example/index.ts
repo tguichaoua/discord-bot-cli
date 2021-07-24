@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { CommandSet, Logs } from "../dist";
+import { CommandSet, Logs } from "../dist/lib";
 import env from "./env.json";
 
 // Enable the logging from discord-bot-cli package
@@ -16,7 +16,7 @@ const commands = new CommandSet({
 commands.loadCommands("commands", true);
 
 // Loads all build-in command
-commands.buildin("all");
+commands.buildin("help");
 
 // Create the discord client
 const client = new Client();

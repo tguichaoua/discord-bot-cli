@@ -1,4 +1,4 @@
-import { makeCommand } from "../../dist";
+import { makeCommand } from "../../dist/lib";
 
 const cmd = makeCommand("ping", {
     description: "Reply to the message.",
