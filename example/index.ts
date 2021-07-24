@@ -1,12 +1,12 @@
 import { Client } from "discord.js";
-import { CommandSet, Logs } from "../dist/lib";
+import { CommandManager, Logs } from "../dist/lib";
 import env from "./env.json";
 
 // Enable the logging from discord-bot-cli package
 Logs.auto(true); // Automatically print logs into the console
 
-// Create a CommandSet with options from env.json
-const commands = new CommandSet({
+// Create a CommandManager with options from env.json
+const commands = new CommandManager({
     prefix: env.prefix,
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,

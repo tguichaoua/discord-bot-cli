@@ -59,7 +59,7 @@ type CommandDefinitionBase = {
 export type CommandSettings = {
     /** Either or not this command will be ignored. (default is false). [inheritable] */
     readonly ignore?: boolean;
-    /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). (default is false). [inheritable] */
+    /** Either or not this command can only be used by dev (see [[CommandManagerOptions.devIDs]]). (default is false). [inheritable] */
     readonly devOnly?: boolean;
     /** Either or not this command can only be used from a guild. (default is false). [inheritable] */
     readonly guildOnly?: boolean;

@@ -15,7 +15,7 @@ const cmd = makeCommand("help", {
     examples: ["help", "help list", "help help", "help command subCommand", "help command subCommand1 subCommand2"],
 });
 
-cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
+cmd.executor = async ({ commandName }, _, { options, commandManager, message }) => {
     const localizator = Localizator.create(options.localizationResolver, message);
     if (commandName.length === 0)
         await reply(
@@ -25,7 +25,7 @@ cmd.executor = async ({ commandName }, _, { options, commandSet, message }) => {
             }),
         );
     else {
-        const { command, consumed } = commandSet.resolve(commandName);
+        const { command, consumed } = commandManager.resolve(commandName);
         if (!command || consumed < commandName.length)
             await reply(
                 message,

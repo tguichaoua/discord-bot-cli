@@ -1,6 +1,6 @@
 import { LocalizationResolver } from "../localization";
 
-export interface CommandSetOptions {
+export interface CommandManagerOptions {
     /** The command prefix. */
     prefix: string;
     /** A list of dev's discord ID.  */

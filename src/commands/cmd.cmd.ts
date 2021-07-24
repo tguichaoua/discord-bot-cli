@@ -43,23 +43,23 @@ const cmd = makeCommand("cmd", {
     },
 });
 
-cmd.subs.reload.executor = async ({ command }, _, { commandSet, message }) => {
-    const cmd = commandSet.commands.get(command);
+cmd.subs.reload.executor = async ({ command }, _, { commandManager, message }) => {
+    const cmd = commandManager.commands.get(command);
     if (!cmd) {
         await message.channel.send(":x: Command not found").catch(Logger.error);
         return;
     }
 
     try {
-        commandSet.reload(cmd);
+        commandManager.reload(cmd);
         await message.channel.send(":white_check_mark: Command reloaded").catch(Logger.error);
     } catch (e) {
         await message.channel.send(`:x: Fail to reload command \`\`\`\n${e}\n\`\`\``).catch(Logger.error);
     }
 };
 
-cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope }, { commandSet, channel }) => {
-    const { command } = commandSet.resolve(commandName);
+cmd.subs.throttling.executor = async ({ commandName }, { reset, resetAll, scope }, { commandManager, channel }) => {
+    const { command } = commandManager.resolve(commandName);
     if (!command) {
         await channel.send(`:x: Command ${commandName} not found.`);
         return;

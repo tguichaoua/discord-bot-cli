@@ -1,4 +1,4 @@
-import { Command, CommandSet } from "../command";
+import { Command, CommandManager } from "../command";
 import { Localizator } from "../localization";
 
 import { CommandListHumanized, CommandListDataHumanized } from "./types";
@@ -6,12 +6,12 @@ import { CommandListHumanized, CommandListDataHumanized } from "./types";
 /**
  * Extracts raw data for list command.
  * @category Utils
- * @param commandSet
+ * @param commandManager
  * @param localization
  * @returns List command raw datas.
  */
-export function commandList(commandSet: CommandSet, localizator: Localizator): CommandListDataHumanized {
-    const commands = Array.from(commandSet.commands)
+export function commandList(commandManager: CommandManager, localizator: Localizator): CommandListDataHumanized {
+    const commands = Array.from(commandManager.commands)
         .sort((a, b) => {
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;

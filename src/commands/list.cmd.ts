@@ -13,9 +13,9 @@ const cmd = makeCommand("list", {
     examples: ["list", "list -d"],
 });
 
-cmd.executor = async (_, { detail }, { commandSet, options, message }) => {
+cmd.executor = async (_, { detail }, { commandManager, options, message }) => {
     const localizator = Localizator.create(options.localizationResolver, message);
-    const raw = humanize.getListRawData(commandSet, localizator);
+    const raw = humanize.getListRawData(commandManager, localizator);
     let commands = options.devIDs.includes(message.author.id)
         ? raw.commands
         : raw.commands.filter(c => !c.command.devOnly);

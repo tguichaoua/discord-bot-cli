@@ -13,8 +13,8 @@ import { Localizator } from "../localization";
 import { ThrottlingDefinition, CommandDefinition, ArgDefinition } from "./definitions";
 import { CommandLoadError, CommandResultError } from "./errors";
 
-import { CommandSet } from "./CommandSet";
-import { CommandSetOptions } from "./CommandSetOptions";
+import { CommandManager } from "./CommandManager";
+import { CommandManagerOptions } from "./CommandManagerOptions";
 import { CommandData } from "./CommandData";
 import { CommandExecutor } from "./CommandExecutor";
 import { CommandResultUtils } from "./CommandResult";
@@ -48,8 +48,8 @@ export class Command {
         public readonly description: string,
         /** This command's parent or `null` if it's a top-most command. */
         public readonly parent: Command | null,
-        /** The [[CommandSet]] that contains this command. */
-        public readonly commandSet: CommandSet,
+        /** The [[CommandManager]] that contains this command. */
+        public readonly commandManager: CommandManager,
         /** A [[ReadonlyCommandCollection]] of this command's sub-commands. */
         public readonly subs: ReadonlyCommandCollection,
         /** A `ReadonlyMap` with this command's arguments' [[ArgDefinition]] */
@@ -65,7 +65,7 @@ export class Command {
         private readonly _useThrottlerOnSubs: boolean,
         /** Either or not this command is ignored. */
         public readonly ignored: boolean,
-        /** Either or not this command can only be used by dev (see [[CommandSetOptions.devIDs]]). */
+        /** Either or not this command can only be used by dev (see [[CommandManagerOptions.devIDs]]). */
         public readonly devOnly: boolean,
         /** Either or not this command can only be used from a guild. */
         public readonly guildOnly: boolean,
@@ -79,15 +79,15 @@ export class Command {
     }
 
     /** @internal */
-    static load(filepath: string, commandSet: CommandSet): Command {
+    static load(filepath: string, commandManager: CommandManager): Command {
         const module = require(filepath); // eslint-disable-line @typescript-eslint/no-var-requires
         if (!module.default) throw new CommandLoadError("Command data must be exported as default.");
-        return Command._build(filepath, commandSet, module.default, null, undefined);
+        return Command._build(filepath, commandManager, module.default, null, undefined);
     }
 
     private static _build<T extends CommandDefinition>(
         filepath: string | null,
-        commandSet: CommandSet,
+        commandManager: CommandManager,
         data: CommandData<T>,
         parent: Command | null,
         parentHelp: HelpHandler | undefined,
@@ -186,7 +186,7 @@ export class Command {
             examples,
             data.def.description ?? "",
             parent,
-            commandSet,
+            commandManager,
             subs,
             new Map(data.def.args ? Object.entries(data.def.args) : []),
             flags,
@@ -207,7 +207,7 @@ export class Command {
             subs.add(
                 Command._build(
                     null,
-                    commandSet,
+                    commandManager,
                     data.subs[subName],
                     cmd,
                     (data.def.useHelpOnSubs ?? false) || (!data.def.help && !!parentHelp) ? cmd._help : undefined,
@@ -304,18 +304,18 @@ export class Command {
      * @param message
      * @param options
      */
-    async help(message: Message, options: CommandSetOptions): Promise<void> {
+    async help(message: Message, options: CommandManagerOptions): Promise<void> {
         const context = {
             message,
             options,
-            commandSet: this.commandSet,
+            commandManager: this.commandManager,
             localizator: Localizator.create(options.localizationResolver, message),
         };
 
         if (this._help) {
             await this._help(this, context);
-        } else if (this.commandSet.helpHandler) {
-            await this.commandSet.helpHandler(this, context);
+        } else if (this.commandManager.helpHandler) {
+            await this.commandManager.helpHandler(this, context);
         } else {
             await defaultHelpHandler(this, context);
         }
@@ -325,8 +325,8 @@ export class Command {
     async execute(
         message: Message,
         inputArguments: readonly ArgItem[],
-        options: CommandSetOptions,
-        commandSet: CommandSet,
+        options: CommandManagerOptions,
+        commandManager: CommandManager,
     ) {
         if (message.guild && !this.hasClientPermissions(message.guild))
             throw new CommandResultError(CommandResultUtils.clientPermissions(this));
@@ -357,7 +357,7 @@ export class Command {
                 member: message.member,
                 channel: message.channel,
                 options,
-                commandSet,
+                commandManager: commandManager,
                 command: this,
             },
         );
@@ -367,7 +367,7 @@ export class Command {
     private parse(
         message: Message,
         inputArguments: readonly ArgItem[],
-        options: CommandSetOptions,
+        options: CommandManagerOptions,
     ): { flags: Map<string, unknown>; args: Map<string, unknown>; rest: ArgItem[] } {
         const flags = new Map<string, unknown>(
             this.flags.map(f => [f.key, f.parser === undefined ? 0 : f.defaultValue]),

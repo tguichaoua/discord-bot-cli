@@ -4,8 +4,8 @@ import { ArgItem } from "arg-analyser";
 import { ParserType } from "../parser";
 import { CommandDefinition, CommandSettings } from "./definitions";
 
-import { CommandSetOptions } from "./CommandSetOptions";
-import { CommandSet } from "./CommandSet";
+import { CommandManagerOptions } from "./CommandManagerOptions";
+import { CommandManager } from "./CommandManager";
 import { Command } from "./Command";
 
 /** @ignore */
@@ -47,8 +47,8 @@ export type CommandExecutor<
     others: {
         readonly rest: ArgItem[];
         readonly message: Message & MessageExtension<S>;
-        readonly options: CommandSetOptions;
-        readonly commandSet: CommandSet;
+        readonly options: CommandManagerOptions;
+        readonly commandManager: CommandManager;
         readonly command: Command;
     } & MessageExtension<S>,
 ) => void | Promise<void>;

@@ -11,20 +11,20 @@ import { CommandLoadError, CommandResultError } from "./errors";
 
 import { Command } from "./Command";
 import { CommandResultUtils, CommandResult } from "./CommandResult";
-import { CommandSetOptions } from "./CommandSetOptions";
+import { CommandManagerOptions } from "./CommandManagerOptions";
 import { CommandCollection, ReadonlyCommandCollection } from "./CommandCollection";
 import { HelpHandler } from "./HelpHandler";
 
 type BuildInCommand = "help" | "list" | "cmd";
 
-export class CommandSet {
+export class CommandManager {
     private _commands = new CommandCollection();
     /** If defined, called when [[Command.help]] is called and if the command didn't define its own help handler. */
     public helpHandler: HelpHandler | undefined = undefined;
 
     private readonly analyser: Analyser;
 
-    constructor(private _defaultOptions?: Partial<CommandSetOptions>) {
+    constructor(private _defaultOptions?: Partial<CommandManagerOptions>) {
         this.analyser = new Analyser({
             groupDelimiters: [
                 ["(", ")"],
@@ -134,7 +134,7 @@ export class CommandSet {
      * @param options - Options to define the parsing behaviour.
      * @returns The result of the parsing.
      */
-    async parse(message: Message, options?: Partial<CommandSetOptions>): Promise<CommandResult> {
+    async parse(message: Message, options?: Partial<CommandManagerOptions>): Promise<CommandResult> {
         async function Reply(content: string) {
             await message.reply(content).catch(Logger.error);
         }
@@ -201,7 +201,7 @@ export class CommandSet {
 }
 
 /** @internal */
-const defaultOptions: CommandSetOptions = {
+const defaultOptions: CommandManagerOptions = {
     prefix: "",
     devIDs: [],
     allowMentionAsPrefix: false,

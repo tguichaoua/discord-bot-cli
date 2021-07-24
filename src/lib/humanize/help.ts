@@ -41,7 +41,7 @@ export function commandHelp(command: Command, localizator: Localizator): Command
     const fullName = commandFullName(command);
     const description = commandLocalization.description;
 
-    const collection = command.parent?.subs ?? command.commandSet.commands;
+    const collection = command.parent?.subs ?? command.commandManager.commands;
     const aliases = command.aliases.filter(a => collection.hasAlias(a));
 
     const args = Array.from(command.args.entries()).map(([name, arg]) =>

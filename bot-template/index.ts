@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { Client, ColorResolvable, MessageEmbed } from "discord.js";
-import { CommandResult, CommandSet, LogLevel, Logs } from "../src/lib";
+import { CommandResult, CommandManager, LogLevel, Logs } from "../src/lib";
 import env from "./env.json";
 
 Logs.auto(true).minLevel(LogLevel.DEBUG);
 
-const commands = new CommandSet({
+const commands = new CommandManager({
     prefix: env.prefix,
     devIDs: env.devIDs,
     skipDevsPermissionsChecking: env.skipDevsPermissionshecking,
@@ -15,7 +15,7 @@ commands.loadCommands("commands", true);
 
 // manually load build-in commands
 // because there are supposed to be JS in production
-// CommandSet#buildin not load TS files.
+// CommandManager#buildin not load TS files.
 commands.loadCommands("../src/commands", true);
 
 const client = new Client();
