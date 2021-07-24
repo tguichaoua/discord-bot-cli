@@ -1,3 +1,3 @@
 export * from "./Localization";
-export * from "./LocalizationResolver";
+export * from "./resolvers";
 export * from "./Localizator";
