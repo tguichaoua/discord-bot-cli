@@ -87,12 +87,12 @@ export class CommandSet {
     buildin(...buildinCommandNames: BuildInCommand[]): void;
     buildin(...buildinCommandNames: string[]): void {
         if (buildinCommandNames.includes("all")) {
-            this.loadCommands(__dirname + "/../commands");
+            this.loadCommands(__dirname + "/../../commands");
         } else {
             for (const name of buildinCommandNames) {
                 const filePath = path.resolve(
                     path.format({
-                        dir: __dirname + "../commands",
+                        dir: __dirname + "/../../commands",
                         name: name,
                         ext: ".cmd.js",
                     }),
