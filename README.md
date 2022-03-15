@@ -7,12 +7,14 @@
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/tguichaoua/discord-bot-cli/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-no-red.svg" />
   </a>
   <a href="https://github.com/tguichaoua/discord-bot-cli/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/tguichaoua/discord-bot-cli" />
   </a>
 </p>
+
+⚠️ **This project is deprecated**
 
 > An easy way to build a command-based discord bot with [discord.js](https://www.npmjs.com/package/discord.js).
 
